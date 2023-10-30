@@ -3,119 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/style.css">
     <title>Smart Lamp</title>
     <style>
-         html {
-            margin: auto 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
+        header, main, footer {
+            display: none;
         }
-
-        body {
-            background-color: white;
-            font-size: 20px;
-            color: black;
-            font-family: monospace;
-            width: 100%;
-            min-height: 120vh;
-            position: relative;
-        }
-
-        .title {
+        /* Center the typing text */
+        .center {
             display: flex;
-            align-items: center;
             justify-content: center;
-            border-bottom: 1px solid black;
-            padding: 30px;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        /* Styling for the overlay */
+        .overlay {
+            position: fixed;
             top: 0;
-            margin-bottom: 30px;
-        }
-        .box1{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .box2 {
-            padding: 30px;
-            width: 30%;
-            height: 35%;
-            border:1px solid black;
-            box-shadow: 10px 10px black;
-            margin-top: 30px;
-        }
-
-        .box2 h2{
-            text-align: center;
-            margin-bottom: 10px;
-        }
-        .button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .button li{
-            margin-right: 42px;
-            list-style-type: none;
-        }
-
-        .btn{
-            text-align: center;
-            padding: 10px 5px;
-            border: 1px solid black;
-            margin-bottom: 20px;
-            box-shadow: 3px 3px black;
-        }
-
-        .btn:hover {
-            box-shadow: 2px 2px black;
-        }
-
-        .btn a {
-            color: black;
-            text-decoration: none;
-        }
-        .btn a:hover{
-            font-weight: bold;
-        }
-        footer {
-            border-top: 1px solid black;
-            text-align: center;
-            position: absolute;
-            bottom: 0;
-            height: 20px;
+            left: 0;
             width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 2s;
         }
-        footer p{
-            margin-bottom: 20px;
+
+        /* Styling for the text in the overlay */
+        .overlay-text {
+            color: white;
+            font-size: 36px;
         }
     </style>
 </head>
 <body>
+    <!-- Overlay for the "Welcome to Smart Lamp" text -->
+    <div class="overlay" id="overlay">
+        <div class="overlay-text" id="typed-text"></div>
+    </div>
     <header>
-        <div class="title">
-            <h1>Smart LampU</h1>
+        <div class="logo">
+            <img src="assets/logo2.png" alt="logo1">
         </div>
     </header>
     <main>
-        <div class="box1">
-            <div class="box2">
-                <h2>Pilihan Menu:</h2>
-                <div class="button">
+        <div class="box-main1">
+            <div class="box-main2">
+                <h2>Main Menu:</h2>
+                <div class="button-main">
                     <ul>
-                        <li class="btn"><a href="">Masuk</a></li>
-                        <li class="btn"><a href="">Daftar</a></li>
-                        <li class="btn"><a href="help.html">Bantuan</a></li>
-                        <li class="btn"><a href="about.html">Tentang</a></li>
+                        <li class="btn-main"><a href="login.html">Masuk</a></li>
+                        <li class="btn-main"><a href="">Daftar</a></li>
+                        <li class="btn-main"><a href="help.html">Bantuan</a></li>
+                        <li class="btn-main"><a href="about.html">Tentang</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </main>
     <footer>
-        <p>Smart LampU &#169; 2023</p>
-        <p>created by <a href="https://www.at043.github.io/profile">AT043</a>.</p>
-        <br>
+        <div class="footer-box">
+            <div class="footer-column footer-logo">
+                <img src="assets/logo2.png" alt="" width="240">
+                <img src="assets/logopnj2.png" alt="" width="120">
+            </div>
+            <div class="footer-column footer-center">
+                <p>Smart LampU &#169; 2023</p>
+                <p>created by <a href="https://www.at043.github.io/profile">AT043</a>.</p>
+                <br>
+            </div>
+            <div class="footer-column footer-contact">
+                <ul>
+                    <li>
+                       <h3>Reach Us @</h3> 
+                    </li>
+                    <li>
+                        <a href="mailto:diegogomez81655@gmail.com">Mail</a>
+                    </li>
+                    <li>
+                        <a href="">Instagram</a>
+                    </li>
+                    <li>
+                        <a href="">X</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </footer>
+    <script>
+        // JavaScript for typing and hiding text
+        const text = "Welcome to Smart LampU";
+        const typingSpeed = 100; // Typing speed in milliseconds
+        const hideDuration = 2000; // 10 seconds before moving to the main content
+        const showDelay = 2000;
+        const typedTextElement = document.getElementById('typed-text');
+        const overlayTextElement = document.getElementById('overlay');
+        const headerElement = document.querySelector('header');
+        const mainElement = document.querySelector('main');
+        const footerElement = document.querySelector('footer');
+
+        let charIndex = 0;
+
+        function type() {
+            if (charIndex < text.length) {
+                typedTextElement.textContent += text.charAt(charIndex);
+                charIndex++;
+                setTimeout(type, typingSpeed);
+            } else {
+                // After typing is complete, show the header, main, and footer
+                setTimeout(function () {
+                    // Show the header, main, and footer
+                    headerElement.style.display = 'block';
+                    mainElement.style.display = 'block';
+                    footerElement.style.display = 'block';
+                }, showDelay);
+
+                // Hide the typed text after the specified duration
+                setTimeout(function () {
+                    typedTextElement.style.display = 'none';
+                    overlayTextElement.style.display = 'none';
+                }, hideDuration);
+            }
+        }
+
+        // Start typing animation
+        type();
+    </script>
 </body>
 </html>

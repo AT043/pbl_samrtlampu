@@ -4,7 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/style.css">
-    <title>Bantuan | Smart LampU</title>
+    <title>Masuk | Smart LampU</title>
+    <style>
+       .box2 ul,
+        p,
+        h1 {
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box2 li {
+            list-style: none;
+            margin: 1rem;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -13,19 +28,27 @@
         </div>
     </header>
     <main>
-        <div class="content">
-            <details>
-                <summary>1. Tentang Project</summary>
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
-            </details>
-            <details>
-                <summary>2. Tentang Project</summary>
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
-            </details>
-            <details>
-                <summary>3. Tentang Project</summary>
-                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
-            </details>
+        <div class="box1">
+            <div class="box2">
+                <ul>
+                    <form action="">
+                        <li>
+                            <label for="username">Username</label>
+                            <input type="text" name="username" id="username" placeholder="your username">
+                        </li>
+                        <li>
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" placeholder=" your password">
+                        </li>
+                        <li>
+                            <button type="submit" name="submit">Login</button>
+                        </li>
+                    </form>
+                    <li>
+                        <a class="btn-add-user" href="">Add new User</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </main>
     <footer>
