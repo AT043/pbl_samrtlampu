@@ -6,19 +6,46 @@
     <link rel="stylesheet" href="assets/style.css">
     <title>Masuk | Smart LampU</title>
     <style>
-       .box2 ul,
-        p,
-        h1 {
+        .box-login1 {
             margin: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        .box2 li {
+        .box-login2 {
+            padding: 30px 60px 30px 0;
+            border: 1px solid black;
+            box-shadow: 10px 10px black;
+        }
+
+        .box-login2 li {
             list-style: none;
             margin: 1rem;
         }
+
+        .btn-add-user {
+            border: 1px solid black;
+            box-shadow: 5px 5px black;
+        }
+
+        input {
+            font-weight: bold;
+            width: 100%;
+            padding: 10px 20px;
+            margin: 8px 0;
+            font-size: 20px;
+            font-family: monospace;
+        }
+        input:focus {
+            background-color: lightblue;
+        }
+        .add-user a:hover {
+            color: red;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        
     </style>
 </head>
 <body>
@@ -28,24 +55,28 @@
         </div>
     </header>
     <main>
-        <div class="box1">
-            <div class="box2">
+        <div class="box-login1">
+            <div class="box-login2">
                 <ul>
                     <form action="">
                         <li>
                             <label for="username">Username</label>
-                            <input type="text" name="username" id="username" placeholder="your username">
+                            <input type="text" name="username" id="username">
                         </li>
                         <li>
                             <label for="password">Password</label>
-                            <input type="password" name="password" id="password" placeholder=" your password">
+                            <input type="password" name="password" id="password">
+                        </li>
+                        <li>
+                            <label>Show Password</label>
+                            <input type="checkbox" onclick="seePass()"> 
                         </li>
                         <li>
                             <button type="submit" name="submit">Login</button>
                         </li>
                     </form>
                     <li>
-                        <a class="btn-add-user" href="">Add new User</a>
+                        <div class="add-user">Belum punya akun? <a href="">Daftar</a></div>
                     </li>
                 </ul>
             </div>
@@ -80,5 +111,15 @@
             </div>
         </div>
     </footer>
+    <script>
+        function seePass(){
+            var x = document.getElementById("password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
 </body>
 </html>
