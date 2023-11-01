@@ -28,6 +28,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 50px;
+    padding: 20px;
 }
 
 .box-main2 {
@@ -55,27 +57,29 @@ body {
 
 .btn-main {
     text-align: center;
-    padding: 10px 5px;
+    padding: 15px 20px;
     border: 1px solid black;
     margin-bottom: 20px;
-    box-shadow: 3px 3px black;
+    box-shadow: 5px 5px black;
 }
 
 .btn-main:hover {
     box-shadow: 2px 2px black;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .btn-main a {
     color: black;
     text-decoration: none;
 }
-.btn-main a:hover{
+/* .btn-main a:hover{
     font-weight: bold;
-}
+} */
 
 footer {
     border-top: 1px solid black;
-    position: absolute;
+    /* position: absolute; */
     bottom: 0;
     height: 20px;
     width: 100%;

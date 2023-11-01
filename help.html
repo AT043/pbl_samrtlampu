@@ -5,6 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/style.css">
     <title>Bantuan | Smart LampU</title>
+    <style>
+        details {
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+            width: 35em;
+            max-width: calc(100% - 2rem);
+            position: relative;
+            border: 1px solid #78909C;
+            /* border-radius: 6px; */
+            /* background-color: #ECEFF1; */
+            background-color: #fff;
+            box-shadow: 7px 7px black;
+            color: #263238;
+            transition: background-color .15s;
+            
+            > :last-child {
+                margin-bottom: 1rem;
+            }
+            
+            &::before {
+                width: 100%;
+                height: 100%;
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                border-radius: inherit;
+                opacity: .15;
+                /* box-shadow: 0 .25em .5em #263238; */
+                /* box-shadow: 10px 10px black; */
+                pointer-events: none;
+                transition: opacity .2s;
+                z-index: -1;
+            }
+            
+            &[open] {
+                background-color: #FFF;
+                
+                &::before {
+                opacity: .6;
+                }
+            }
+            }
+
+            summary {
+            padding: 1rem 2em 1rem 0;
+            display: block;
+            position: relative;
+            font-size: 1.33em;
+            font-weight: bold;
+            cursor: pointer;
+            
+            &::before,
+            &::after {
+                width: .75em;
+                height: 2px;
+                position: absolute;
+                top: 50%;
+                right: 0;
+                content: '';
+                background-color: currentColor;
+                text-align: right;
+                transform: translateY(-50%);
+                transition: transform .2s ease-in-out;
+            }
+            
+            &::after {
+                transform: translateY(-50%) rotate(90deg);
+            }
+
+            [open] &::after {
+                transform: translateY(-50%) rotate(180deg);
+            }
+
+            
+            &::-webkit-details-marker {
+                display: none;
+            }
+            }
+
+            p {
+            margin: 0 0 1em;
+            line-height: 1.5;
+            }
+
+            ul {
+            margin: 0 0 1em;
+            padding: 0 0 0 1em;
+            }
+
+            li:not(:last-child) {
+            margin-bottom: 0.5em;
+            }
+
+            code {
+            padding: 0.2em;
+            border-radius: 3px;
+            background-color: #E0E0E0;
+            
+            pre > & {
+                display: block;
+                padding: 1em;
+                margin: 0;
+            }
+            }
+    </style>
 </head>
 <body>
     <header>
@@ -15,16 +121,24 @@
     <main>
         <div class="content">
             <details>
-                <summary>1. Tentang Project</summary>
+                <summary>Cara Login</summary>
                 <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
             </details>
             <details>
-                <summary>2. Tentang Project</summary>
+                <summary>Lupa Password</summary>
                 <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
             </details>
             <details>
-                <summary>3. Tentang Project</summary>
+                <summary>Bagaimana Bisa?</summary>
                 <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
+            </details>
+            <details>
+                <summary>What Werere</summary>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita doloremque consectetur molestias illo eveniet velit itaque, culpa praesentium dignissimos commodi quasi natus blanditiis quo, quae provident at fugiat sequi minus ad voluptas? Eaque aliquid, nesciunt perspiciatis eligendi dolor possimus commodi!</p>
+            </details>
+            <details>
+                <summary>Who are whee</summary>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo possimus soluta enim officiis ipsum architecto, nostrum sequi quod id! Ipsum cupiditate rem explicabo amet aliquam blanditiis optio, nemo accusantium vitae labore iure recusandae, ab ex distinctio unde quidem quo modi, quasi excepturi laboriosam architecto et vel. Quia neque quidem blanditiis?</p>
             </details>
         </div>
     </main>

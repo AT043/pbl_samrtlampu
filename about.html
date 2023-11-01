@@ -19,33 +19,43 @@
             margin: 0 auto;
             width: 40%;
         }
-        .card{
+        .member-outter h3{
+            margin: 20px 20px;
+            padding: 30px;
+        }
+        .member-inner{
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .card {
+            height: 270px;
+            width: 200px;
+            margin-bottom: 40px;
+            border: 1px solid black;
+            box-shadow: 7px 7px black;
+        }
+       
+        .member-photo{
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 10px 0px;
         }
-        .member1 {
-            margin: 10px 30px;
-            height: 250px;
-            width: 200px;
-            border: 1px solid black;
-            box-shadow: 10px 10px black;
-            display: inline-block;
-        }
-        .memberphoto img{
-            display: block;
-            margin: 0 auto;
-            border: 1px solid white;
+        .member-photo img{
             width: 100px;
         }
-        .memberphoto1 img{
-            display: block;
-            margin: 0 auto;
-            border: 1px solid white;
-            width: 107px;
+        .member-detail{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
         }
-        .member1 li{
+
+        .member-detail li{
+            margin-right: 40px;
             list-style-type: none;
+            text-align: center;
         }
     </style>
 </head>
@@ -63,45 +73,98 @@
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi quasi cupiditate impedit nemo ex maiores, at voluptatum unde quia excepturi fuga, quos voluptatibus deleniti! Illo laudantium velit harum natus, commodi doloribus voluptatum provident odio quidem nihil vitae tempore eligendi! Vel maiores aliquid qui adipisci consectetur non nemo libero error voluptates.
             </p>
         </div>
-        
-        <div class="member">
-            <h3>Project Member:</h3>
-            <div class="card">
-                <div class="member1">
-                    <div class="memberphoto1">
-                        <img src="https://s1.zerochan.net/Ayase.Saki.600.3568026.jpg" alt="ayase">
+        <div class="member-outter">
+            <h3>Project Members: </h3>
+            <div class="member-inner">
+                <div class="card">
+                    <div class="member-profile">
+                        <div class="member-photo">
+                            <img src="https://s1.zerochan.net/Ayase.Saki.600.3568026.jpg" alt="ayase">
+                        </div>
+                        <div class="member-detail">
+                            <ul>
+                                <li><strong>Daffa AT</strong></li>
+                                <li>TMJ-3A</li>
+                                <li>Website</li>
+                            </ul>
+                        </div>
                     </div>
-                    <ul>
-                        <li>Daffa AT</li>
-                        <li>2207421024</li>
-                        <!-- <li>TMJ 3A</li> -->
-                        <li>Web</li>
-                    </ul>
                 </div>
-                <div class="member1">
-                    <div class="memberphoto">
-                        <img src="https://www.med.navy.mil/portals/62/Images/NMFSC/NMOTC/NMOTCHQ/Image%20Unavail.jpg?ver=-Ut3gkuECLDg81_sddlDqA%3D%3D" alt="foto Rangga">
+                <div class="card">
+                    <div class="member-profile">
+                        <div class="member-photo">
+                            <img src="https://pps.whatsapp.net/v/t61.24694-24/170770129_359510408931026_5476591668251715724_n.jpg?ccb=11-4&oh=01_AdRS-ik2LmG0U2RFydCnof46nnBL7_35jo4mlEw3B6U9tQ&oe=654C782C&_nc_sid=000000&_nc_cat=111" alt="foto Rangga">
+                        </div>
+                        <div class="member-detail">
+                            <ul>
+                                <li><strong>Rangga Azizzan</strong></li>
+                                <li>TMJ-3A</li>
+                                <li>All-role</li>
+                            </ul>
+                        </div>
                     </div>
-                    <ul>
-                        <li>Rangga Hussaen</li>
-                        <li>2207421017</li>
-                        <!-- <li>TMJ 3A</li> -->
-                        <li>IoT</li>
-                    </ul>
                 </div>
-                <div class="member1">
-                    <div class="memberphoto">
-                        <img src="https://www.med.navy.mil/portals/62/Images/NMFSC/NMOTC/NMOTCHQ/Image%20Unavail.jpg?ver=-Ut3gkuECLDg81_sddlDqA%3D%3D" alt="foto Rangga">
+                <div class="card">
+                    <div class="member-profile">
+                        <div class="member-photo">
+                            <img src="https://www.med.navy.mil/portals/62/Images/NMFSC/NMOTC/NMOTCHQ/Image%20Unavail.jpg?ver=-Ut3gkuECLDg81_sddlDqA%3D%3D" alt="foto Adipraja">
+                        </div>
+                        <div class="member-detail">
+                            <ul>
+                                <li><strong>Adipraja Rama</strong></li>
+                                <li>TMJ-3A</li>
+                                <li>Network</li>
+                            </ul>
+                        </div>
                     </div>
-                    <ul>
-                        <li>Adi Rama</li>
-                        <li>2207421017</li>
-                        <!-- <li>TMJ 3A</li> -->
-                        <li>Security</li>
-                    </ul>
                 </div>
             </div>
-            
+        </div>
+        <div class="member-outter">
+            <div class="member-inner">
+                <div class="card">
+                    <div class="member-profile">
+                        <div class="member-photo">
+                            <img src="https://www.med.navy.mil/portals/62/Images/NMFSC/NMOTC/NMOTCHQ/Image%20Unavail.jpg?ver=-Ut3gkuECLDg81_sddlDqA%3D%3D" alt="foto Herdi">
+                        </div>
+                        <div class="member-detail">
+                            <ul>
+                                <li><strong>Herdian Rama</strong></li>
+                                <li>TMJ-3A</li>
+                                <li>Dokum & Security</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="member-profile">
+                        <div class="member-photo">
+                            <img src="https://www.med.navy.mil/portals/62/Images/NMFSC/NMOTC/NMOTCHQ/Image%20Unavail.jpg?ver=-Ut3gkuECLDg81_sddlDqA%3D%3D" alt="foto Rasyid">
+                        </div>
+                        <div class="member-detail">
+                            <ul>
+                                <li><strong>Rasyid Fathoni</strong></li>
+                                <li>TMJ-3A</li>
+                                <li>IoT</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="member-profile">
+                        <div class="member-photo">
+                            <img src="https://www.med.navy.mil/portals/62/Images/NMFSC/NMOTC/NMOTCHQ/Image%20Unavail.jpg?ver=-Ut3gkuECLDg81_sddlDqA%3D%3D" alt="foto Dina">
+                        </div>
+                        <div class="member-detail">
+                            <ul>
+                                <li><strong>Dina Yuliasti</strong></li>
+                                <li>TMJ-3A</li>
+                                <li>IoT</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
     <footer>
