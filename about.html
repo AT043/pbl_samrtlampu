@@ -6,6 +6,35 @@
     <link rel="stylesheet" href="assets/style.css">
     <title>Tentang | Smart Lampu</title>
     <style>
+        .navbar {
+            margin: 10px 0px;
+            border-bottom: 1px solid black;
+            border-top: 1px solid black;
+        }
+
+        .navbar ul{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            right: 0;
+        }
+        .navbar li {
+            display: inline;
+            list-style-type: none;
+            margin: 5px 20px;
+        }
+        .navbar a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .navbar a:hover{
+            font-weight: bold;
+            font-size: 26px;
+            background-color: black;
+            color: white;
+        }
+
         .content{
             margin: 20px;
             padding: 30px;
@@ -17,7 +46,7 @@
         .content img {
             display: block;
             margin: 0 auto;
-            width: 40%;
+            width: 100%;
         }
         .member-outter h3{
             margin: 20px 20px;
@@ -26,12 +55,12 @@
         .member-inner{
             display: flex;
             align-items: center;
-            justify-content: space-around;
+            justify-content: center;
         }
         .card {
             height: 270px;
             width: 200px;
-            margin-bottom: 40px;
+            margin: 10px 80px 80px 40px;
             border: 1px solid black;
             box-shadow: 7px 7px black;
         }
@@ -43,7 +72,8 @@
             margin: 10px 0px;
         }
         .member-photo img{
-            width: 100px;
+            height: 100px;
+            width: 80px;
         }
         .member-detail{
             display: flex;
@@ -63,6 +93,14 @@
     <header>
         <div class="logo">
             <img src="assets/logo2.png" alt="logo1">
+        </div>
+        <div class="navbar">
+            <ul>
+                <li><a href="login.html">Masuk</a></li>
+                <li><a href="">Daftar</a></li>
+                <li><a href="#">Tentang</a></li>
+                <li><a href="help.html">Bantuan</a></li>
+            </ul>
         </div>
     </header>
     <main>

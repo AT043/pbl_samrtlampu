@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar | Smart LampU</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        .box-login1 {
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box-login2 {
+            padding: 30px 60px 30px 0;
+            border: 1px solid black;
+            box-shadow: 10px 10px black;
+            margin-bottom: 60px;
+        }
+
+        .box-login2 li {
+            list-style: none;
+            margin: 1rem;
+        }
+
+        .btn-add-user {
+            border: 1px solid black;
+            box-shadow: 5px 5px black;
+        }
+
+        input {
+            font-weight: bold;
+            width: 100%;
+            padding: 10px 20px;
+            margin: 8px 0;
+            font-size: 20px;
+            font-family: monospace;
+        }
+        input:focus {
+            background-color: lightblue;
+        }
+        .sign-in a:hover {
+            color: red;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="assets/logo2.png" alt="logo1">
+        </div>
+    </header>
+    <main>
+        <div class="box-login1">
+            <div class="box-login2">
+                <ul>
+                    <form action="">
+                        <li>
+                            <label for="username">Username</label>
+                            <input type="text" name="username" id="username">
+                        </li>
+                        <li>
+                            <label for="newPassword">Password</label>
+                            <input type="password" name="newPassword" id="newPassword">
+                        </li>
+                        <li>
+                            <label for="rePassword">Re-enter Password</label>
+                            <input type="password" name="rePassword" id="rePassword">
+                        </li>
+                        <li>
+                            <label for="email">Email</label>
+                            <input type="email" name="email" id="email">
+                        </li>
+                        <li>
+                            <label>Show Password</label>
+                            <input type="checkbox" onclick="seePass()"> 
+                        </li>
+                        <li>
+                            <button type="submit" name="submit">Login</button>
+                        </li>
+                    </form>
+                    <li>
+                        <div class="sign-in">Sudah punya akun? <a href="login.html">Masuk</a></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-box">
+            <div class="footer-column footer-logo">
+                <img src="assets/logo2.png" alt="" width="240">
+                <img src="assets/logopnj2.png" alt="" width="120">
+            </div>
+            <div class="footer-column footer-center">
+                <p>&#169; Smart LampU 2023</p>
+                <p>Site is still under</p>
+                <p>construction.</p>
+            </div>
+            <div class="footer-column footer-contact">
+                <ul>
+                    <li>
+                       <h3>Reach Us @</h3> 
+                    </li>
+                    <li>
+                        <a href="mailto:diegogomez81655@gmail.com">Mail</a>
+                    </li>
+                    <li>
+                        <a href="">Instagram</a>
+                    </li>
+                    <li>
+                        <a href="">X</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <script>
+        function seePass(){
+            var x = document.getElementById("newPassword");
+            var y = document.getElementById("rePassword")
+            if (x.type === "password" && y.type === "password") {
+                x.type = "text";
+                y.type = "text";
+            } else {
+                x.type = "password";
+                y.type = "password";
+            }
+        }
+    </script>
+</body>
+</html>
