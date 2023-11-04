@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <title>Bantuan | Smart LampU</title>
     <style>
         details {
@@ -90,26 +91,37 @@
             line-height: 1.5;
             }
 
-            ul {
+            /* ul {
             margin: 0 0 1em;
             padding: 0 0 0 1em;
             }
 
             li:not(:last-child) {
-            margin-bottom: 0.5em;
-            }
-
-            code {
+                margin-bottom: 0.5em;
+            } */
+/* 
+        code {
             padding: 0.2em;
             border-radius: 3px;
-            background-color: #E0E0E0;
+            background-color: #E0E0E0; 
             
             pre > & {
                 display: block;
                 padding: 1em;
                 margin: 0;
             }
-            }
+        } */
+        .content {
+            margin-bottom: 100px;
+        }
+        .content-title {
+            margin: 0px 20px 30px 30px;
+            text-indent: 40px;
+        }
+        
+        textarea {
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -117,29 +129,76 @@
         <div class="logo">
             <img src="assets/logo2.png" alt="logo1">
         </div>
+        <div class="navbar">
+            <ul>
+                <li><a href="login.html">Masuk</a></li>
+                <li><a href="signup.html">Daftar</a></li>
+                <li><a href="about.html">Tentang</a></li>
+                <li><a href="#">Bantuan</a></li>
+            </ul>
+        </div>
     </header>
     <main>
         <div class="content">
+            <span class="content-title">
+                <h2>Frequently Asked Questions (FAQs):</h2>
+            </span>
             <details>
-                <summary>Cara Login</summary>
+                <summary>Apa itu Smart LampU?</summary>
                 <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
             </details>
             <details>
-                <summary>Lupa Password</summary>
+                <summary>Bagaimana Cara Kerja Smart LampU?</summary>
                 <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
             </details>
             <details>
-                <summary>Bagaimana Bisa?</summary>
+                <summary>Apa saja fitur yang ada pada Smart LampU?</summary>
                 <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
             </details>
             <details>
-                <summary>What Werere</summary>
+                <summary>Bagaimana cara mendaftar akun baru?</summary>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita doloremque consectetur molestias illo eveniet velit itaque, culpa praesentium dignissimos commodi quasi natus blanditiis quo, quae provident at fugiat sequi minus ad voluptas? Eaque aliquid, nesciunt perspiciatis eligendi dolor possimus commodi!</p>
             </details>
             <details>
-                <summary>Who are whee</summary>
+                <summary>Bagaimana jika lupa password?</summary>
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo possimus soluta enim officiis ipsum architecto, nostrum sequi quod id! Ipsum cupiditate rem explicabo amet aliquam blanditiis optio, nemo accusantium vitae labore iure recusandae, ab ex distinctio unde quidem quo modi, quasi excepturi laboriosam architecto et vel. Quia neque quidem blanditiis?</p>
             </details>
+            <details>
+                <summary>Bagaimana jika ingin mengganti email?</summary>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo possimus soluta enim officiis ipsum architecto, nostrum sequi quod id! Ipsum cupiditate rem explicabo amet aliquam blanditiis optio, nemo accusantium vitae labore iure recusandae, ab ex distinctio unde quidem quo modi, quasi excepturi laboriosam architecto et vel. Quia neque quidem blanditiis?</p>
+            </details>
+            <details>
+                <summary>Apa sistem ini aman digunakan?</summary>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo possimus soluta enim officiis ipsum architecto, nostrum sequi quod id! Ipsum cupiditate rem explicabo amet aliquam blanditiis optio, nemo accusantium vitae labore iure recusandae, ab ex distinctio unde quidem quo modi, quasi excepturi laboriosam architecto et vel. Quia neque quidem blanditiis?</p>
+            </details>
+            <span class="content-title"><h3>Pertanyaan lainnya: </h3></span>
+            <div class="input-box1">
+                <div class="input-box2">
+                    <ul>
+                        <form action="">
+                            <li>
+                                <label for="name">Nama Anda</label>
+                                <input type="text" name="name" id="name">
+                            </li>
+                            <li>
+                                <label for="email">Email Anda</label>
+                                <input type="email" name="email" id="email">
+                            </li>
+                            <li>
+                                <label for="message">Pertanyaan:</label>
+                                <br>
+                                <textarea name="message" id="message" cols="55" rows="20"></textarea> 
+                            </li>
+                            <li>
+                                <button type="submit" name="submit">Send</button>
+                            </li>
+                        </form>
+                        <!-- <li>
+                            <div class="add-user">Belum punya akun? <a href="">Daftar</a></div>
+                        </li> -->
+                    </ul>
+                </div>
+            </div>
         </div>
     </main>
     <footer>
@@ -149,9 +208,9 @@
                 <img src="assets/logopnj2.png" alt="" width="120">
             </div>
             <div class="footer-column footer-center">
-                <p>Smart LampU &#169; 2023</p>
-                <p>created by <a href="https://www.at043.github.io/profile">AT043</a>.</p>
-                <br>
+                <p>&#169; Smart LampU 2023</p>
+                <p>Site is still under</p>
+                <p>construction.</p>
             </div>
             <div class="footer-column footer-contact">
                 <ul>
@@ -159,13 +218,13 @@
                        <h3>Reach Us @</h3> 
                     </li>
                     <li>
-                        <a href="mailto:diegogomez81655@gmail.com">Mail</a>
+                        <a href="mailto:diegogomez81655@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                     </li>
                     <li>
-                        <a href="">Instagram</a>
+                        <a href=""><i class="fab fa-instagram" aria-hidden="true"></i></a>
                     </li>
                     <li>
-                        <a href="">X</a>
+                        <a href=""><i class="fa fa-x" aria-hidden="true"></i></a>
                     </li>
                 </ul>
             </div>

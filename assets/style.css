@@ -1,6 +1,5 @@
 /* Main css */
-html {
-    margin: auto 0;
+* {
     box-sizing: border-box;
     scroll-behavior: smooth;
 }
@@ -13,6 +12,44 @@ body {
     width: 100%;
     min-height: 120vh;
     position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: inline;
+    top: 0;
+}
+.navbar {
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    background-color: white;
+    padding: 5px 0px;
+    position: sticky;
+    z-index: 1;
+    top: 0;
+}
+.navbar ul{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+.navbar li {
+    display: inline;
+    list-style-type: none;
+    margin: 0px 20px;
+}
+.navbar a {
+    z-index: 1;
+    text-decoration: none;
+    color: black;
+}
+
+.navbar a:hover{
+    font-weight: bold;
+    font-size: 26px;
+    background-color: black;
+    color: white;
 }
 
 .logo {
@@ -20,8 +57,7 @@ body {
     align-items: center;
     justify-content: center;
     /* border-bottom: 1px solid black; */
-    padding: 10px;
-    top: 0;
+    padding: 30px;
 }
 
 .box-main1{
@@ -77,12 +113,55 @@ body {
     font-weight: bold;
 } */
 
+.input-box1 {
+    margin: 20px;
+    padding-bottom: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-box2 {
+    padding: 30px 60px 30px 0;
+    border: 1px solid black;
+    box-shadow: 10px 10px black;
+}
+
+.input-box2 li {
+    list-style: none;
+    margin: 1rem;
+}
+
+.btn-add-user {
+    border: 1px solid black;
+    box-shadow: 5px 5px black;
+}
+
+input {
+    font-weight: bold;
+    width: 100%;
+    padding: 10px 20px;
+    margin: 8px 0;
+    font-size: 20px;
+    font-family: monospace;
+}
+
 footer {
     border-top: 1px solid black;
     /* position: absolute; */
     bottom: 0;
     height: 20px;
     width: 100%;
+}
+
+footer a {
+    color: black;
+    font-size: 24px;
+    margin: 0px 15px;
+}
+
+footer a:hover {
+    font-size: 28px;
 }
 
 /* .footer-box {
@@ -92,6 +171,7 @@ footer {
 } */
 
 .footer-column {
+    margin-top: 20px;
     display: inline-block;
 }
 
@@ -112,9 +192,12 @@ footer {
     margin-right: 5%;
     margin-left: 10%;
 }
-
+.footer-contact ul{
+    text-align: center;
+}
 .footer-contact li {
     list-style-type: none;
+    display: inline;
 }
 
 /* footer .footer-column {
