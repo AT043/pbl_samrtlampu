@@ -20,44 +20,38 @@
             margin: 0 auto;
             width: 50%;
         }
-        .member-outter h3{
-            margin: 20px 20px;
+        .profile{
+            margin: 20px;
             padding: 30px;
         }
-        .member-inner{
+        .profile-inner{
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             justify-content: center;
         }
         .card {
+            border: 1px solid black;
             height: 270px;
             width: 200px;
-            margin: 10px 80px 80px 40px;
-            border: 1px solid black;
-            box-shadow: 7px 7px black;
+            margin: 20px 100px;
+            box-shadow: 5px 5px black;
         }
-       
-        .member-photo{
+        .card-photos{
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 20px 0px 0px 0px;
+            margin-top: 10px;
         }
-        .member-photo img{
-            height: 110px;
-            width: 90px;
+        .card-photos img{
+            height: 120px;
+            width: 100px;
         }
-        .member-detail{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-
-        .member-detail li{
-            margin-right: 40px;
-            list-style-type: none;
+        .card-details {
+            margin-top: 20px;
             text-align: center;
+        }
+        .card-details p{
+            margin: 10px;
         }
     </style>
 </head>
@@ -68,7 +62,7 @@
         </div>
         <div class="navbar">
             <ul>
-                <li><a href="login.html">Masuk</a></li>
+                <li><a href="login.php">Masuk</a></li>
                 <li><a href="signup.html">Daftar</a></li>
                 <li><a href="#">Tentang</a></li>
                 <li><a href="help.html">Bantuan</a></li>
@@ -105,98 +99,70 @@
                 To make efficient Lightning system that can be used in classroom.
             </p>
         </div>
-        <div class="member-outter">
-            <h3>Project Members: </h3>
-            <div class="member-inner">
+        <div class="profile">
+            <h3>Project Members: </h2>
+            <div class="profile-inner">
                 <div class="card">
-                    <div class="member-profile">
-                        <div class="member-photo">
-                            <img src="assets/members/rangga.jpeg" alt="foto Rangga">
-                        </div>
-                        <div class="member-detail">
-                            <ul>
-                                <li><strong>Rangga Azizzan</strong></li>
-                                <li>TMJ-3A</li>
-                                <li>All-role</li>
-                            </ul>
-                        </div>
+                    <div class="card-photos">
+                        <img src="assets/members/rangga.jpeg" alt="foto Rangga">
+                    </div>
+                    <div class="card-details">
+                        <strong>Rangga Azizzan</strong>
+                        <p>TMJ-3A</p>
+                        <p>All-Role</p>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="member-profile">
-                        <div class="member-photo">
-                            <img src="assets/members/dina.jpeg" alt="foto Dina">
-                        </div>
-                        <div class="member-detail">
-                            <ul>
-                                <li><strong>Dina Yuliasti</strong></li>
-                                <li>TMJ-3A</li>
-                                <li>IoT</li>
-                            </ul>
-                        </div>
+                    <div class="card-photos">
+                        <img src="assets/members/dina.jpeg" alt="foto Dina">
+                    </div>
+                    <div class="card-details">
+                        <strong>Dina Yuliasti</strong>
+                        <p>TMJ-3A</p>
+                        <p>Administrasi</p>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="member-profile">
-                        <div class="member-photo">
-                            <img src="assets/members/adipraja.jpeg" alt="foto Adipraja">
-                        </div>
-                        <div class="member-detail">
-                            <ul>
-                                <li><strong>Adipraja Rama</strong></li>
-                                <li>TMJ-3A</li>
-                                <li>Network</li>
-                            </ul>
-                        </div>
+                    <div class="card-photos">
+                        <img src="assets/members/adipraja.jpeg" alt="foto Adipraja">
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="member-outter">
-            <div class="member-inner">
+                    <div class="card-details">
+                        <strong>Adipraja Rama</strong>
+                        <p>TMJ-3A</p>
+                        <p>Network-Server</p>
+                    </div>
+                </div>   
                 <div class="card">
-                    <div class="member-profile">
-                        <div class="member-photo">
-                            <img src="assets/members/heridansyah.jpeg" alt="foto Herdi">
-                        </div>
-                        <div class="member-detail">
-                            <ul>
-                                <li><strong>Herdian Rama</strong></li>
-                                <li>TMJ-3A</li>
-                                <li>Security</li>
-                            </ul>
-                        </div>
+                    <div class="card-photos">
+                        <img src="assets/members/heridansyah.jpeg" alt="foto Herdiansyah">
+                    </div>
+                    <div class="card-details">
+                        <strong>Herdiansyah Rama</strong>
+                        <p>TMJ-3A</p>
+                        <p>Security-Dokum</p>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="member-profile">
-                        <div class="member-photo">
-                            <img src="assets/members/rasyid.jpeg" alt="foto Rasyid">
-                        </div>
-                        <div class="member-detail">
-                            <ul>
-                                <li><strong>Rasyid Fathoni</strong></li>
-                                <li>TMJ-3A</li>
-                                <li>IoT</li>
-                            </ul>
-                        </div>
+                    <div class="card-photos">
+                        <img src="assets/members/rasyid.jpeg" alt="foto Rasyid">
+                    </div>
+                    <div class="card-details">
+                        <strong>Rasyid Fathoni</strong>
+                        <p>TMJ-3A</p>
+                        <p>IoT</p>
                     </div>
                 </div>
                 <div class="card">
-                    <div class="member-profile">
-                        <div class="member-photo">
-                            <img src="https://s1.zerochan.net/Ayase.Saki.600.3568026.jpg" alt="ayase">
-                        </div>
-                        <div class="member-detail">
-                            <ul>
-                                <li><strong>Daffa AT</strong></li>
-                                <li>TMJ-3A</li>
-                                <li>Website</li>
-                            </ul>
-                        </div>
+                    <div class="card-photos">
+                        <img src="https://s1.zerochan.net/Ayase.Saki.600.3568026.jpg" alt="foto Daffa">
+                    </div>
+                    <div class="card-details">
+                        <strong>Daffa Thariq</strong>
+                        <p>TMJ-3A</p>
+                        <p>Website</p>
                     </div>
                 </div>
-            </div>
+            </div>    
         </div>
     </main>
     <footer>
@@ -213,7 +179,7 @@
             <div class="footer-column footer-contact">
                 <ul>
                     <li>
-                       <h3>Reach Us @</h3> 
+                       <h3>Contact</h3> 
                     </li>
                     <li>
                         <a href="mailto:diegogomez81655@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>

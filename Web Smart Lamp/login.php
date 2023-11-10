@@ -1,11 +1,30 @@
+<?php
+
+
+if (isset($_POST['submit'])) {
+    $error = false;
+    if ($_POST["username"] == "admine" && $_POST["password"] == "12310") {
+        header("Location: admin.html");
+        exit;
+    } elseif (isset($_POST["submit"])) {
+        if ($_POST["username"] == "user" && $_POST["password"] == "user12310") {
+            header("Location: userdashboard.html");
+            exit;
+        }   
+    } else {
+        $error = true;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar | Smart LampU</title>
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Masuk | Smart LampU</title>
     <style>
         input:focus {
             background-color: lightblue;
@@ -44,42 +63,35 @@
         </div>
     </header>
     <main>
-        <div class="input-box1">
-            <h1>Buat Akun Baru</h1>
-            <form>
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="tokenAdmin">Token Admin (Optional)</label>
-                    <input type="text" id="tokenAdmin" name="tokenAdmin">
-                </div>
-    
-                <div class="form-group">
-                    <label for="newPassword">Password</label>
-                    <input type="password" id="newPassword" name="newPassword" required>
-                </div>
-                <div class="form-group">
-                    <label for="rePassword">Ulangi Password</label>
-                    <input type="password" id="rePassword" name="rePassword" required>
-                </div>
-    
-                <div class="form-group show-password-label">
-                    <label for="showPassword">Tampilkan Password</label>
-                    <input type="checkbox" id="showPassword" class="checkbox" onclick="seePass()" >
-                </div>
-                <button type="submit">Daftar</button>
-            </form>
-            <div class="sign-in">Sudah punya akun? <a href="login.php">Masuk</a></div>
-            <div class="sign-in">atau perlu <a href="help.html">Bantuan</a></div>
-        </div>
+        <?php 
+        if ($error) {
+                echo '<script language="javascript">';
+                echo 'alert("Password/username salah!")';
+                echo '</script>';
+            }
+        ?>
+       <div class="input-box">
+            <div class="input-box1">        
+                <h1>Masuk</h1>
+                <form method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="form-group show-password-label">
+                        <label for="showPassword">Tampilkan Password</label>
+                        <input type="checkbox" id="showPassword" class="checkbox" onclick="seePass()" >
+                    </div>
+                    <button type="submit" name="submit">Masuk</button>
+                </form>
+                <div class="sign-in">Belum punya akun? <a href="signup.html">Daftar</a></div>
+                <div class="sign-in">atau perlu <a href="help.html">Bantuan</a></div>
+            </div>
+       </div>
     </main>
     <footer>
         <div class="footer-box">
@@ -95,7 +107,7 @@
             <div class="footer-column footer-contact">
                 <ul>
                     <li>
-                       <h3>Reach Us @</h3> 
+                       <h3>Contact</h3> 
                     </li>
                     <li>
                         <a href="mailto:diegogomez81655@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
@@ -112,14 +124,11 @@
     </footer>
     <script>
         function seePass(){
-            var x = document.getElementById("newPassword");
-            var y = document.getElementById("rePassword")
-            if (x.type === "password" && y.type === "password") {
+            var x = document.getElementById("password");
+            if (x.type === "password") {
                 x.type = "text";
-                y.type = "text";
             } else {
                 x.type = "password";
-                y.type = "password";
             }
         }
     </script>
