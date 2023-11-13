@@ -8,7 +8,7 @@
     <title>Bantuan | Smart LampU</title>
     <style>
         details {
-            margin: 1.5rem auto;
+            margin: 40px auto;
             padding: 0 1rem;
             width: 35em;
             max-width: calc(100% - 2rem);
@@ -48,42 +48,42 @@
                 opacity: .6;
                 }
             }
-            }
+        }
 
             summary {
-            padding: 1rem 2em 1rem 0;
-            display: block;
-            position: relative;
-            font-size: 1.33em;
-            font-weight: bold;
-            cursor: pointer;
+                padding: 1rem 2em 1rem 0;
+                display: block;
+                position: relative;
+                font-size: 1.33em;
+                font-weight: bold;
+                cursor: pointer;
             
-            &::before,
-            &::after {
-                width: .75em;
-                height: 2px;
-                position: absolute;
-                top: 50%;
-                right: 0;
-                content: '';
-                background-color: currentColor;
-                text-align: right;
-                transform: translateY(-50%);
-                transition: transform .2s ease-in-out;
-            }
+                &::before,
+                &::after {
+                    width: .75em;
+                    height: 2px;
+                    position: absolute;
+                    top: 50%;
+                    right: 0;
+                    content: '';
+                    background-color: currentColor;
+                    text-align: right;
+                    transform: translateY(-50%);
+                    transition: transform .2s ease-in-out;
+                }
             
-            &::after {
-                transform: translateY(-50%) rotate(90deg);
-            }
+                &::after {
+                    transform: translateY(-50%) rotate(90deg);
+                }
 
-            [open] &::after {
-                transform: translateY(-50%) rotate(180deg);
-            }
+                [open] &::after {
+                    transform: translateY(-50%) rotate(180deg);
+                }
 
             
-            &::-webkit-details-marker {
-                display: none;
-            }
+                &::-webkit-details-marker {
+                    display: none;
+                }
             }
 
             p {
@@ -91,26 +91,7 @@
             line-height: 1.5;
             }
 
-            /* ul {
-            margin: 0 0 1em;
-            padding: 0 0 0 1em;
-            }
-
-            li:not(:last-child) {
-                margin-bottom: 0.5em;
-            } */
-/* 
-        code {
-            padding: 0.2em;
-            border-radius: 3px;
-            background-color: #E0E0E0; 
-            
-            pre > & {
-                display: block;
-                padding: 1em;
-                margin: 0;
-            }
-        } */
+        
         .content {
             margin-bottom: 100px;
         }
@@ -118,10 +99,47 @@
             margin: 0px 20px 30px 30px;
             text-indent: 40px;
         }
+
+        .input-box1 {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid black;
+            box-shadow: 12px 12px black;
+        }
+
+        button{
+            height: 30px;
+            width: 70px;
+            border: 1px solid black;
+            box-shadow: 3px 3px black;
+            font-size: 18px;
+            margin-bottom: 15px;
+            margin-left: 5px;
+        }
+
+        button:hover {
+            font-weight: bold;
+            box-shadow: 1px 1px black;
+            cursor:pointer;
+        }
         
         textarea {
-            font-size: 20px;
+            font-size: 24px;
+            height: 500px;
+            width: 750px;
         }
+
+        .question {
+            margin: 140px 0px 20px 45px;
+        }
+        /* .footer-logo-sub{
+            display: flex;
+            justify-content: center;
+        }
+        .footer-logo-sub img {
+            margin: 0px 20px;
+        } */
     </style>
 </head>
 <body>
@@ -169,64 +187,59 @@
             </details>
             <details>
                 <summary>Apa sistem ini aman digunakan?</summary>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo possimus soluta enim officiis ipsum architecto, nostrum sequi quod id! Ipsum cupiditate rem explicabo amet aliquam blanditiis optio, nemo accusantium vitae labore iure recusandae, ab ex distinctio unde quidem quo modi, quasi excepturi laboriosam architecto et vel. Quia neque quidem blanditiis?</p>
+                <p>Insha Allah aman gan, hehe...</p>
             </details>
-            <span class="content-title"><h3>Pertanyaan lainnya: </h3></span>
-            <div class="input-box1">
-                <div class="input-box2">
-                    <ul>
-                        <form action="">
-                            <li>
-                                <label for="name">Nama Anda</label>
-                                <input type="text" name="name" id="name">
-                            </li>
-                            <li>
-                                <label for="email">Email Anda</label>
-                                <input type="email" name="email" id="email">
-                            </li>
-                            <li>
-                                <label for="message">Pertanyaan:</label>
-                                <br>
-                                <textarea name="message" id="message" cols="55" rows="20"></textarea> 
-                            </li>
-                            <li>
-                                <button type="submit" name="submit">Send</button>
-                            </li>
-                        </form>
-                        <!-- <li>
-                            <div class="add-user">Belum punya akun? <a href="">Daftar</a></div>
-                        </li> -->
-                    </ul>
-                </div>
+            <div class="question">
+                <h2>Pertanyaan Lainnya:</h2>
             </div>
+            <div class="input-box">
+                <div class="input-box1">        
+                    <h1>Kirim Pertanyaan</h1>
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="username">Nama</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Pertanyaan:</label>
+                            <textarea name="message" id="message" placeholder="Silahkan Tulis Pertanyaan Anda di Sini." required></textarea> 
+                        </div>
+                        <button type="submit" name="submit">Kirim</button>
+                    </form>
+                </div>
+           </div>
         </div>
     </main>
     <footer>
         <div class="footer-box">
-            <div class="footer-column footer-logo">
-                <img src="assets/logo2.png" alt="" width="240">
-                <img src="assets/logopnj2.png" alt="" width="120">
+            <div class="footer-column">
+                <div class="footer-logo-main">
+                    <img src="assets/logo2.png" alt="" width="240">
+                    <img src="assets/help.png" alt="" width="120">
+                </div>
+                <!-- <div class="footer-logo-sub">
+                    <img src="assets/beespro.JPG" alt="" width="50">
+                    <img src="assets/hmtk.JPG" alt="" width="50">
+                    <img src="assets/Tmje.JPG" alt="" width="50">
+                    <img src="assets/logopnj.png" alt="" width="50">
+                </div> -->
             </div>
             <div class="footer-column footer-center">
                 <p>&#169; Smart LampU 2023</p>
-                <p>Site is still under</p>
-                <p>construction.</p>
+                <!-- <p>Site is still under</p>
+                <p>construction.</p> -->
             </div>
-            <div class="footer-column footer-contact">
-                <ul>
-                    <li>
-                       <h3>Reach Us @</h3> 
-                    </li>
-                    <li>
-                        <a href="mailto:diegogomez81655@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                    </li>
-                    <li>
-                        <a href=""><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                    </li>
-                    <li>
-                        <a href=""><i class="fa fa-x" aria-hidden="true"></i></a>
-                    </li>
-                </ul>
+            <div class="footer-column">
+                <div class="footer-contact">
+                    <h3>Kontak</h3>
+                    <a href="mailto:diegogomez81655@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                    <a href=""><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    <a href=""><i class="fa fa-x" aria-hidden="true"></i></a>
+                </div>
             </div>
         </div>
     </footer>

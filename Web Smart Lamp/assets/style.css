@@ -6,7 +6,7 @@
 
 body {
     background-color: white;
-    font-size: 20px;
+    font-size: 22px;
     color: black;
     font-family: monospace;
     width: 100%;
@@ -109,47 +109,9 @@ header {
     color: black;
     text-decoration: none;
 }
-/* .btn-main a:hover{
-    font-weight: bold;
-} */
-
-/* .input-box1 {
-    margin: 20px;
-    padding-bottom: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.input-box2 {
-    display: flex;
-    justify-content: left;
-    padding: 30px 60px 30px 0px;
-    border: 1px solid black;
-    box-shadow: 10px 10px black;
-}
-
-.input-box2 li {
-    list-style: none;
-    margin: 1rem;
-}
-
-.btn-add-user {
-    border: 1px solid black;
-    box-shadow: 5px 5px black;
-}
-
-input {
-    font-weight: bold;
-    width: 100%;
-    padding: 10px 20px;
-    margin: 8px 0;
-    font-size: 20px;
-    font-family: monospace;
-} */
 
 .input-box{
-    margin: 10px 80px;
+    padding: 40px 10px;
 }
 
 .input-box1 {
@@ -209,79 +171,36 @@ footer {
 
 footer a {
     color: black;
-    font-size: 24px;
+    font-size: 36px;
     margin: 0px 15px;
 }
 
 footer a:hover {
-    font-size: 28px;
+    font-size: 40px;
 }
 
-/* .footer-box {
+.footer-box {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     justify-content: center;
-} */
+}
 
 .footer-column {
-    margin-top: 20px;
-    display: inline-block;
-}
-
-.footer-logo {
-    margin-left: 6%;
-    margin-right: 10%;
-}
-
-.footer-center {
-    margin-right: 5%;
+    text-align: center;
+    margin: 20px 100px 20px 10px;
 }
 
 .footer-center p {
-    text-align: center;
+    margin-top: 40px;
+    font-size: 28px;
 }
 
 .footer-contact {
-    margin-right: 5%;
-    margin-left: 10%;
-}
-.footer-contact ul{
+    /* display: flex;
+    justify-content: center; */
+    margin-left: 40px;
     text-align: center;
 }
-.footer-contact li {
-    list-style-type: none;
-    display: inline;
-}
-
-/* footer .footer-column {
-    float: left;
-}
-
-footer .footer-logo {
-    margin-left: 10px;
-    width: 40%;
-}
-
-footer .footer-logo img{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40%;
-}
-
-footer .footer-center {
-    width: 30%;
-}
-
-footer .footer-contact {
-    width: 30%;
-}
-
-footer .footer-row:after {
-    content: "";
-    display: table;
-    clear: both;
-} */
 
 
 

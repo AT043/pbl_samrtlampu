@@ -3,29 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Smart LampU</title>
+    <title>Lampu | Smart LampU</title>
     <link rel="stylesheet" href="assets/style.css">
     <style>
-        main {
-            margin: 80px 10px;
-        }
-       .outter-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .user-container {
+        .lamp-status{
+            float: left;
+            width: 35%;
             border: 1px solid black;
-            padding: 20px;
-            height: 248px;
-            width: 248px;
-            margin: 60px 160px;
-            text-align: center;
-            box-shadow: 2px 2px 5px 5px #ccc;
+            height: 100%;
+            width: 50%;
         }
-        .user-container:hover {
-            box-shadow: 1px 1px 3px 3px #ccc;
-            cursor: pointer;
+        footer {
+            position: absolute;
         }
     </style>
 </head>
@@ -43,19 +32,11 @@
         </div>
     </header>
     <main>
-        <div class="outter-container">
-            <div class="user-container">
-                <h3>Lampu 1</h3>
-            </div>
-            <div class="user-container">
-                <h3>Lampu 2</h3>
-            </div>
-            <div class="user-container">
-                <h3>Lampu 3</h3>
-            </div>
-            <div class="user-container">
-                <h3>Lampu 4</h3>
-            </div>
+        <div class="lamp-status">
+            
+        </div>
+        <div class="lamp-control">
+
         </div>
     </main>
     <footer>
