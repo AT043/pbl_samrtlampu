@@ -1,0 +1,206 @@
+/* Main css */
+* {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: white;
+    font-size: 22px;
+    color: black;
+    font-family: monospace;
+    width: 100%;
+    min-height: 120vh;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: inline;
+    top: 0;
+}
+.navbar {
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    background-color: white;
+    padding: 5px 0px;
+    position: sticky;
+    z-index: 1;
+    top: 0;
+}
+.navbar ul{
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+.navbar li {
+    display: inline;
+    list-style-type: none;
+    margin: 0px 20px;
+}
+.navbar a {
+    z-index: 1;
+    text-decoration: none;
+    color: black;
+}
+
+.navbar a:hover{
+    font-weight: bold;
+    font-size: 26px;
+    background-color: black;
+    color: white;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border-bottom: 1px solid black; */
+    padding: 30px;
+}
+
+.box-main1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+    padding: 20px;
+}
+
+.box-main2 {
+    padding: 30px;
+    width: 30%;
+    height: 35%;
+    border:1px solid black;
+    box-shadow: 10px 10px black;
+    margin-top: 30px;
+}
+
+.box-main2 h2{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.button-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.button-main li{
+    margin-right: 42px;
+    list-style-type: none;
+}
+
+.btn-main {
+    text-align: center;
+    padding: 15px 20px;
+    border: 1px solid black;
+    margin-bottom: 20px;
+    box-shadow: 5px 5px black;
+}
+
+.btn-main:hover {
+    box-shadow: 2px 2px black;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.button-main a {
+    color: black;
+    text-decoration: none;
+}
+
+.input-box{
+    padding: 40px 10px;
+}
+
+.input-box1 {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid black;
+    box-shadow: 12px 12px black;
+}
+
+.input-box1 h1{
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"]
+{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid black;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+input[type="password"]{
+    letter-spacing: 8px;
+}
+
+input[type="text"],
+input[type="email"] {
+    letter-spacing: 3px;
+}
+
+input[type="checkbox"]{
+    height: 20px;
+    width: 25px;
+    margin-left: 10px;
+}
+
+footer {
+    border-top: 1px solid black;
+    /* position: absolute; */
+    bottom: 0;
+    height: 20px;
+    width: 100%;
+}
+
+footer a {
+    color: black;
+    font-size: 36px;
+    margin: 0px 15px;
+}
+
+footer a:hover {
+    font-size: 40px;
+}
+
+.footer-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-column {
+    text-align: center;
+    margin: 20px 100px 20px 10px;
+}
+
+.footer-center p {
+    margin-top: 40px;
+    font-size: 28px;
+}
+
+.footer-contact {
+    /* display: flex;
+    justify-content: center; */
+    margin-left: 40px;
+    text-align: center;
+}
+
+
+
