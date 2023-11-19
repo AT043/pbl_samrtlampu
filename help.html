@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Bantuan | Smart LampU</title>
+    <style>
+        details {
+            margin: 40px auto;
+            padding: 0 1rem;
+            width: 35em;
+            max-width: calc(100% - 2rem);
+            position: relative;
+            border: 1px solid #78909C;
+            /* border-radius: 6px; */
+            /* background-color: #ECEFF1; */
+            background-color: #fff;
+            box-shadow: 7px 7px black;
+            color: #263238;
+            transition: background-color .15s;
+            
+            > :last-child {
+                margin-bottom: 1rem;
+            }
+            
+            &::before {
+                width: 100%;
+                height: 100%;
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                border-radius: inherit;
+                opacity: .15;
+                /* box-shadow: 0 .25em .5em #263238; */
+                /* box-shadow: 10px 10px black; */
+                pointer-events: none;
+                transition: opacity .2s;
+                z-index: -1;
+            }
+            
+            &[open] {
+                background-color: #FFF;
+                
+                &::before {
+                opacity: .6;
+                }
+            }
+        }
+
+            summary {
+                padding: 1rem 2em 1rem 0;
+                display: block;
+                position: relative;
+                font-size: 1.33em;
+                font-weight: bold;
+                cursor: pointer;
+            
+                &::before,
+                &::after {
+                    width: .75em;
+                    height: 2px;
+                    position: absolute;
+                    top: 50%;
+                    right: 0;
+                    content: '';
+                    background-color: currentColor;
+                    text-align: right;
+                    transform: translateY(-50%);
+                    transition: transform .2s ease-in-out;
+                }
+            
+                &::after {
+                    transform: translateY(-50%) rotate(90deg);
+                }
+
+                [open] &::after {
+                    transform: translateY(-50%) rotate(180deg);
+                }
+
+            
+                &::-webkit-details-marker {
+                    display: none;
+                }
+            }
+
+            p {
+            margin: 0 0 1em;
+            line-height: 1.5;
+            }
+
+        
+        .content {
+            margin-bottom: 100px;
+        }
+        .content-title {
+            margin: 0px 20px 30px 30px;
+            text-indent: 40px;
+        }
+
+        .input-box1 {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid black;
+            box-shadow: 12px 12px black;
+        }
+
+        button{
+            height: 30px;
+            width: 70px;
+            border: 1px solid black;
+            box-shadow: 3px 3px black;
+            font-size: 18px;
+            margin-bottom: 15px;
+            margin-left: 5px;
+        }
+
+        button:hover {
+            font-weight: bold;
+            box-shadow: 1px 1px black;
+            cursor:pointer;
+        }
+        
+        textarea {
+            font-size: 24px;
+            height: 500px;
+            width: 750px;
+        }
+
+        .question {
+            margin: 140px 0px 20px 45px;
+        }
+        /* .footer-logo-sub{
+            display: flex;
+            justify-content: center;
+        }
+        .footer-logo-sub img {
+            margin: 0px 20px;
+        } */
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <img src="assets/logo2.png" alt="logo1">
+        </div>
+        <div class="navbar">
+            <ul>
+                <li><a href="login.html">Masuk</a></li>
+                <li><a href="signup.html">Daftar</a></li>
+                <li><a href="about.html">Tentang</a></li>
+                <li><a href="#">Bantuan</a></li>
+            </ul>
+        </div>
+    </header>
+    <main>
+        <div class="content">
+            <span class="content-title">
+                <h2>Frequently Asked Questions (FAQs):</h2>
+            </span>
+            <details>
+                <summary>Apa itu Smart LampU?</summary>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
+            </details>
+            <details>
+                <summary>Bagaimana Cara Kerja Smart LampU?</summary>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
+            </details>
+            <details>
+                <summary>Apa saja fitur yang ada pada Smart LampU?</summary>
+                <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat, architecto vero. Atque, nulla? Facilis commodi labore eveniet velit consectetur ut quisquam mollitia error sequi est excepturi ratione, voluptatibus dignissimos natus.</p>
+            </details>
+            <details>
+                <summary>Bagaimana cara mendaftar akun baru?</summary>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita doloremque consectetur molestias illo eveniet velit itaque, culpa praesentium dignissimos commodi quasi natus blanditiis quo, quae provident at fugiat sequi minus ad voluptas? Eaque aliquid, nesciunt perspiciatis eligendi dolor possimus commodi!</p>
+            </details>
+            <details>
+                <summary>Bagaimana jika lupa password?</summary>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo possimus soluta enim officiis ipsum architecto, nostrum sequi quod id! Ipsum cupiditate rem explicabo amet aliquam blanditiis optio, nemo accusantium vitae labore iure recusandae, ab ex distinctio unde quidem quo modi, quasi excepturi laboriosam architecto et vel. Quia neque quidem blanditiis?</p>
+            </details>
+            <details>
+                <summary>Bagaimana jika ingin mengganti email?</summary>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Illo possimus soluta enim officiis ipsum architecto, nostrum sequi quod id! Ipsum cupiditate rem explicabo amet aliquam blanditiis optio, nemo accusantium vitae labore iure recusandae, ab ex distinctio unde quidem quo modi, quasi excepturi laboriosam architecto et vel. Quia neque quidem blanditiis?</p>
+            </details>
+            <details>
+                <summary>Apa sistem ini aman digunakan?</summary>
+                <p>Insha Allah aman gan, hehe...</p>
+            </details>
+            <div class="question">
+                <h2>Pertanyaan Lainnya:</h2>
+            </div>
+            <div class="input-box">
+                <div class="input-box1">        
+                    <h1>Kirim Pertanyaan</h1>
+                    <form method="post">
+                        <div class="form-group">
+                            <label for="username">Nama</label>
+                            <input type="text" id="username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Pertanyaan:</label>
+                            <textarea name="message" id="message" placeholder="Silahkan Tulis Pertanyaan Anda di Sini." required></textarea> 
+                        </div>
+                        <button type="submit" name="submit">Kirim</button>
+                    </form>
+                </div>
+           </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer-box">
+            <div class="footer-column">
+                <div class="footer-logo-main">
+                    <img src="assets/logo2.png" alt="" width="240">
+                    <img src="assets/help.png" alt="" width="120">
+                </div>
+                <!-- <div class="footer-logo-sub">
+                    <img src="assets/beespro.JPG" alt="" width="50">
+                    <img src="assets/hmtk.JPG" alt="" width="50">
+                    <img src="assets/Tmje.JPG" alt="" width="50">
+                    <img src="assets/logopnj.png" alt="" width="50">
+                </div> -->
+            </div>
+            <div class="footer-column footer-center">
+                <p>&#169; Smart LampU 2023</p>
+                <!-- <p>Site is still under</p>
+                <p>construction.</p> -->
+            </div>
+            <div class="footer-column">
+                <div class="footer-contact">
+                    <h3>Kontak</h3>
+                    <a href="mailto:diegogomez81655@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+                    <a href=""><i class="fab fa-instagram" aria-hidden="true"></i></a>
+                    <a href=""><i class="fa fa-x" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
