@@ -134,7 +134,9 @@ if (isset($_POST['submit'])) {
                 </form>
                 <div class="sign-in">Belum punya akun? <a href="signup.php">Daftar</a></div>
                 <div class="sign-in">atau perlu <a href="help.html">Bantuan</a></div>
-                <p>Lupa Akun? <button type="submit" name="reset">Reset</button></p>
+		<form name="update" method="post" >
+		    <p>Lupa akun? <button name = "update" type="submit">reset</button></p>
+
             </div>
        </div>
     </main>
@@ -178,3 +180,10 @@ if (isset($_POST['submit'])) {
     </script>
 </body>
 </html>
+
+<?php
+if (isset($_POST['update']))
+{
+exec("/usr/bin/python /var/www/html/mysql.py $input_val");
+}
+?>

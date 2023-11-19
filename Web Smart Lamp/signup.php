@@ -21,7 +21,7 @@ if (isset($_POST['daftar'])) {
     // $user_acc = !empty(trim($username)) && !empty(trim($email)) && empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass));
     // $admin_acc = !empty(trim($username)) && !empty(trim($email)) && !empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass)); 
   
-    if (!empty(trim($username)) && !empty(trim($email)) && !empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass))) {
+    // if (!empty(trim($username)) && !empty(trim($email)) && !empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass))) {
         if ($password == $repass) {
             if (cek_uname_admin($username, $con) == 0) {
                 if (cek_token($token, $con) == 1) {
@@ -74,9 +74,9 @@ if (isset($_POST['daftar'])) {
             $validate = 'Password tidak sama !!';
         }
     
-    } else {
-        $error = 'Data tidak boleh kosong !!';
-    } 
+    // } else {
+    //     $error = 'Data tidak boleh kosong !!';
+    // } 
 }
 
 function cek_uname($username, $con)
