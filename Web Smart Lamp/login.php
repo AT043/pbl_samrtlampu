@@ -1,21 +1,65 @@
 <?php
+require('koneksi.php');
+session_start();
+$error = '';
+$validate = '';
 
+// Checking if the session username is available; if yes, redirect to the userdashboard page
+if (isset($_SESSION['username'])) {
+    header('Location: userdashboard.html');
+    exit;
+}
 
+// Checking if the form is submitted
 if (isset($_POST['submit'])) {
-    $error = false;
-    if ($_POST["username"] == "admine" && $_POST["password"] == "12310") {
-        header("Location: admin.html");
-        exit;
-    } elseif (isset($_POST["submit"])) {
-        if ($_POST["username"] == "user" && $_POST["password"] == "user12310") {
-            header("Location: userdashboard.html");
-            exit;
-        }   
+    $username = stripslashes($_POST['username']);
+    $username = mysqli_real_escape_string($con, $username);
+    $password = stripslashes($_POST['password']);
+    $password = mysqli_real_escape_string($con, $password);
+
+    // Checking if the form fields are not empty
+    if (!empty(trim($username)) && !empty(trim($password))) {
+        // Selecting data based on username from the user_account table
+        $query  = "SELECT * FROM user_account WHERE username = '$username'";
+        $result = mysqli_query($con, $query);
+        $rows   = mysqli_num_rows($result);
+
+        if ($rows != 0) {
+            $hash = mysqli_fetch_assoc($result)['password'];
+            // Verifying the password for user login
+            if (password_verify($password, $hash)) {
+                $_SESSION['username'] = $username;
+                header('Location: userdashboard.html');
+                exit;
+            } else {
+                $error = 'Login gagal! Silakan cek username dan password Anda.';
+            }
+        } else {
+            // If the user is not found in user_account, check in admin_account
+            $query  = "SELECT * FROM admin_account WHERE username = '$username'";
+            $result = mysqli_query($con, $query);
+            $rows   = mysqli_num_rows($result);
+
+            if ($rows != 0) {
+                $hash = mysqli_fetch_assoc($result)['password'];
+                // Verifying the password for admin login
+                if (password_verify($password, $hash)) {
+                    $_SESSION['username'] = $username;
+                    header('Location: admin.html');
+                    exit;
+                } else {
+                    $error = 'Login gagal! Silakan cek username dan password Anda.';
+                }
+            } else {
+                $error = 'Login gagal! Silakan cek username dan password Anda.';
+            }
+        }
     } else {
-        $error = true;
+        $error = 'Data tidak boleh kosong!';
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -63,13 +107,13 @@ if (isset($_POST['submit'])) {
         </div>
     </header>
     <main>
-        <?php 
+        <!-- <?php 
         if ($error) {
                 echo '<script language="javascript">';
                 echo 'alert("Password/username salah!")';
                 echo '</script>';
             }
-        ?>
+        ?> -->
        <div class="input-box">
             <div class="input-box1">        
                 <h1>Masuk</h1>
@@ -88,8 +132,9 @@ if (isset($_POST['submit'])) {
                     </div>
                     <button type="submit" name="submit">Masuk</button>
                 </form>
-                <div class="sign-in">Belum punya akun? <a href="signup.html">Daftar</a></div>
+                <div class="sign-in">Belum punya akun? <a href="signup.php">Daftar</a></div>
                 <div class="sign-in">atau perlu <a href="help.html">Bantuan</a></div>
+                <p>Lupa Akun? <button type="submit" name="reset">Reset</button></p>
             </div>
        </div>
     </main>
