@@ -1,4 +1,10 @@
 /* Main css */
+:root {
+    --white: #fff;
+    --light-grey: #ccc;
+    --font: #000;
+}
+
 * {
     box-sizing: border-box;
     scroll-behavior: smooth;
@@ -8,9 +14,9 @@ body {
     background-color: white;
     font-size: 22px;
     color: black;
-    font-family: monospace;
+    font-family: Tahoma;
     width: 100%;
-    min-height: 120vh;
+    height: 100%;
     position: relative;
     margin: 0;
     padding: 0;
@@ -20,45 +26,54 @@ header {
     display: inline;
     top: 0;
 }
-.navbar {
-    border-bottom: 1px solid black;
-    border-top: 1px solid black;
-    background-color: white;
-    padding: 5px 0px;
-    position: sticky;
-    z-index: 1;
-    top: 0;
-}
-.navbar ul{
-    display: flex;
-    align-items: center;
-    justify-content: right;
-}
-.navbar li {
-    display: inline;
-    list-style-type: none;
-    margin: 0px 20px;
-}
-.navbar a {
-    z-index: 1;
-    text-decoration: none;
-    color: black;
-}
 
-.navbar a:hover{
-    font-weight: bold;
-    font-size: 26px;
-    background-color: black;
-    color: white;
-}
+/*Navbar*/
+    .navbar {
+        border-bottom: 1px solid #ccc;
+        background-color: white;
+        position: sticky;
+        z-index: 1;
+        top: 0;
+    }
+    .navbar ul{
+        display: flex;
+        align-items: center;
+        justify-content: right;
+    }
+    .navbar li {
+        display: inline;
+        list-style-type: none;
+        margin: 0px 30px;
+    }
+    .navbar a {
+        z-index: 1;
+        text-decoration: none;
+        color: black;
+    }
 
-.logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* border-bottom: 1px solid black; */
-    padding: 30px;
-}
+    .navbar a:hover{
+        font-weight: bold;
+        font-size: 26px;
+        background-color: black;
+        color: white;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* border-bottom: 1px solid black; */
+        padding: 30px;
+    }
+    .inner-nav {
+        display: flex;
+    }
+    .inner-nav p {
+        margin-right: auto;
+        margin-left: 60px;
+        font-size: 24px;
+        font-weight: bold;
+    }
 
 .box-main1{
     display: flex;
@@ -161,46 +176,22 @@ input[type="checkbox"]{
     margin-left: 10px;
 }
 
-footer {
-    border-top: 1px solid black;
-    /* position: absolute; */
-    bottom: 0;
-    height: 20px;
-    width: 100%;
-}
-
-footer a {
-    color: black;
-    font-size: 36px;
-    margin: 0px 15px;
-}
-
-footer a:hover {
-    font-size: 40px;
-}
-
-.footer-box {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.footer-column {
-    text-align: center;
-    margin: 20px 100px 20px 10px;
-}
-
-.footer-center p {
-    margin-top: 40px;
-    font-size: 28px;
-}
-
-.footer-contact {
-    /* display: flex;
-    justify-content: center; */
-    margin-left: 40px;
-    text-align: center;
-}
+/* Footer */
+    footer {
+        padding: 20px;
+        width: 100%;
+        text-align: center;
+        bottom: 0;
+    }
+    footer:before {
+        content: '';
+        display: block;
+        left: 50%;
+        position: relative;
+        width: 40%;
+        border-top: 1px solid #ccc;
+        transform: translate(-50%, 0);
+    }
 
 
 

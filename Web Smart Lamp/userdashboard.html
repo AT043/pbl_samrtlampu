@@ -6,85 +6,359 @@
     <title>Dashboard | Smart LampU</title>
     <link rel="stylesheet" href="assets/style.css">
     <style>
-        main {
-            margin: 80px 10px;
-        }
-       .outter-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .user-container {
-            border: 1px solid black;
-            padding: 20px;
-            height: 248px;
-            width: 248px;
-            margin: 60px 160px;
-            text-align: center;
-            box-shadow: 2px 2px 5px 5px #ccc;
-        }
-        .user-container:hover {
-            box-shadow: 1px 1px 3px 3px #ccc;
-            cursor: pointer;
-        }
+     main {
+        height: 100%;
+     }
+     .mode {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .manual-lamp-mode {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-basis: 48%; /* Set the width to 40% */
+        margin: 50px 0px;
+    }
+
+    .auto-lamp-mode {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-basis: 52%; /* Set the width to 60% */
+    }
+
+    .lamp-mode-box {
+        border: 1px solid #ccc;
+        height: 500px;
+        width: 340px;
+            /*margin: 30px;*/
+    }
+    .lamp-mode-box h3, p {
+        text-align: center;
+    }
+    .lamp-mode-box-m {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 10px 30px;
+    }
+
+    .lamp-circle {
+        border: 1px solid #ccc;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+    }
+
+    .manual-all-lamp {
+        border-top: 1px solid #ccc;
+    }
+    .manual-all-lamp h3{
+        margin: 0;
+    }
+
+    .all-lamp-btn {
+        display: flex;
+    }
+
+    .btn-all-lamp{
+        border: 1px solid #ccc;
+        margin: 15px 10px;
+        width: 70px;
+        height: 30px;
+        text-align: center
+    }
+
+
+    .auto-schedul {
+        border: 1px solid #ccc;
+        width: 400px;
+        height: 240px;
+        margin: 30px 0px;
+    }
+
+    .auto-schedul h3 {
+        text-align: center;
+    }
+
+    .auto-schedul table {
+        display: flex;
+        justify-content: center;
+    }
+
+    .auto-schedul th, td {
+        text-align: center;
+        padding: 5px 10px;
+    }
+
+    .auto-timer {
+        border: 1px solid #ccc;
+        width: 400px;
+        height: 240px;
+        margin: 30px 0px;
+    }
+
+    .auto-timer h3{
+        text-align: center;
+    }
+
+    .auto-mode-switch {
+        display: flex;
+        justify-content: center;
+    }
+    .auto-lamp-block {
+        display: block;
+    }
+/*
+    .lamp-switch input {
+        position: absolute;
+        opacity: 0;
+    }*/
+
+    .auto-mode-switch-block {
+        display: block;
+ /*       margin: 10px 0;*/
+    }
+
+    .auto-mode-switch-block .lamp-circle{
+        margin: 10px auto;
+    }
+
+        /**
+         * 1. Adjust this to size
+         */
+
+    .toggle {
+      --width: 65px;
+      --height: calc(var(--width) / 2);
+
+      position: relative;
+      display: inline-block;
+      width: var(--width);
+      height: var(--height);
+      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+      border-radius: var(--height);
+      cursor: pointer;
+    }
+
+    .toggle input {
+      display: none;
+    }
+
+    .toggle .slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: var(--height);
+      background-color: #ccc;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .toggle .slider::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc(var(--height));
+      height: calc(var(--height));
+      border-radius: calc(var(--height) / 2);
+      background-color: #fff;
+      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+      transition: all 0.4s ease-in-out;
+    }
+
+    .toggle input:checked+.slider {
+      background-color: #2196F3;
+    }
+
+    .toggle input:checked+.slider::before {
+      transform: translateX(calc(var(--width) - var(--height)));
+    }
+
+    .toggle .labels {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      font-size: 14px;
+      font-family: sans-serif;
+      transition: all 0.4s ease-in-out;
+    }
+
+    .toggle .labels::after {
+      content: attr(data-off);
+      position: absolute;
+      right: 5px;
+      color: #4d4d4d;
+      opacity: 1;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+      transition: all 0.4s ease-in-out;
+    }
+
+    .toggle .labels::before {
+      content: attr(data-on);
+      position: absolute;
+      left: 5px;
+      color: #ffffff;
+      opacity: 0;
+      text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.4);
+      transition: all 0.4s ease-in-out;
+    }
+
+    .toggle input:checked~.labels::after {
+      opacity: 0;
+    }
+
+    .toggle input:checked~.labels::before {
+      opacity: 1;
+    }
+
+
     </style>
 </head>
 <body>
     <header>
-        <div class="logo">
-            <img src="assets/logo2.png" alt="logo1">
-        </div>
         <div class="navbar">
-            <ul>
-                <li><a href="logout.php">Logout</a></li>
-                <li><a href="about.html">Tentang</a></li>
-                <li><a href="help.html">Bantuan</a></li>
-            </ul>
+            <div class="inner-nav">
+                <p>User</p>
+                <ul>
+                    <li><a href="logout.php">Logout</a></li>
+                    <li><a href="about.html">Tentang</a></li>
+                    <li><a href="help.html">Bantuan</a></li>
+                </ul>
+            </div>
         </div>
     </header>
     <main>
-        <div class="outter-container">
-            <div class="user-container">
-                <h3>Lampu 1</h3>
+        <div class="mode">
+            <div class="manual-lamp-mode">
+                <div class="lamp-mode-box">
+                    <h3>Mode Manual</h3>
+                    <div class="lamp-mode-box-m">
+                        <div class="lamp-circle"></div>
+                        <p>Lampu 1</p>
+                        <label class="toggle">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                            <span class="labels" data-on="ON" data-off="OFF"></span>
+                        </label>
+                    </div>
+                    <div class="lamp-mode-box-m">
+                        <div class="lamp-circle"></div>
+                        <p>Lampu 2</p>
+                        <label class="toggle">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                            <span class="labels" data-on="ON" data-off="OFF"></span>
+                        </label>
+                    </div>
+                    <div class="lamp-mode-box-m">
+                        <div class="lamp-circle"></div>
+                        <p>Lampu 3</p>
+                        <label class="toggle">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                            <span class="labels" data-on="ON" data-off="OFF"></span>
+                        </label>
+                    </div>
+                    <div class="lamp-mode-box-m">
+                        <div class="lamp-circle"></div>
+                        <p>Lampu 4</p>
+                        <label class="toggle">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                            <span class="labels" data-on="ON" data-off="OFF"></span>
+                        </label>
+                    </div>
+                    <div class="manual-all-lamp">
+                        <h3>Semua Lampu</h3>
+                        <div class="all-lamp-btn">
+                            <input class="btn-all-lamp" type="submit" name="OnAll" value="On">
+                            <div class="btn-all-lamp">Off</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="user-container">
-                <h3>Lampu 2</h3>
+            <div class="auto-lamp-mode">
+                <div class="auto-lamp-block">
+                    <div class="auto-schedul">
+                        <h3>Mode Terjadwal</h3>
+                        <table>
+                            <tr>
+                                <th>Waktu Mulai</th>
+                                <th>Waktu Selesai</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="time" name="startTime">
+                                </td>
+                                <td>
+                                    <input type="time" name="endTime">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><input type="submit" name="submit" value="Simpan"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="auto-timer">
+                        <h3>Mode Otomatis</h3>
+                        <div class="auto-mode-switch">
+                            <div class="auto-mode-switch-block">
+                                <div class="lamp-circle"></div>
+                                <label class="toggle">
+                                <input type="checkbox">
+                                <span class="slider"></span>
+                                <span class="labels" data-on="ON" data-off="OFF"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="user-container">
-                <h3>Lampu 3</h3>
+        </div>
+       
+        <div class="status">
+            <div class="lamp-status">
+                <div class="lamp-circle"></div>
+                <div class="status-details">
+                    <p>Status: </p>
+                    <p>Waktu: </p>
+                    <p>Terjadwal: </p>
+                </div>
             </div>
-            <div class="user-container">
-                <h3>Lampu 4</h3>
+            <div class="lamp-status">
+                <div class="status-details">
+                    <p>Status: </p>
+                    <p>Waktu: </p>
+                    <p>Terjadwal: </p>
+                </div>
+            </div>
+            <div class="lamp-status">
+                <div class="status-details">
+                    <p>Status: </p>
+                    <p>Waktu: </p>
+                    <p>Terjadwal: </p>
+                </div>
+            </div>
+            <div class="lamp-status">
+                <div class="status-details">
+                    <p>Status: </p>
+                    <p>Waktu: </p>
+                    <p>Terjadwal: </p>
+                </div>
             </div>
         </div>
     </main>
     <footer>
-        <div class="footer-box">
-            <div class="footer-column">
-                <div class="footer-logo-main">
-                    <img src="assets/logo2.png" alt="" width="240">
-                    <img src="assets/help.png" alt="" width="120">
-                </div>
-                <!-- <div class="footer-logo-sub">
-                    <img src="assets/hmtk.JPG" alt="" width="50">
-                    <img src="assets/Tmje.JPG" alt="" width="50">
-                    <img src="assets/logopnj.png" alt="" width="50">
-                </div> -->
-            </div>
-            <div class="footer-column footer-center">
-                <p>&#169; Smart LampU 2023</p>
-                <!-- <p>Site is still under</p>
-                <p>construction.</p> -->
-            </div>
-            <div class="footer-column">
-                <div class="footer-contact">
-                    <h3>Kontak</h3>
-                    <a href="mailto:diegogomez81655@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                    <a href=""><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                    <a href=""><i class="fa fa-x" aria-hidden="true"></i></a>
-                </div>
-            </div>
-        </div>
+        <p>&copy; Tim Smart Lamp</p>
+        <small>2023</small>
     </footer>
 </body>
 </html>

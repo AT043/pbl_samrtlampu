@@ -67,77 +67,47 @@
         </div>
     </main>
     <footer>
-        <div class="footer-box">
-            <div class="footer-column">
-                <div class="footer-logo-main">
-                    <img src="assets/logo2.png" alt="" width="240">
-                    <img src="assets/help.png" alt="" width="120">
-                </div>
-                <!-- <div class="footer-logo-sub">
-                    <img src="assets/hmtk.JPG" alt="" width="50">
-                    <img src="assets/Tmje.JPG" alt="" width="50">
-                    <img src="assets/logopnj.png" alt="" width="50">
-                </div> -->
-            </div>
-            <div class="footer-column footer-center">
-                <p>&#169; Smart LampU 2023</p>
-                <!-- <p>Site is still under</p>
-                <p>construction.</p> -->
-            </div>
-            <div class="footer-column">
-                <div class="footer-contact">
-                    <h3>Kontak</h3>
-                    <a href="mailto:diegogomez81655@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                    <a href=""><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                    <a href=""><i class="fa fa-x" aria-hidden="true"></i></a>
-                </div>
-            </div>
-        </div>
+        <p>&copy; Tim Smart Lamp</p>
+        <small>2023</small>
     </footer>
     <script>
-        class TypingAnimation {
-        constructor(textElementId, overlayElementId, headerSelector, mainSelector, footerSelector) {
-            this.text = "Welcome to Smart LampU";
-            this.typingSpeed = 100;
-            this.hideDuration = 2000;
-            this.showDelay = 2000;
-            this.charIndex = 0;
+        // JavaScript for typing and hiding text
+        const text = "Welcome to Smart LampU";
+        const typingSpeed = 100; // Typing speed in milliseconds
+        const hideDuration = 2000; // 10 seconds before moving to the main content
+        const showDelay = 2000;
+        const typedTextElement = document.getElementById('typed-text');
+        const overlayTextElement = document.getElementById('overlay');
+        const headerElement = document.querySelector('header');
+        const mainElement = document.querySelector('main');
+        const footerElement = document.querySelector('footer');
 
-            this.typedTextElement = document.getElementById(textElementId);
-            this.overlayTextElement = document.getElementById(overlayElementId);
-            this.headerElement = document.querySelector(headerSelector);
-            this.mainElement = document.querySelector(mainSelector);
-            this.footerElement = document.querySelector(footerSelector);
-        }
+        let charIndex = 0;
 
-        type() {
-            if (this.charIndex < this.text.length) {
-                this.typedTextElement.textContent += this.text.charAt(this.charIndex);
-                this.charIndex++;
-                setTimeout(() => this.type(), this.typingSpeed);
+        function type() {
+            if (charIndex < text.length) {
+                typedTextElement.textContent += text.charAt(charIndex);
+                charIndex++;
+                setTimeout(type, typingSpeed);
             } else {
-                setTimeout(() => {
-                    this.headerElement.style.display = 'block';
-                    this.mainElement.style.display = 'block';
-                    this.footerElement.style.display = 'block';
-                }, this.showDelay);
+                // After typing is complete, show the header, main, and footer
+                setTimeout(function () {
+                    // Show the header, main, and footer
+                    headerElement.style.display = 'block';
+                    mainElement.style.display = 'block';
+                    footerElement.style.display = 'block';
+                }, showDelay);
 
-                setTimeout(() => {
-                    this.typedTextElement.style.display = 'none';
-                    this.overlayTextElement.style.display = 'none';
-                }, this.hideDuration);
+                // Hide the typed text after the specified duration
+                setTimeout(function () {
+                    typedTextElement.style.display = 'none';
+                    overlayTextElement.style.display = 'none';
+                }, hideDuration);
             }
         }
 
-        startAnimation() {
-            this.type();
-        }
-    }
-
-    // Usage
-    const typingAnimation = new TypingAnimation('typed-text', 'overlay', 'header', 'main', 'footer');
-    typingAnimation.startAnimation();
-
+        // Start typing animation
+        type();
     </script>
 </body>
 </html>

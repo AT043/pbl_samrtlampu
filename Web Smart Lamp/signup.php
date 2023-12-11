@@ -2,36 +2,39 @@
 
 require('koneksi.php');
 
-// session_start();
-$error = '';
-$validate = '';
+class RegistrationManager {
+    private $con;
 
-if (isset($_POST['daftar'])) {
+    public function __construct($connection) {
+        $this->con = $connection;
+    }
 
-    $username = stripslashes($_POST['newUsername']);
-    $username = mysqli_real_escape_string($con, $username);
-    $email = stripslashes($_POST['email']);
-    $email = mysqli_real_escape_string($con, $email);
-    $token = stripslashes($_POST['tokenAdmin']);
-    $token = mysqli_real_escape_string($con, $token);
-    $password = stripslashes($_POST['newPassword']);
-    $password = mysqli_real_escape_string($con, $password);
-    $repass = stripslashes($_POST['rePassword']);
-    $repass = mysqli_real_escape_string($con, $repass);
-    // $user_acc = !empty(trim($username)) && !empty(trim($email)) && empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass));
-    // $admin_acc = !empty(trim($username)) && !empty(trim($email)) && !empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass)); 
-  
-    // if (!empty(trim($username)) && !empty(trim($email)) && !empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass))) {
-        if ($password == $repass) {
-            if (cek_uname_admin($username, $con) == 0) {
-                if (cek_token($token, $con) == 1) {
-                    if (token_avail($token, $con) == 0) {
-                        $pass = password_hash($password, PASSWORD_DEFAULT);
-                        $query = "INSERT INTO admin_account (username, email, password, token) VALUES ('$username', '$email', '$pass', '$token')";
-                        $result = mysqli_query($con, $query);
-                    
+    public function registerUser($newUsername, $email, $tokenAdmin, $newPassword, $rePassword) {
+        $error = '';
+        $validate = '';
+
+        $newUsername = stripslashes($newUsername);
+        $newUsername = mysqli_real_escape_string($this->con, $newUsername);
+        $email = stripslashes($email);
+        $email = mysqli_real_escape_string($this->con, $email);
+        $tokenAdmin = stripslashes($tokenAdmin);
+        $tokenAdmin = mysqli_real_escape_string($this->con, $tokenAdmin);
+        $newPassword = stripslashes($newPassword);
+        $newPassword = mysqli_real_escape_string($this->con, $newPassword);
+        $rePassword = stripslashes($rePassword);
+        $rePassword = mysqli_real_escape_string($this->con, $rePassword);
+
+        if ($newPassword == $rePassword) {
+            if (!$this->checkUsernameAdmin($newUsername)) {
+                if ($this->checkToken($tokenAdmin)) {
+                    if (!$this->tokenAvailable($tokenAdmin)) {
+                        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+                        $query = "INSERT INTO admin_account (username, email, password, token) VALUES ('$newUsername', '$email', '$hashedPassword', '$tokenAdmin')";
+                        $result = mysqli_query($this->con, $query);
+
                         if ($result) {
-                            $_SESSION['username'] = $username;
+                            session_start();
+                            $_SESSION['username'] = $newUsername;
                             header('Location: login.php');
                             exit;
                         } else {
@@ -39,13 +42,14 @@ if (isset($_POST['daftar'])) {
                         }
                     } else {
                         $error = 'Token Sudah Terdaftar, silahkan login sebagai user';
-                        $pass = password_hash($password, PASSWORD_DEFAULT);
-               
-                        $query = "INSERT INTO user_account (username, email, password) VALUES ('$username', '$email', '$pass')";
-                        $result = mysqli_query($con, $query);
-                    
+                        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+                        $query = "INSERT INTO user_account (username, email, password) VALUES ('$newUsername', '$email', '$hashedPassword')";
+                        $result = mysqli_query($this->con, $query);
+
                         if ($result) {
-                            $_SESSION['username'] = $username;
+                            session_start();
+                            $_SESSION['username'] = $newUsername;
                             header('Location: login.php');
                             exit;
                         } else {
@@ -54,73 +58,94 @@ if (isset($_POST['daftar'])) {
                     }
                 } else {
                     $error = 'Token Yang Dimasukkan Salah!';
-                        $pass = password_hash($password, PASSWORD_DEFAULT);
-               
-                        $query = "INSERT INTO user_account (username, email, password) VALUES ('$username', '$email', '$pass')";
-                        $result = mysqli_query($con, $query);
-                    
-                        if ($result) {
-                            $_SESSION['username'] = $username;
-                            header('Location: login.php');
-                            exit;
-                        } else {
-                            $error = 'Register User Gagal !!';
-                        }
-                }  
+                    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+                    $query = "INSERT INTO user_account (username, email, password) VALUES ('$newUsername', '$email', '$hashedPassword')";
+                    $result = mysqli_query($this->con, $query);
+
+                    if ($result) {
+                        session_start();
+                        $_SESSION['username'] = $newUsername;
+                        header('Location: login.php');
+                        exit;
+                    } else {
+                        $error = 'Register User Gagal !!';
+                    }
+                }
             } else {
                 $error = 'Username sudah terdaftar !!';
             }
         } else {
             $validate = 'Password tidak sama !!';
         }
-    
-    // } else {
-    //     $error = 'Data tidak boleh kosong !!';
-    // } 
+
+        return [
+            'error' => $error,
+            'validate' => $validate,
+        ];
+    }
+
+    private function checkUsername($username) {
+        $username = mysqli_real_escape_string($this->con, $username);
+        $query = "SELECT * FROM user_account WHERE username = '$username'";
+        $result = mysqli_query($this->con, $query);
+
+        if ($result) {
+            return mysqli_num_rows($result);
+        }
+
+        return 0;
+    }
+
+    private function checkToken($token) {
+        $token = mysqli_real_escape_string($this->con, $token);
+        $query = "SELECT * FROM token_admin WHERE token = '$token'";
+        $result = mysqli_query($this->con, $query);
+
+        if ($result) {
+            return mysqli_num_rows($result) == 1;
+        }
+
+        return false;
+    }
+
+    private function tokenAvailable($token) {
+        $token = mysqli_real_escape_string($this->con, $token);
+        $query = "SELECT * FROM admin_account WHERE token = '$token'";
+        $result = mysqli_query($this->con, $query);
+
+        if ($result) {
+            return mysqli_num_rows($result) > 0;
+        }
+
+        return false;
+    }
+
+    private function checkUsernameAdmin($username) {
+        $username = mysqli_real_escape_string($this->con, $username);
+        $query = "SELECT * FROM admin_account WHERE username = '$username'";
+        $result = mysqli_query($this->con, $query);
+
+        if ($result) {
+            return mysqli_num_rows($result) > 0;
+        }
+
+        return false;
+    }
 }
 
-function cek_uname($username, $con)
-{
-    $uname = mysqli_real_escape_string($con, $username);
-    $query = "SELECT * FROM user_account WHERE username = '$uname'";
-    $result = mysqli_query($con, $query);
-    if ($result) {
-        return mysqli_num_rows($result);
-    } 
-}
+// Usage
+$registrationManager = new RegistrationManager($con);
 
-function cek_token($token, $con)
-{
-    $token = mysqli_real_escape_string($con, $token);
-    $query = "SELECT * FROM token_admin WHERE token = '$token'";
-    $result = mysqli_query($con, $query);
-    if ($result) {
-        return mysqli_num_rows($result);
-    } 
-}
-
-function token_avail($token, $con)
-{
-    $token = mysqli_real_escape_string($con, $token);
-    $query = "SELECT * FROM admin_account WHERE token = '$token'";
-    $result = mysqli_query($con, $query);
-    if ($result) {
-        return mysqli_num_rows($result);
-    } 
-}
-
-function cek_uname_admin($username, $con)
-{
-    $username = mysqli_real_escape_string($con, $username);
-    $query = "SELECT * FROM admin_account WHERE username = '$username'";
-    $result = mysqli_query($con, $query);
-
-    if ($result) {
-        return mysqli_num_rows($result);
-    } 
+if (isset($_POST['daftar'])) {
+    $result = $registrationManager->registerUser($_POST['newUsername'], $_POST['email'], $_POST['tokenAdmin'], $_POST['newPassword'], $_POST['rePassword']);
+    $error = $result['error'];
+    $validate = $result['validate'];
 }
 
 ?>
+
+
 
 
 <!DOCTYPE html>

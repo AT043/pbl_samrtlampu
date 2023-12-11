@@ -1,63 +1,94 @@
 <?php
+
 require('koneksi.php');
-session_start();
-$error = '';
-$validate = '';
 
-// Checking if the session username is available; if yes, redirect to the userdashboard page
-if (isset($_SESSION['username'])) {
-    header('Location: userdashboard.html');
-    exit;
-}
+class LoginManager {
+    private $con;
 
-// Checking if the form is submitted
-if (isset($_POST['submit'])) {
-    $username = stripslashes($_POST['username']);
-    $username = mysqli_real_escape_string($con, $username);
-    $password = stripslashes($_POST['password']);
-    $password = mysqli_real_escape_string($con, $password);
+    public function __construct($connection) {
+        $this->con = $connection;
+        session_start();
+    }
 
-    // Checking if the form fields are not empty
-    if (!empty(trim($username)) && !empty(trim($password))) {
-        // Selecting data based on username from the user_account table
-        $query  = "SELECT * FROM user_account WHERE username = '$username'";
-        $result = mysqli_query($con, $query);
-        $rows   = mysqli_num_rows($result);
+    public function checkSession() {
+        if (isset($_SESSION['username'])) {
+            header('Location: userdashboard.html');
+            exit;
+        }
+    }
 
-        if ($rows != 0) {
-            $hash = mysqli_fetch_assoc($result)['password'];
-            // Verifying the password for user login
-            if (password_verify($password, $hash)) {
-                $_SESSION['username'] = $username;
+    public function loginUser($username, $password) {
+        $error = '';
+
+        $username = stripslashes($username);
+        $username = mysqli_real_escape_string($this->con, $username);
+        $password = stripslashes($password);
+        $password = mysqli_real_escape_string($this->con, $password);
+
+        if (!empty(trim($username)) && !empty(trim($password))) {
+            $userResult = $this->checkUserAccount($username, $password);
+
+            if ($userResult['success']) {
                 header('Location: userdashboard.html');
                 exit;
             } else {
-                $error = 'Login gagal! Silakan cek username dan password Anda.';
-            }
-        } else {
-            // If the user is not found in user_account, check in admin_account
-            $query  = "SELECT * FROM admin_account WHERE username = '$username'";
-            $result = mysqli_query($con, $query);
-            $rows   = mysqli_num_rows($result);
+                $adminResult = $this->checkAdminAccount($username, $password);
 
-            if ($rows != 0) {
-                $hash = mysqli_fetch_assoc($result)['password'];
-                // Verifying the password for admin login
-                if (password_verify($password, $hash)) {
-                    $_SESSION['username'] = $username;
+                if ($adminResult['success']) {
                     header('Location: admin.html');
                     exit;
                 } else {
                     $error = 'Login gagal! Silakan cek username dan password Anda.';
                 }
-            } else {
-                $error = 'Login gagal! Silakan cek username dan password Anda.';
+            }
+        } else {
+            $error = 'Data tidak boleh kosong!';
+        }
+
+        return $error;
+    }
+
+    private function checkUserAccount($username, $password) {
+        $query  = "SELECT * FROM user_account WHERE username = '$username'";
+        $result = mysqli_query($this->con, $query);
+        $rows   = mysqli_num_rows($result);
+
+        if ($rows != 0) {
+            $hash = mysqli_fetch_assoc($result)['password'];
+            if (password_verify($password, $hash)) {
+                $_SESSION['username'] = $username;
+                return ['success' => true];
             }
         }
-    } else {
-        $error = 'Data tidak boleh kosong!';
+
+        return ['success' => false];
+    }
+
+    private function checkAdminAccount($username, $password) {
+        $query  = "SELECT * FROM admin_account WHERE username = '$username'";
+        $result = mysqli_query($this->con, $query);
+        $rows   = mysqli_num_rows($result);
+
+        if ($rows != 0) {
+            $hash = mysqli_fetch_assoc($result)['password'];
+            if (password_verify($password, $hash)) {
+                $_SESSION['username'] = $username;
+                return ['success' => true];
+            }
+        }
+
+        return ['success' => false];
     }
 }
+
+// Usage
+$loginManager = new LoginManager($con);
+$loginManager->checkSession();
+
+if (isset($_POST['submit'])) {
+    $error = $loginManager->loginUser($_POST['username'], $_POST['password']);
+}
+
 ?>
 
 
