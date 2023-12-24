@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
                 // Verifying the password for admin login
                 if (password_verify($password, $hash)) {
                     $_SESSION['username'] = $username;
-                    header('Location: admin.php');
+                    header('Location: admin.html');
                     exit;
                 } else {
                     $error = 'Login gagal! Silakan cek username dan password Anda.';

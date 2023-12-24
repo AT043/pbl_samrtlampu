@@ -155,7 +155,7 @@
                         <ul>
                             <a href="admin.html"><div class="menu-card"><li>Kontrol Lampu</li></div></a>
                             <a href="admin2.html"><div class="menu-card"><li>Data Sensor</li></div></a>
-                            <a href="admin3.html"><div class="menu-card" id="active-menu-card"><li>Data Pengguna</li></div></a>
+                            <a href="admin3.php"><div class="menu-card" id="active-menu-card"><li>Data Pengguna</li></div></a>
                             <li></li>
                         </ul>
                     </div>
@@ -164,89 +164,86 @@
             <div class="slave2">
                 <div class="slave2-sub">
                     <div class="big-box">
-                        <div class="container mt-2">
-                            <?php
-                            require('koneksi.php');
-                            $result = mysqli_query($con, "SELECT * FROM user_account");
-                            $jumlah_record = mysqli_num_rows($result);
-                            ?>
+                        <div class="container mt-3">
+                            <div class="user-data">
+                                <?php
+                                require('koneksi.php');
+                                $result = mysqli_query($con, "SELECT * FROM user_account");
+                                $jumlah_record = mysqli_num_rows($result);
+                                ?>
 
-                            <h3>Daftar User</h3>
-                            <table id="userdata" class="table table-striped table-bordered" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Update</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    while ($row = mysqli_fetch_row($result)) {
-                                        echo "<tr><td>$row[1]</td><td>$row[2]</td><td><a href='update.php?id=$row[0]'>Edit</a> | <a href='admin3.php?delete_id=$row[0]'>Hapus</a></td></tr>";
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
+                                <h3>Daftar User</h3>
+                                <table id="userdata" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                            <th>Update</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        while ($row = mysqli_fetch_row($result)) {
+                                            echo "<tr><td>$row[1]</td><td>$row[2]</td><td><a href='update.php?id=$row[0]'>Edit</a> | <a href='admin3.php?delete_id=$row[0]'>Hapus</a></td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                                <a href="#" onclick="return show('admin-data','user-data');">Show page 2</a>
+                                <?php
+                                mysqli_close($con);
+                                ?>
 
-                            <?php
-                            mysqli_close($con);
-                            ?>
+                                <?php
+                                include "koneksi.php";
+                                if (isset($_GET['delete_id'])) {
+                                    $id_user = $_GET['delete_id'];
+                                    $query = "DELETE FROM user_account WHERE id='$id_user'";
+                                    mysqli_query($con, $query);
+                                    echo "<meta http-equiv=Refresh content=0;url=admin3.php>";
+                                }
+                                ?>
+                                
+                            </div>
+                            <div class="admin-data" style="display: none">
+                                <?php
+                                require('koneksi.php');
+                                $result = mysqli_query($con, "SELECT * FROM admin_account");
+                                $jumlah_record = mysqli_num_rows($result);
+                                ?>
 
-                            <?php
-                            include "koneksi.php";
-                            if (isset($_GET['delete_id'])) {
-                                $id_user = $_GET['delete_id'];
-                                $query = "DELETE FROM user_account WHERE id='$id_user'";
-                                mysqli_query($con, $query);
-                                echo "<meta http-equiv=Refresh content=0;url=admin3.php>";
-                            }
-                            ?>
+                                <h3>Daftar Admin</h3>
+                                <table id="admindata" class="table table-striped table-bordered" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                            <th>Update</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php
+                                        while ($row = mysqli_fetch_row($result)) {
+                                            echo "<tr><td>$row[1]</td><td>$row[2]</td><td><a href='update.php?id=$row[0]'>Edit</a> | <a href='admin3.php?delete_id=$row[0]'>Hapus</a></td></tr>";
+                                        }
+                                        ?>
+                                    </tbody>
+                                </table>
+                                <a href="#" onclick="return show('user-data','admin-data');">Show page 1</a>
+                                <?php
+                                mysqli_close($con);
+                                ?>
 
-                        </div>
-                    </div>
-                </div>
-                <div class="slave2-sub">
-                    <div class="medium-box">
-                        <div class="container mt-2">
-                            <?php
-                            require('koneksi.php');
-                            $result = mysqli_query($con, "SELECT * FROM admin_account");
-                            $jumlah_record = mysqli_num_rows($result);
-                            ?>
-
-                            <h3>Daftar Admin</h3>
-                            <table id="admindata" class="table table-striped table-bordered" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Username</th>
-                                        <th>Email</th>
-                                        <th>Update</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php
-                                    while ($row = mysqli_fetch_row($result)) {
-                                        echo "<tr><td>$row[1]</td><td>$row[2]</td><td><a href='update.php?id=$row[0]'>Edit</a> | <a href='admin3.php?delete_id=$row[0]'>Hapus</a></td></tr>";
-                                    }
-                                    ?>
-                                </tbody>
-                            </table>
-
-                            <?php
-                            mysqli_close($con);
-                            ?>
-
-                            <?php
-                            include "koneksi.php";
-                            if (isset($_GET['delete_id'])) {
-                                $id_admin = $_GET['delete_id'];
-                                $query = "DELETE FROM admin_account WHERE id='$id_admin'";
-                                mysqli_query($con, $query);
-                                echo "<meta http-equiv=Refresh content=0;url=admin3.php>";
-                            }
-                            ?>
-
+                                <?php
+                                include "koneksi.php";
+                                if (isset($_GET['delete_id'])) {
+                                    $id_admin = $_GET['delete_id'];
+                                    $query = "DELETE FROM admin_account WHERE id='$id_admin'";
+                                    mysqli_query($con, $query);
+                                    echo "<meta http-equiv=Refresh content=0;url=admin3.php>";
+                                }
+                                ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -273,6 +270,11 @@
                 "pageLength": 7  // Set the default number of rows per page
             });
         });
+        function show(shown, hidden) {
+            document.getElementById(shown).style.display='block';
+            document.getElementById(hidden).style.display='none';
+            return false;
+        }
     </script>
 </body>
 </html>

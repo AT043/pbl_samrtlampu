@@ -1,3 +1,127 @@
+<?php
+
+require('koneksi.php');
+
+// session_start();
+$error = '';
+$validate = '';
+
+if (isset($_POST['daftar'])) {
+
+    $username = stripslashes($_POST['newUsername']);
+    $username = mysqli_real_escape_string($con, $username);
+    $email = stripslashes($_POST['email']);
+    $email = mysqli_real_escape_string($con, $email);
+    $token = stripslashes($_POST['tokenAdmin']);
+    $token = mysqli_real_escape_string($con, $token);
+    $password = stripslashes($_POST['newPassword']);
+    $password = mysqli_real_escape_string($con, $password);
+    $repass = stripslashes($_POST['rePassword']);
+    $repass = mysqli_real_escape_string($con, $repass);
+    // $user_acc = !empty(trim($username)) && !empty(trim($email)) && empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass));
+    // $admin_acc = !empty(trim($username)) && !empty(trim($email)) && !empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass)); 
+  
+    if (!empty(trim($username)) && !empty(trim($email)) && !empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass))) {
+        if ($password == $repass) {
+            if (cek_uname_admin($username, $con) == 0) {
+                if (cek_token($token, $con) == 1) {
+                    if (token_avail($token, $con) == 0) {
+                        $pass = password_hash($password, PASSWORD_DEFAULT);
+                        $query = "INSERT INTO admin_account (username, email, password, token) VALUES ('$username', '$email', '$pass', '$token')";
+                        $result = mysqli_query($con, $query);
+                    
+                        if ($result) {
+                            $_SESSION['username'] = $username;
+                            header('Location: index.php');
+                            exit;
+                        } else {
+                            $error = 'Register Gagal !!';
+                        }
+                    } else {
+                        $error = 'Token Sudah Terdaftar, silahkan login sebagai user';
+                        $pass = password_hash($password, PASSWORD_DEFAULT);
+               
+                        $query = "INSERT INTO user_account (username, email, password) VALUES ('$username', '$email', '$pass')";
+                        $result = mysqli_query($con, $query);
+                    
+                        if ($result) {
+                            $_SESSION['username'] = $username;
+                            header('Location: index.php');
+                            exit;
+                        } else {
+                            $error = 'Register User Gagal !!';
+                        }
+                    }
+                } else {
+                    $error = 'Token Yang Dimasukkan Salah!';
+                        $pass = password_hash($password, PASSWORD_DEFAULT);
+               
+                        $query = "INSERT INTO user_account (username, email, password) VALUES ('$username', '$email', '$pass')";
+                        $result = mysqli_query($con, $query);
+                    
+                        if ($result) {
+                            $_SESSION['username'] = $username;
+                            header('Location: index.php');
+                            exit;
+                        } else {
+                            $error = 'Register User Gagal !!';
+                        }
+                }  
+            } else {
+                $error = 'Username sudah terdaftar !!';
+            }
+        } else {
+            $validate = 'Password tidak sama !!';
+        }
+    
+    } else {
+        $error = 'Data tidak boleh kosong !!';
+    } 
+}
+
+function cek_uname($username, $con)
+{
+    $uname = mysqli_real_escape_string($con, $username);
+    $query = "SELECT * FROM user_account WHERE username = '$uname'";
+    $result = mysqli_query($con, $query);
+    if ($result) {
+        return mysqli_num_rows($result);
+    } 
+}
+
+function cek_token($token, $con)
+{
+    $token = mysqli_real_escape_string($con, $token);
+    $query = "SELECT * FROM token_admin WHERE token = '$token'";
+    $result = mysqli_query($con, $query);
+    if ($result) {
+        return mysqli_num_rows($result);
+    } 
+}
+
+function token_avail($token, $con)
+{
+    $token = mysqli_real_escape_string($con, $token);
+    $query = "SELECT * FROM admin_account WHERE token = '$token'";
+    $result = mysqli_query($con, $query);
+    if ($result) {
+        return mysqli_num_rows($result);
+    } 
+}
+
+function cek_uname_admin($username, $con)
+{
+    $username = mysqli_real_escape_string($con, $username);
+    $query = "SELECT * FROM admin_account WHERE username = '$username'";
+    $result = mysqli_query($con, $query);
+
+    if ($result) {
+        return mysqli_num_rows($result);
+    } 
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -187,7 +311,7 @@
             <div class="outter">
               <div class="inner">
                 <div class="form">
-                  <form>
+                  <form method="post">
                     <div class="form-table">
                       <table width="500">
                         <tr>
@@ -195,7 +319,7 @@
                           <td><div class="title">Email</div></td>
                         </tr>
                         <tr>
-                          <td><input type="text" id="username" name="username" required></td>
+                          <td><input type="text" id="newUsername" name="newUsername" required></td>
                           <td><input type="email" id="email" name="email" required></td>
                         </tr>
                         <tr>
@@ -203,42 +327,25 @@
                           <td><div class="title">Re-Passowrd</div></td>
                         </tr>
                         <tr>
-                          <td> <input type="text" id="username" name="username" required></td>
-                          <td><input type="email" id="email" name="email" required></td>
+                          <td> <input type="password" id="newPassword" name="newPassword" required></td>
+                          <td><input type="password" id="rePassword" name="rePassword" required></td>
                         </tr>
                         <tr>
                           <td><div class="title">Token Admin (Opsional)</div></td>
                           <td><!-- <div class="title">Email</div> --></td>
                         </tr>
                         <tr>
-                          <td> <input type="text" id="username" name="username"></td>
+                          <td> <input type="text" id="tokenAdmin" name="tokenAdmin"></td>
                           <td><!-- <input type="email" id="email" name="email" required> --></td>
                         </tr>
                       </table>
                     </div>
-                    
-                    <!-- <div class="inner-form">
-                      <div class="title">Username</div>
-                      <input type="text" id="username" name="username" required>
-                    </div>
-                    <div class="inner-form">
-                      <div class="title">Email</div>
-                      <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="inner-form">
-                      <div class="title">Password</div>
-                      <input type="password" id="password" name="password" required>
-                    </div>
-                    <div class="inner-form">
-                      <div class="title">Re Password</div>
-                      <input type="password" id="repassword" name="repassword" required>
-                    </div>-->
                     <div class="submit-button">
-                      <button type="submit" name="submit">Masuk</button>
+                      <button type="submit" name="daftar">Masuk</button>
                     </div>
                   </form>
                   <div class="check1">
-                    <p>Sudah Punya Akun? <a href="index.html">Login</a></p>
+                    <p>Sudah Punya Akun? <a href="index.php">Login</a></p>
                     <!-- <div class="show-password-label">
                       <table>
                         <tr>
