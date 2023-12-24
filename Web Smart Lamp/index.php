@@ -1,3 +1,65 @@
+<?php
+require('koneksi.php');
+session_start();
+$error = '';
+$validate = '';
+
+// Checking if the session username is available; if yes, redirect to the userdashboard page
+if (isset($_SESSION['username'])) {
+    header('Location: userdashboard.html');
+    exit;
+}
+
+// Checking if the form is submitted
+if (isset($_POST['submit'])) {
+    $username = stripslashes($_POST['username']);
+    $username = mysqli_real_escape_string($con, $username);
+    $password = stripslashes($_POST['password']);
+    $password = mysqli_real_escape_string($con, $password);
+
+    // Checking if the form fields are not empty
+    if (!empty(trim($username)) && !empty(trim($password))) {
+        // Selecting data based on username from the user_account table
+        $query  = "SELECT * FROM user_account WHERE username = '$username'";
+        $result = mysqli_query($con, $query);
+        $rows   = mysqli_num_rows($result);
+
+        if ($rows != 0) {
+            $hash = mysqli_fetch_assoc($result)['password'];
+            // Verifying the password for user login
+            if (password_verify($password, $hash)) {
+                $_SESSION['username'] = $username;
+                header('Location: userdashboard.html');
+                exit;
+            } else {
+                $error = 'Login gagal! Silakan cek username dan password Anda.';
+            }
+        } else {
+            // If the user is not found in user_account, check in admin_account
+            $query  = "SELECT * FROM admin_account WHERE username = '$username'";
+            $result = mysqli_query($con, $query);
+            $rows   = mysqli_num_rows($result);
+
+            if ($rows != 0) {
+                $hash = mysqli_fetch_assoc($result)['password'];
+                // Verifying the password for admin login
+                if (password_verify($password, $hash)) {
+                    $_SESSION['username'] = $username;
+                    header('Location: admin.php');
+                    exit;
+                } else {
+                    $error = 'Login gagal! Silakan cek username dan password Anda.';
+                }
+            } else {
+                $error = 'Login gagal! Silakan cek username dan password Anda.';
+            }
+        }
+    } else {
+        $error = 'Data tidak boleh kosong!';
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,8 +67,7 @@
     <meta charset="utf-8">
     <meta lang="en-us">
     <title>Welcome | SmartLamp</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style type="text/css">
         html, body {
             padding: 0px;
@@ -39,9 +100,8 @@
                 color: #000;
                 font-weight: bold;
                 white-space: nowrap;
-                overflow: hidden;
                 text-align: center; /* Keep the text in the middle */
-                animation: typing 4s steps(40, end);
+                animation: typing 3.5s steps(40, end);
                 margin: 0px 0px 0px 200px; /* Adjust the margin as needed */
             }
 
@@ -121,55 +181,33 @@
           align-items: center;
         }
         .inner {
-          width: 600px;
-          height: 480px;
+          width: 300px;
+          height: 380px;
           border: 1px solid #ccc;
           background-color: #fff;
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
           border-radius: 5px;
+          overflow: hidden;
         }
         .form {
           margin: 10px 20px;
         }
-        /*.inner-form {
+        .inner-form {
           margin: 20px 0;
           display: block;
         }
         .inner-form input {
-          width: 50%;
+          width: 97%;
           height: 25px;
-        }*/
-        .submit-button {
-          display: flex;
-          justify-content: center;
         }
         .submit-button button {
-          background-color: #ccc;
-          width: 50%;
+          background-color: yellowgreen;
+          width: 100%;
           height: 35px;
           margin: 10px auto;
         }
         .submit-button button:hover {
           cursor: pointer;
-        }
-
-        table {
-          margin: 20px 0;
-          padding: 20px 0;
-        }
-
-        .form-table {
-          display: flex;
-          justify-content: center;
-        }
-        table input {
-          width: 90%;
-          height: 25px;
-          margin: 10px 10px;
-        }
-        .check1 {
-          display: flex;
-          justify-content: center;
         }
 
     </style>
@@ -187,67 +225,28 @@
             <div class="outter">
               <div class="inner">
                 <div class="form">
-                  <form>
-                    <div class="form-table">
-                      <table width="500">
-                        <tr>
-                          <td><div class="title">Username</div></td>
-                          <td><div class="title">Email</div></td>
-                        </tr>
-                        <tr>
-                          <td><input type="text" id="username" name="username" required></td>
-                          <td><input type="email" id="email" name="email" required></td>
-                        </tr>
-                        <tr>
-                          <td><div class="title">Password</div></td>
-                          <td><div class="title">Re-Passowrd</div></td>
-                        </tr>
-                        <tr>
-                          <td> <input type="text" id="username" name="username" required></td>
-                          <td><input type="email" id="email" name="email" required></td>
-                        </tr>
-                        <tr>
-                          <td><div class="title">Token Admin (Opsional)</div></td>
-                          <td><!-- <div class="title">Email</div> --></td>
-                        </tr>
-                        <tr>
-                          <td> <input type="text" id="username" name="username"></td>
-                          <td><!-- <input type="email" id="email" name="email" required> --></td>
-                        </tr>
-                      </table>
-                    </div>
-                    
-                    <!-- <div class="inner-form">
+                  <form method="post">
+                    <div class="inner-form">
                       <div class="title">Username</div>
                       <input type="text" id="username" name="username" required>
                     </div>
                     <div class="inner-form">
-                      <div class="title">Email</div>
-                      <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="inner-form">
-                      <div class="title">Password</div>
+                      <div>Password</div>
                       <input type="password" id="password" name="password" required>
                     </div>
-                    <div class="inner-form">
-                      <div class="title">Re Password</div>
-                      <input type="password" id="repassword" name="repassword" required>
-                    </div>-->
                     <div class="submit-button">
                       <button type="submit" name="submit">Masuk</button>
                     </div>
                   </form>
-                  <div class="check1">
-                    <p>Sudah Punya Akun? <a href="index.html">Login</a></p>
-                    <!-- <div class="show-password-label">
+                   <div class="input show-password-label">
                       <table>
                         <tr>
-                          <td><input type="checkbox" id="showPassword" class="checkbox" onclick="seePass()" ></td>
-                          <td><p>Tampilkan Password</p></td>
+                            <td><input type="checkbox" id="showPassword" class="checkbox" onclick="seePass()" ></td>
+                            <td><p>Tampilkan Password</p></td>
                         </tr>
                       </table>
-                    </div> -->
                   </div>
+                  <p>belum punya akun? <a href="index2.html">Daftar</a></p>
                 </div>
               </div>
             </div>
@@ -261,15 +260,6 @@
     </div> -->
     </main>
     <script type="text/javascript">
-
-        var signin = document.querySelector("#signin");
-        var register = document.querySelector("#register");
-        setTimeout(function () {
-           register.checked = true;
-        }, 1000);
-        setTimeout(function () {
-           signin.checked = true;
-        }, 2000);
 
          function seePass(){
             var x = document.getElementById("password");

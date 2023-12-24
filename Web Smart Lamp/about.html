@@ -63,7 +63,9 @@
         justify-content: center;
         align-items: center;
         margin: 5% 2%;
-        background-color: #ccc;
+        background-color: #fff;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        border-radius: 5px;
        }
 
        .content h3, .content p {
@@ -80,6 +82,7 @@
         margin: 5% 2%;
        }
        .card {
+            background-color: white;
             border: 1px solid #ccc;
             height: 280px;
             width: 200px;
@@ -88,6 +91,7 @@
             align-items: center;
             justify-content: center;
             margin: 2% 5%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         }
 
         .card img {
@@ -113,6 +117,58 @@
             flex-wrap: wrap;
             justify-content: center;
         }
+
+    @media only screen and (max-width: 768px) {
+        .inner-nav {
+            flex-direction: column;
+        }
+
+        .hero-text {
+            font-size: 14px;
+        }
+
+       .members {
+        /*height: 60%;*/
+        /*display: flex;
+        justify-content: center;
+        align-items: center;*/
+        margin: 5% 2%;
+       }
+       .card {
+            border: 1px solid #ccc;
+            height: 180px;
+            width: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 2% 5%;
+        }
+
+        .card img {
+            object-fit: cover;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            margin: 15px;
+        }
+
+        .card h2,
+        .card p {
+            text-align: center;
+            font-size: 12px;
+            margin: 0 auto;
+        }
+        .card p {
+            color: #ccc;
+        }
+        .members-profile {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
     </style>
 </head>
 <body>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Smart LampU</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <style>
+        .master {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+        }
+        .slave1 {
+            flex: 20%;
+            border-right: 1px solid #ccc;
+            background-color: #fff;
+        }
+        .slave2 {
+            flex: 80%;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="inner-nav">
+                <p>SmartLamp</p>
+                <ul>
+                    <li><a href="index.html">Logout</a></li>
+                    <li><a href="about.html">Tentang</a></li>
+                    <li><a href="help.html">Bantuan</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- <div class="admin-drp">
+            <button onclick="dropdownFunction()" class="drop-btn">Admin</button>
+            <div id="admin-menu" class="drp-content">
+                <a href="">List User</a>
+                <a href="">Tambah User</a>
+                <a href="">Token Admin</a>
+            </div>
+        </div> -->
+    </header>
+    <main>
+        <div class="master">
+            <div class="slave1">
+                <div class="sidebar">
+                    <div class="sidebar-menu">
+                        <ul>
+                            <a href="admin.html"><div class="menu-card"><li>Kontrol Lampu</li></div></a>
+                            <a href="admin2.html"><div class="menu-card" id="active-menu-card"><li>Data Sensor</li></div></a>
+                            <a href="admin3.html"><div class="menu-card"><li>Data Pengguna</li></div></a>
+                            <li></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="slave2">
+             
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; Tim Smart Lamp</p>
+        <small>2023</small>
+    </footer>
+</body>
+</html>
