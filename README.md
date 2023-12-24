@@ -1,7 +1,8 @@
 # Project Smart Lamp # 
-1. Rangga Hussaen (Ketua)
-2. Dina Yuliasti
-3. Adipraja P
-4. Daffa Assyam
-5. Herdiansyah
-6. Rasyid Fathoni
+1. Rangga Azizzan H.
+2. Rasyid Fathoni S.
+3. Daffa Assyam T.
+4. Adipraja P. Ramadhan
+5. Dina Yuliasti
+6. Herdiansyah Ramadan
+
