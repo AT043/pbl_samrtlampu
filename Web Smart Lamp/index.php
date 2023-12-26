@@ -99,20 +99,30 @@ if (isset($_POST['submit'])) {
                 font-size: 48px;
                 color: #000;
                 font-weight: bold;
+                overflow: hidden;
                 white-space: nowrap;
+                border-right: .05em solid rgb(34, 33, 33);
+                line-height: 1%;
                 text-align: center; /* Keep the text in the middle */
-                animation: typing 3.5s steps(40, end);
+                letter-spacing: .1em;
                 margin: 0px 0px 0px 200px; /* Adjust the margin as needed */
+                animation:
+                    typing 4.5s steps(20, end),
+                    blink-caret .5s step-end infinite;
             }
 
             @keyframes typing {
                 from {
                     width: 0;
                 }
-
                 to {
                     width: 100%;
                 }
+            }
+
+            @keyframes blink-caret {
+                from, to { border-color: transparent }
+                50% { border-color: rgb(58, 57, 56) }
             }
 
 

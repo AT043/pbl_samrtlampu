@@ -154,6 +154,7 @@
                     <div class="sidebar-menu">
                         <ul>
                             <a href="admin.html"><div class="menu-card"><li>Kontrol Lampu</li></div></a>
+                            <a href="admin2.html"><div class="menu-card"><li>Status Lampu</li></div></a>
                             <a href="admin2.html"><div class="menu-card"><li>Data Sensor</li></div></a>
                             <a href="admin3.php"><div class="menu-card" id="active-menu-card"><li>Data Pengguna</li></div></a>
                             <li></li>
@@ -165,7 +166,7 @@
                 <div class="slave2-sub">
                     <div class="big-box">
                         <div class="container mt-3">
-                            <div class="user-data">
+                            <div class="user-data" id="user-data">
                                 <?php
                                 require('koneksi.php');
                                 $result = mysqli_query($con, "SELECT * FROM user_account");
@@ -189,7 +190,7 @@
                                         ?>
                                     </tbody>
                                 </table>
-                                <a href="#" onclick="return show('admin-data','user-data');">Show page 2</a>
+                                <button onclick="showFunction()">Admin</button>
                                 <?php
                                 mysqli_close($con);
                                 ?>
@@ -205,7 +206,7 @@
                                 ?>
                                 
                             </div>
-                            <div class="admin-data" style="display: none">
+                            <div class="admin-data" id="admin-data" style="display: none;">
                                 <?php
                                 require('koneksi.php');
                                 $result = mysqli_query($con, "SELECT * FROM admin_account");
@@ -229,7 +230,7 @@
                                         ?>
                                     </tbody>
                                 </table>
-                                <a href="#" onclick="return show('user-data','admin-data');">Show page 1</a>
+                                <button onclick="showFunction()">User</button>
                                 <?php
                                 mysqli_close($con);
                                 ?>
@@ -274,6 +275,18 @@
             document.getElementById(shown).style.display='block';
             document.getElementById(hidden).style.display='none';
             return false;
+        }
+        function showFunction() {
+            var x = document.getElementById("user-data");
+            var y = document.getElementById("admin-data");
+
+            if (x.style.display === "none" && y.style.display === "block") {
+                x.style.display = "block";
+                y.style.display = "none";
+            } else {
+                x.style.display = "none";
+                y.style.display = "block";
+            }
         }
     </script>
 </body>
