@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin | Smart LampU</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="assets/style.css">
     <style>
         .master {
@@ -16,6 +15,7 @@
             flex: 20%;
             border-right: 1px solid #ccc;
             background-color: #fff;
+            position: relative;
         }
         .slave2 {
             flex: 80%;
@@ -287,12 +287,6 @@
     .show {
       display: block;
     }
-
-    .material-icons.orange600 { 
-        color: #FB8C00; 
-    }
-    .material-icons.md-36 { font-size: 36px; }
-
     </style>
 </head>
 <body>
@@ -305,8 +299,8 @@
                         <div class="dropbtn" onclick="myFunction()">User1</div>
                         <div class="dropdown-content" id="myDropdown">
                             <a href="#">User1</a>
-                            <a href="#">Buat Token</a>
-                            <a href="logout.php">Logout</a>
+                            <a href="#">Ubah Passowrd</a>
+                            <a href="#">Logout</a>
                         </div>
                     </li>
                     <li><a href="about.html">Tentang</a></li>
@@ -321,9 +315,9 @@
                 <div class="sidebar">
                     <div class="sidebar-menu">
                         <ul>
-                            <a href="admin.html"><div class="menu-card" id="active-menu-card"><li>Kontrol Lampu</li></div></a>
-                            <a href="admin2.html"><div class="menu-card"><li>Data Sensor</li></div></a>
-                            <a href="admin3.php"><div class="menu-card"><li>Data Pengguna</li></div></a>
+                            <a href="userdashboard.html"><div class="menu-card"><li>Kontrol Lampu</li></div></a>
+                            <a href="userdashboard2.html"><div class="menu-card"><li>Status Lampu</li></div></a>
+                            <a href="userdashboard3.html"><div class="menu-card" id="active-menu-card"><li>Edit User</li></div></a>
                             <div class="menu-card1"><li id="datetime"></li></div>
                         </ul>
                     </div>
@@ -331,99 +325,7 @@
             </div>
             <div class="slave2">
                 <div class="slave2-main">
-                    <div class="slave2-sub1">
-                        <div class="lamp-mode-box">
-                        <h3>Mode Manual</h3>
-                        <div class="lamp-mode-box-m">
-                            <span class="material-icons md-36 orange600">lightbulb</span>
-                            <p>Lampu 1</p>
-                            <label class="toggle">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                                <span class="labels" data-on="ON" data-off="OFF"></span>
-                            </label>
-                        </div>
-                        <div class="lamp-mode-box-m">
-                            <span class="material-icons md-36 orange600">lightbulb</span>
-                            <p>Lampu 2</p>
-                            <label class="toggle">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                                <span class="labels" data-on="ON" data-off="OFF"></span>
-                            </label>
-                        </div>
-                        <div class="lamp-mode-box-m">
-                            <span class="material-icons md-36 orange600">lightbulb</span>
-                            <p>Lampu 3</p>
-                            <label class="toggle">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                                <span class="labels" data-on="ON" data-off="OFF"></span>
-                            </label>
-                        </div>
-                        <div class="lamp-mode-box-m">
-                            <span class="material-icons md-36 orange600">lightbulb</span>
-                            <p>Lampu 4</p>
-                            <label class="toggle">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                                <span class="labels" data-on="ON" data-off="OFF"></span>
-                            </label>
-                        </div>
-                        <div class="manual-all-lamp">
-                            <h3>Semua Lampu</h3>
-                            <div class="all-lamp-btn">
-                                <button class="btn-all-lamp" type="submit" name="OnAll">ON</button>
-                                <button class="btn-all-lamp" type="submit" name="OffAll">OFF</button>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    <div class="slave2-sub2">
-                        <div class="auto-lamp-mode">
-                            <div class="auto-lamp-block">
-                                <div class="auto-schedul">
-                                    <h3>Mode Terjadwal</h3>
-                                    <table>
-                                        <tr>
-                                            <td colspan="2">Tanggal</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2"><input type="date" name="date"></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Waktu Mulai</td>
-                                            <td>Waktu Selesai</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <input type="time" name="startTime">
-                                            </td>
-                                            <td>
-                                                <input type="time" name="endTime">
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2"><button type="submit" name="submit" class="btn-all-lamp">Simpan</button></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="auto-timer">
-                                    <h3>Mode Otomatis</h3>
-                                    <div class="auto-mode-switch">
-                                        <div class="auto-mode-switch-block">
-                                            <span class="material-icons md-36 orange600">lightbulb</span>
-                                            <label class="toggle">
-                                            <input type="checkbox">
-                                            <span class="slider"></span>
-                                            <span class="labels" data-on="ON" data-off="OFF"></span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -432,7 +334,7 @@
         <p>&copy; Tim Smart Lamp</p>
         <small>2023</small>
     </footer>
-    <script type="text/javascript">
+    <script>
         function updateClock() {
             // Get current date and time
             var now = new Date();
@@ -458,7 +360,6 @@
                 }
             }
         }
-
     </script>
 </body>
 </html>

@@ -1,206 +1,261 @@
 <?php
 
-require('koneksi.php');
+require_once "dbconfig.php";
+require_once "Auth.php";
 
-class LoginManager {
-    private $con;
+// Instantiate UserAuth and AdminAuth
+$UserAuth = new UserAuth($db_conn);
+$AdminAuth = new AdminAuth($db_conn);
 
-    public function __construct($connection) {
-        $this->con = $connection;
-        session_start();
-    }
-
-    public function checkSession() {
-        if (isset($_SESSION['username'])) {
-            header('Location: userdashboard.html');
-            exit;
-        }
-    }
-
-    public function loginUser($username, $password) {
-        $error = '';
-
-        $username = stripslashes($username);
-        $username = mysqli_real_escape_string($this->con, $username);
-        $password = stripslashes($password);
-        $password = mysqli_real_escape_string($this->con, $password);
-
-        if (!empty(trim($username)) && !empty(trim($password))) {
-            $userResult = $this->checkUserAccount($username, $password);
-
-            if ($userResult['success']) {
-                header('Location: userdashboard.html');
-                exit;
-            } else {
-                $adminResult = $this->checkAdminAccount($username, $password);
-
-                if ($adminResult['success']) {
-                    header('Location: admin.html');
-                    exit;
-                } else {
-                    $error = 'Login gagal! Silakan cek username dan password Anda.';
-                }
-            }
-        } else {
-            $error = 'Data tidak boleh kosong!';
-        }
-
-        return $error;
-    }
-
-    private function checkUserAccount($username, $password) {
-        $query  = "SELECT * FROM user_account WHERE username = '$username'";
-        $result = mysqli_query($this->con, $query);
-        $rows   = mysqli_num_rows($result);
-
-        if ($rows != 0) {
-            $hash = mysqli_fetch_assoc($result)['password'];
-            if (password_verify($password, $hash)) {
-                $_SESSION['username'] = $username;
-                return ['success' => true];
-            }
-        }
-
-        return ['success' => false];
-    }
-
-    private function checkAdminAccount($username, $password) {
-        $query  = "SELECT * FROM admin_account WHERE username = '$username'";
-        $result = mysqli_query($this->con, $query);
-        $rows   = mysqli_num_rows($result);
-
-        if ($rows != 0) {
-            $hash = mysqli_fetch_assoc($result)['password'];
-            if (password_verify($password, $hash)) {
-                $_SESSION['username'] = $username;
-                return ['success' => true];
-            }
-        }
-
-        return ['success' => false];
-    }
+// Check status login user
+if ($UserAuth->isLoggedIn()) {
+    // Redirect to the user dashboard
+    header("location: userdashboard.html");
+    exit();
+} elseif ($AdminAuth->isLoggedIn()) {
+    // Redirect to the admin dashboard
+    header("location: admin.html");
+    exit();
 }
 
-// Usage
-$loginManager = new LoginManager($con);
-$loginManager->checkSession();
-
+// If form data is submitted
 if (isset($_POST['submit'])) {
-    $error = $loginManager->loginUser($_POST['username'], $_POST['password']);
+    $name = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Process user login
+    if ($AdminAuth->login($name, $password)) {
+        // Redirect to the admin dashboard
+        header("location: admin.html");
+        exit();
+    } elseif ($UserAuth->login($name, $password)) {
+        // Redirect to the user dashboard
+        header("location: userdashboard.html");
+        exit();
+    } else {
+        // If login fails, retrieve the error message
+        $error = $UserAuth->getLastError(); //
+        echo '<script>alert("' . $error . '");</script>';
+    }
 }
+
 
 ?>
 
 
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <title>Masuk | Smart LampU</title>
-    <style>
-        input:focus {
-            background-color: lightblue;
-        }
-        .sign-in a:hover {
-            color: red;
-            font-weight: bold;
-            text-decoration: none;
+    <meta charset="utf-8">
+    <meta lang="en-us">
+    <title>Welcome | SmartLamp</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style type="text/css">
+        html, body {
+            padding: 0px;
+            margin: 0px;
+            font-family: "Tahoma";
+            color: black;
+            height: 100%;
+            font-size: 22px;
+            background-color: #f0efed;
         }
 
-        button{
-            height: 30px;
-            width: 70px;
-            border: 1px solid black;
-            box-shadow: 3px 3px black;
+        main {
+            height: 100%;
+        }
+
+            .main-container {
+                display: flex;
+                height: 100%;
+            }
+
+            .left-container {
+                flex: 40%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .welcome-text {
+                font-size: 48px;
+                color: #000;
+                font-weight: bold;
+                overflow: hidden;
+                white-space: nowrap;
+                border-right: .05em solid rgb(34, 33, 33);
+                line-height: 1%;
+                text-align: center; /* Keep the text in the middle */
+                letter-spacing: .1em;
+                margin: 0px 0px 0px 200px; /* Adjust the margin as needed */
+                animation:
+                    typing 4.5s steps(20, end),
+                    blink-caret .5s step-end infinite;
+            }
+
+            @keyframes typing {
+                from {
+                    width: 0;
+                }
+                to {
+                    width: 100%;
+                }
+            }
+
+            @keyframes blink-caret {
+                from, to { border-color: transparent }
+                50% { border-color: rgb(58, 57, 56) }
+            }
+
+
+            .right-container {
+                flex: 60%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+        @media only screen and (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .left-container, .right-container {
+                flex: 100%;
+            }
+
+            .welcome-text {
+                margin: 0; /* Adjust the margin for smaller screens */
+            }
+
+            .container {
+                width: 100%;
+                margin: 20px auto; /* Adjust the margin for smaller screens */
+            }
+
+            .tabs .tab {
+                flex: 100%;
+            }
+        }
+
+        .show-password-label {
+            display: flex;
+        }
+        .show-password-label p{
+            margin-top: 15px;
             font-size: 18px;
-            margin-bottom: 15px;
-            margin-left: 5px;
+        }
+        /*.show-password-label table {
+            padding: 10px;
+        }*/
+        .show-password-label input[type="checkbox"]{
+            height: 20px;
+            width: 25px;
+        }
+        .footer {
+          display: flex;
+          justify-content: center;
+          background-color: skyblue;
+          margin-bottom:  10px;
+         /* height: 50%;*/
+        }
+        .footer-content {
+            height: 30%;
+            width: 80%;
+            /*padding: 10px;*/
+            text-align: center;
+            color: black;
         }
 
-        button:hover {
-            font-weight: bold;
-            box-shadow: 1px 1px black;
-            cursor:pointer;
+        .outter {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .inner {
+          width: 300px;
+          height: 380px;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          border-radius: 5px;
+          overflow: hidden;
+        }
+        .form {
+          margin: 10px 20px;
+        }
+        .inner-form {
+          margin: 20px 0;
+          display: block;
+        }
+        .inner-form input {
+          width: 97%;
+          height: 25px;
+        }
+        .submit-button button {
+          background-color: yellowgreen;
+          width: 100%;
+          height: 35px;
+          margin: 10px auto;
+        }
+        .submit-button button:hover {
+          cursor: pointer;
         }
 
-        footer{
-            margin-top: 80px;
-        }
     </style>
 </head>
-<body>
-    <header>
-        <div class="logo">
-            <img src="assets/logo2.png" alt="logo1">
-        </div>
-    </header>
-    <main>
-        <!-- <?php 
-        if ($error) {
-                echo '<script language="javascript">';
-                echo 'alert("Password/username salah!")';
-                echo '</script>';
-            }
-        ?> -->
-       <div class="input-box">
-            <div class="input-box1">        
-                <h1>Masuk</h1>
-                <form method="post">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="newPassword">Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <div class="form-group show-password-label">
-                        <label for="showPassword">Tampilkan Password</label>
-                        <input type="checkbox" id="showPassword" class="checkbox" onclick="seePass()" >
-                    </div>
-                    <button type="submit" name="submit">Masuk</button>
-                </form>
-                <div class="sign-in">Belum punya akun? <a href="signup.php">Daftar</a></div>
-                <div class="sign-in">atau perlu <a href="help.html">Bantuan</a></div>
-		<form name="update" method="post" >
-		    <p>Lupa akun? <button name = "update" type="submit">reset</button></p>
 
-            </div>
-       </div>
-    </main>
-    <footer>
-    <div class="footer-box">
-            <div class="footer-column">
-                <div class="footer-logo-main">
-                    <img src="assets/logo2.png" alt="" width="240">
-                    <img src="assets/help.png" alt="" width="120">
-                </div>
-                <!-- <div class="footer-logo-sub">
-                    <img src="assets/hmtk.JPG" alt="" width="50">
-                    <img src="assets/Tmje.JPG" alt="" width="50">
-                    <img src="assets/logopnj.png" alt="" width="50">
-                </div> -->
-            </div>
-            <div class="footer-column footer-center">
-                <p>&#169; Smart LampU 2023</p>
-                <!-- <p>Site is still under</p>
-                <p>construction.</p> -->
-            </div>
-            <div class="footer-column">
-                <div class="footer-contact">
-                    <h3>Kontak</h3>
-                    <a href="mailto:diegogomez81655@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                    <a href=""><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                    <a href=""><i class="fa fa-x" aria-hidden="true"></i></a>
-                </div>
+<body>
+    <main>
+        <div class="main-container">    
+        <div class="left-container">
+            <div class="welcome-text">
+                <p>Selamat Datang</p>
             </div>
         </div>
-    </footer>
-    <script>
-        function seePass(){
+        <div class="right-container">
+            <div class="outter">
+              <div class="inner">
+                <div class="form">
+                  <form method="post">
+                    <div class="inner-form">
+                      <div class="title">Username</div>
+                      <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="inner-form">
+                      <div>Password</div>
+                      <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="submit-button">
+                      <button type="submit" name="submit">Masuk</button>
+                    </div>
+                  </form>
+                   <div class="input show-password-label">
+                      <table>
+                        <tr>
+                            <td><input type="checkbox" id="showPassword" class="checkbox" onclick="seePass()" ></td>
+                            <td><p>Tampilkan Password</p></td>
+                        </tr>
+                      </table>
+                  </div>
+                  <p>belum punya akun? <a href="index2.html">Daftar</a></p>
+                </div>
+              </div>
+            </div>
+        </div>    
+      </div>
+     <!--  <div class="footer">
+        <div class="footer-content">
+          <p>&copy; Tim Smart Lamp</p>
+          <small>2023</small>
+        </div>
+    </div> -->
+    </main>
+    <script type="text/javascript">
+
+         function seePass(){
             var x = document.getElementById("password");
             if (x.type === "password") {
                 x.type = "text";
@@ -210,11 +265,6 @@ if (isset($_POST['submit'])) {
         }
     </script>
 </body>
+
 </html>
 
-<?php
-if (isset($_POST['update']))
-{
-exec("/usr/bin/python /var/www/html/mysql.py $input_val");
-}
-?>

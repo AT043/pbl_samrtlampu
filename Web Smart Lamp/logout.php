@@ -1,14 +1,15 @@
-<?php
-require('koneksi.php');
+<?php  
 
-session_start();
+// Lampirkan dbconfig  
+require_once "dbconfig.php";  
+include_once "Auth.php";
 
+$UserAuth = new UserAuth($db_conn);
+$AdminAuth = new AdminAuth($db_conn);
 
-session_unset();
+// Logout! hapus session user  
+$UserAuth->logout(); 
+$AdminAuth->logout(); 
 
-
-session_destroy();
-
-header('Location: index.php');
-exit;
-?>
+// Redirect ke login  
+header('location: login.php');

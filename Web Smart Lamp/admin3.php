@@ -58,7 +58,7 @@
         .nav-bar li, .nav-bar p {
             display: inline;
             list-style-type: none;
-            margin: 8px 30px;
+            margin: 0 30px;
         }
         .nav-bar a {
             z-index: 1;

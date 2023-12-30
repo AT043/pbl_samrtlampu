@@ -1,126 +1,82 @@
 <?php
 
-require('koneksi.php');
+// Lampirkan dbconfig
+require_once "dbconfig.php";
 
-// session_start();
-$error = '';
-$validate = '';
+// Include Auth.php
+include_once "Auth.php";
 
+// Instantiate UserAuth and AdminAuth
+$UserAuth = new UserAuth($db_conn);
+$AdminAuth = new AdminAuth($db_conn);
+
+// Cek status login user
+if ($UserAuth->isLoggedIn() || $AdminAuth->isLoggedIn()) {
+    // Redirect to the appropriate page based on user type
+    if ($UserAuth->isLoggedIn()) {
+        header("location: userdashboard.html");
+    } else {
+        header("location: admin.html");
+    }
+    exit();
+}
+
+// Cek adanya data yang dikirim
 if (isset($_POST['daftar'])) {
+    $nama = $_POST['newUsername'];
+    $email = $_POST['email'];
+    $password = $_POST['newPassword'];
+    $repassword = $_POST['rePassword'];
+    $token = $_POST['tokenAdmin']; // Token for admin registration
 
-    $username = stripslashes($_POST['newUsername']);
-    $username = mysqli_real_escape_string($con, $username);
-    $email = stripslashes($_POST['email']);
-    $email = mysqli_real_escape_string($con, $email);
-    $token = stripslashes($_POST['tokenAdmin']);
-    $token = mysqli_real_escape_string($con, $token);
-    $password = stripslashes($_POST['newPassword']);
-    $password = mysqli_real_escape_string($con, $password);
-    $repass = stripslashes($_POST['rePassword']);
-    $repass = mysqli_real_escape_string($con, $repass);
-    // $user_acc = !empty(trim($username)) && !empty(trim($email)) && empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass));
-    // $admin_acc = !empty(trim($username)) && !empty(trim($email)) && !empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass)); 
-  
-    if (!empty(trim($username)) && !empty(trim($email)) && !empty(trim($token)) && !empty(trim($password)) && !empty(trim($repass))) {
-        if ($password == $repass) {
-            if (cek_uname_admin($username, $con) == 0) {
-                if (cek_token($token, $con) == 1) {
-                    if (token_avail($token, $con) == 0) {
-                        $pass = password_hash($password, PASSWORD_DEFAULT);
-                        $query = "INSERT INTO admin_account (username, email, password, token) VALUES ('$username', '$email', '$pass', '$token')";
-                        $result = mysqli_query($con, $query);
-                    
-                        if ($result) {
-                            $_SESSION['username'] = $username;
-                            header('Location: index.php');
-                            exit;
-                        } else {
-                            $error = 'Register Gagal !!';
-                        }
-                    } else {
-                        $error = 'Token Sudah Terdaftar, silahkan login sebagai user';
-                        $pass = password_hash($password, PASSWORD_DEFAULT);
-               
-                        $query = "INSERT INTO user_account (username, email, password) VALUES ('$username', '$email', '$pass')";
-                        $result = mysqli_query($con, $query);
-                    
-                        if ($result) {
-                            $_SESSION['username'] = $username;
-                            header('Location: index.php');
-                            exit;
-                        } else {
-                            $error = 'Register User Gagal !!';
-                        }
-                    }
-                } else {
-                    $error = 'Token Yang Dimasukkan Salah!';
-                        $pass = password_hash($password, PASSWORD_DEFAULT);
-               
-                        $query = "INSERT INTO user_account (username, email, password) VALUES ('$username', '$email', '$pass')";
-                        $result = mysqli_query($con, $query);
-                    
-                        if ($result) {
-                            $_SESSION['username'] = $username;
-                            header('Location: index.php');
-                            exit;
-                        } else {
-                            $error = 'Register User Gagal !!';
-                        }
-                }  
+    // Check if the provided token exists in the token_admin table
+    $stmtToken = $db_conn->prepare("SELECT * FROM token_admin WHERE token = :token");
+    $stmtToken->bindParam(":token", $token);
+    $stmtToken->execute();
+
+    // Check if the username already exists in the user_account table
+    $stmtUser = $db_conn->prepare("SELECT * FROM user_account WHERE username = :username");
+    $stmtUser->bindParam(":username", $nama);
+    $stmtUser->execute();
+
+    // Check if the username already exists in the admin_account table
+    $stmtAdmin = $db_conn->prepare("SELECT * FROM admin_account WHERE username = :username");
+    $stmtAdmin->bindParam(":username", $nama);
+    $stmtAdmin->execute();
+
+    if ($stmtToken->rowCount() > 0) {
+        // Token is valid, proceed with admin registration
+        if ($stmtAdmin->rowCount() === 0 && $password == $repassword) {
+            if ($AdminAuth->register($nama, $email, $password, $token, 'admin')) {
+                $success = true;
+                header("location: login.php");
+                exit();
             } else {
-                $error = 'Username sudah terdaftar !!';
+                $error = $AdminAuth->getLastError();
             }
         } else {
-            $validate = 'Password tidak sama !!';
+            $error = "Invalid admin registration.";
         }
-    
     } else {
-        $error = 'Data tidak boleh kosong !!';
-    } 
-}
-
-function cek_uname($username, $con)
-{
-    $uname = mysqli_real_escape_string($con, $username);
-    $query = "SELECT * FROM user_account WHERE username = '$uname'";
-    $result = mysqli_query($con, $query);
-    if ($result) {
-        return mysqli_num_rows($result);
-    } 
-}
-
-function cek_token($token, $con)
-{
-    $token = mysqli_real_escape_string($con, $token);
-    $query = "SELECT * FROM token_admin WHERE token = '$token'";
-    $result = mysqli_query($con, $query);
-    if ($result) {
-        return mysqli_num_rows($result);
-    } 
-}
-
-function token_avail($token, $con)
-{
-    $token = mysqli_real_escape_string($con, $token);
-    $query = "SELECT * FROM admin_account WHERE token = '$token'";
-    $result = mysqli_query($con, $query);
-    if ($result) {
-        return mysqli_num_rows($result);
-    } 
-}
-
-function cek_uname_admin($username, $con)
-{
-    $username = mysqli_real_escape_string($con, $username);
-    $query = "SELECT * FROM admin_account WHERE username = '$username'";
-    $result = mysqli_query($con, $query);
-
-    if ($result) {
-        return mysqli_num_rows($result);
-    } 
+        // Ordinary user registration (no token required)
+        if ($stmtUser->rowCount() === 0 && $password == $repassword) {
+            if ($UserAuth->register($nama, $email, $password, null, 'ordinary')) {
+                $success = true;
+                header("location: login.php");
+                exit();
+            } else {
+                $error = $UserAuth->getLastError();
+            }
+        } else {
+            $error = "Invalid ordinary user registration.";
+            
+        }
+    }
 }
 
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -152,7 +108,7 @@ function cek_uname_admin($username, $con)
             }
 
             .left-container {
-                flex: 40%;
+                flex: 35%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -162,26 +118,35 @@ function cek_uname_admin($username, $con)
                 font-size: 48px;
                 color: #000;
                 font-weight: bold;
-                white-space: nowrap;
                 overflow: hidden;
+                white-space: nowrap;
+                border-right: .05em solid rgb(34, 33, 33);
+                line-height: 1%;
                 text-align: center; /* Keep the text in the middle */
-                animation: typing 4s steps(40, end);
-                margin: 0px 0px 0px 200px; /* Adjust the margin as needed */
+                letter-spacing: .1em;
+                margin: 0px 0px 0px 120px; /* Adjust the margin as needed */
+                animation:
+                    typing 4.5s steps(20, end),
+                    blink-caret .5s step-end infinite;
             }
 
             @keyframes typing {
                 from {
                     width: 0;
                 }
-
                 to {
                     width: 100%;
                 }
             }
 
+            @keyframes blink-caret {
+                from, to { border-color: transparent }
+                50% { border-color: rgb(58, 57, 56) }
+            }
+
 
             .right-container {
-                flex: 60%;
+                flex: 65%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -304,7 +269,7 @@ function cek_uname_admin($username, $con)
         <div class="main-container">    
         <div class="left-container">
             <div class="welcome-text">
-                <p>Hello Stranger!</p>
+                <p>Selamat Datang</p>
             </div>
         </div>
         <div class="right-container">
