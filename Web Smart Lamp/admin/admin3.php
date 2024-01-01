@@ -88,7 +88,7 @@ $currentUser = $user->getUser();
                             <a href="#" class="sb-settings-btn">
                                 <img src="../assets/icons/settings.svg" alt="settings icon" />
                             </a>
-                            <a href="logout.php" class="sb-logout-btn" >
+                            <a href="../logout.php" class="sb-logout-btn" >
                                 <img src="../assets/icons/log-out.svg" alt="logout icon" />
                             </a>
                         </div>

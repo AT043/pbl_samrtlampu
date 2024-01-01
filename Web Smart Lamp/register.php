@@ -234,7 +234,7 @@ if (isset($_POST['daftar'])) {
         <div class="main-container">    
         <div class="left-container">
             <div class="welcome-text">
-                <p>Selamat Datang</p>
+                <p>Silahkan Daftar</p>
             </div>
         </div>
         <div class="right-container">

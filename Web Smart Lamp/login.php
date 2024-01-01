@@ -231,7 +231,7 @@ if (isset($_POST['submit'])) {
                         </tr>
                       </table>
                   </div>
-                  <p>belum punya akun? <a href="index2.html">Daftar</a></p>
+                  <p>belum punya akun? <a href="register.php">Daftar</a></p>
                 </div>
               </div>
             </div>

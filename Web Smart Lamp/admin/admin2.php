@@ -155,7 +155,7 @@ $currentUser = $user->getUser();
                             <a href="#" class="sb-settings-btn">
                                 <img src="../assets/icons/settings.svg" alt="settings icon" />
                             </a>
-                            <a href="logout.php" class="sb-logout-btn" >
+                            <a href="../logout.php" class="sb-logout-btn" >
                                 <img src="../assets/icons/log-out.svg" alt="logout icon" />
                             </a>
                         </div>
@@ -229,7 +229,7 @@ $currentUser = $user->getUser();
         </div>   
     </body>
     <script src="../assets/js/main.js"></script>
-    <script type="text/javascript">
+<!--     <script type="text/javascript">
         function updateClock() {
             // Get current date and time
             var now = new Date();
@@ -241,9 +241,9 @@ $currentUser = $user->getUser();
 
         // Update the clock every second (1000 milliseconds)
         setInterval(updateClock, 1000);
-    </script>
+    </script> -->
     <script>
-        $(document).ready(function() {
+        jQuery(document).ready(function($) {
             $('#userdata').DataTable({
                 "lengthMenu": [2, 4, 6, 8], // Set the available choices for the number of rows per page
                 "pageLength": 8  // Set the default number of rows per page
@@ -251,7 +251,7 @@ $currentUser = $user->getUser();
         });
     </script>
     <script>
-        $(document).ready(function() {
+        jQuery(document).ready(function($) {
             $('#admindata').DataTable({
                 "lengthMenu": [3, 5, 7], // Set the available choices for the number of rows per page
                 "pageLength": 7  // Set the default number of rows per page

@@ -29,7 +29,7 @@ class Auth
         if (session_status() == PHP_SESSION_NONE) {
         // Mulai sesi baru
         session_start();
-    }
+        }
     }
     /**
      * @param $username
@@ -116,7 +116,7 @@ class Auth
      * @param $password
      * @return bool
      *
-     * fungsi login user
+     * Function to log in the user
      */
     public function login($username, $password)
     {
@@ -131,6 +131,9 @@ class Auth
             if ($stmt->rowCount() > 0) {
                 // jika password yang dimasukkan sesuai dengan yg ada di database
                 if (password_verify($password, $data['password'])) {
+                    // Insert login history record
+                    $this->insertLoginHistory($data['id'], $data['username']);
+
                     $_SESSION['user_session'] = $data['id'];
 
                     // Check permissions and redirect accordingly
@@ -160,19 +163,48 @@ class Auth
         }
     }
 
+    /**
+     * Insert a record into the login_history table.
+     *
+     * @param int $userId User ID
+     * @param string $username Username
+     */
+    private function insertLoginHistory($username)
+    {
+        try {
+            $stmt = $this->db->prepare("INSERT INTO login_history (username, timestamp) VALUES (:username, NOW())");
+            $stmt->bindParam(":username", $username);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            // Handle error if needed
+            echo $e->getMessage();
+        }
+    }
 
     /**
-     * @return true|void
-     *
-     * fungsi cek login user
+     * @return bool
+     * Check if the user is logged in and if the session has not expired.
      */
     public function isLoggedIn()
     {
         // Apakah user_session sudah ada di session
-
         if (isset($_SESSION['user_session'])) {
-            return true;
+            // Check if the session timeout has not been reached
+            $lastActivity = isset($_SESSION['last_activity']) ? $_SESSION['last_activity'] : 0;
+            $timeoutSeconds = 7200; // 2 hours
+
+            if (time() - $lastActivity < $timeoutSeconds) {
+                // Update the last activity timestamp to the current time
+                $_SESSION['last_activity'] = time();
+                return true;
+            } else {
+                // Session has expired, log the user out
+                $this->logout();
+                return false;
+            }
         }
+
+        return false;
     }
 
     /**
@@ -201,8 +233,6 @@ class Auth
         }
     }
 
-
-
     /**
      * @return array|false
      *
@@ -221,6 +251,45 @@ class Auth
 
             return ['users' => $users, 'admins' => $admins];
         } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    /**
+     * Get login history for a specific user.
+     *
+     * @param int $userId User ID
+     * @return array|false Array of login history records or false on failure
+     */
+    public function getLoginHistory($userId)
+    {
+        try {
+            // Tentukan batas jumlah log yang diizinkan
+            $limit = 50;
+
+            // Periksa jumlah log saat ini
+            $countQuery = $this->db->prepare("SELECT COUNT(*) AS total FROM login_history WHERE id = :id");
+            $countQuery->bindParam(":id", $userId);
+            $countQuery->execute();
+
+            $totalLogs = $countQuery->fetchColumn();
+
+            // Jika jumlah log mencapai batas, hapus log tertua
+            if ($totalLogs >= $limit) {
+                $deleteQuery = $this->db->prepare("DELETE FROM login_history WHERE user_id = :user_id ORDER BY timestamp ASC LIMIT 1");
+                $deleteQuery->bindParam(":user_id", $userId);
+                $deleteQuery->execute();
+            }
+
+            // Ambil data login history
+            $stmt = $this->db->prepare("SELECT * FROM login_history WHERE id = :id ORDER BY timestamp DESC");
+            $stmt->bindParam(":id", $userId);
+            $stmt->execute();
+
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            // Handle error if needed
             echo $e->getMessage();
             return false;
         }
