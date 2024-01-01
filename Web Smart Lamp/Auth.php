@@ -1,109 +1,194 @@
 <?php
 
 /**
- * Class Auth for general authentication functionality
+ * Class Auth untuk melakukan login dan registrasi user baru
  */
-class Auth{
-       /**
-     * @var PDO
+class Auth
+{
+    /**
+     * @var
      * Menyimpan Koneksi database
      */
-    protected $db;
+    private $db;
 
     /**
-     * @var string
+     * @var
      * Menyimpan Error Message
      */
-    protected $error;
+    private $error;
 
     /**
-     * @param PDO $db_conn 
+     * @param $db_conn
      * Contructor untuk class Auth, membutuhkan satu parameter yaitu koneksi ke database
      */
     public function __construct($db_conn)
     {
         $this->db = $db_conn;
 
-        // Check if a session is already active before starting a new one
+        // Cek sesi
         if (session_status() == PHP_SESSION_NONE) {
-            session_start();
+        // Mulai sesi baru
+        session_start();
+    }
+    }
+    /**
+     * @param $username
+     * @param $email
+     * @param $password
+     * @param $permissions
+     * @return bool
+     *
+     * Registrasi User baru
+     */
+    public function register($username, $email, $password, $rePassword, $token = null)
+    {
+        try {
+            // buat hash dari password yang dimasukkan
+            $hashPasswd = password_hash($password, PASSWORD_DEFAULT);
+
+            // Set default permissions value
+            $permissions = 0;
+
+            // Check if a token is provided and it matches a token in the token_admin table
+            if (!empty($token)) {
+                // Check if the token has already been used
+                $stmtToken = $this->db->prepare("SELECT * FROM token_admin WHERE token = :token AND admin IS NULL");
+                $stmtToken->bindParam(":token", $token);
+                $stmtToken->execute();
+
+                if ($stmtToken->rowCount() > 0) {
+                    // Token found and not used, set permissions to 1 for admin
+                    $permissions = 1;
+
+                    // Store the username in the admin column of token_admin table
+                    $tokenData = $stmtToken->fetch();
+                    $adminUsername = $username; // Change this to the appropriate value based on your data model
+                    $stmtUpdateAdmin = $this->db->prepare("UPDATE token_admin SET admin = :admin WHERE token = :token");
+                    $stmtUpdateAdmin->bindParam(":admin", $adminUsername);
+                    $stmtUpdateAdmin->bindParam(":token", $token);
+                    $stmtUpdateAdmin->execute();
+                } else {
+                    // Token has already been used
+                    echo "<script>alert('Token has already been used or is invalid.');</script>";
+                    return false;
+                }
+            }
+
+
+            var_dump($permissions);
+
+            if ($password == $rePassword) {
+                //Masukkan user baru ke database
+                $stmt = $this->db->prepare("INSERT INTO users(username, email, password, permissions) VALUES(:username, :email, :pass, :permissions)");
+                $stmt->bindParam(":username", $username);
+                $stmt->bindParam(":email", $email);
+                $stmt->bindParam(":pass", $hashPasswd);
+                $stmt->bindParam(":permissions", $permissions);
+
+                $stmt->execute();
+
+                
+            } else {
+                echo "<script>alert('Password dan rePassword tida sesuai');</script>";
+            }
+
+            return true;
+        } catch (PDOException $e) {
+            // Jika terjadi error
+
+            if ($e->errorInfo[0] == 23000) {
+                //errorInfor[0] berisi informasi error tentang query sql yg baru dijalankan
+                //23000 adalah kode error ketika ada data yg sama pada kolom yg di set unique
+                $this->error = "Username atau email sudah pernah digunakan!";
+                echo "<script>alert('Username, token, atau email sudah pernah digunakan!');</script>";
+
+                return false;
+            } else {
+                echo $e->getMessage();
+
+                return false;
+            }
         }
     }
 
-        /**
-     * @param $name
+    /**
+     * @param $username
      * @param $password
-     * @param string $userType
      * @return bool
      *
-     * Shared login logic for both ordinary users and administrators
+     * fungsi login user
      */
-    protected function loginUserOrAdmin($name, $password, $userType = 'ordinary')
+    public function login($username, $password)
     {
         try {
-            // Check in the users table
-            $stmtUser = $this->db->prepare("SELECT * FROM user_account WHERE username = :name");
-            $stmtUser->bindParam(":name", $name);
-            $stmtUser->execute();
-            $userData = $stmtUser->fetch();
+            // Ambil data dari database
+            $stmt = $this->db->prepare("SELECT * FROM users WHERE username = :username");
+            $stmt->bindParam(":username", $username);
+            $stmt->execute();
+            $data = $stmt->fetch();
 
-            // Check in the admin table
-            $stmtAdmin = $this->db->prepare("SELECT * FROM admin_account WHERE username = :name");
-            $stmtAdmin->bindParam(":name", $name);
-            $stmtAdmin->execute();
-            $adminData = $stmtAdmin->fetch();
+            // Jika jumlah baris > 0
+            if ($stmt->rowCount() > 0) {
+                // jika password yang dimasukkan sesuai dengan yg ada di database
+                if (password_verify($password, $data['password'])) {
+                    $_SESSION['user_session'] = $data['id'];
 
-            // Check if the username exists in either users or admin table
-            if ($stmtUser->rowCount() > 0 || $stmtAdmin->rowCount() > 0) {
-                // Determine which table to use based on the result
-                $data = $stmtUser->rowCount() > 0 ? $userData : $adminData;
-                $existingUserType = $stmtUser->rowCount() > 0 ? 'ordinary' : 'admin';
-
-                // Check if the password is correct
-                if ($data && password_verify($password, $data['password'])) {
-                    // Check if the existing user type matches the intended user type
-                    if ($existingUserType !== $userType) {
-                        $this->error = "Username sudah digunakan sebagai " . ucfirst($existingUserType) . " user!";
-                        return false;
+                    // Check permissions and redirect accordingly
+                    if ($data['permissions'] == 1) {
+                        // Admin
+                        header("location: admin/admin.php");
+                    } else {
+                        // User
+                        header("location: user/userdashboard.php");
                     }
-
-                    // Check if the username exists in both tables
-                    if ($stmtUser->rowCount() > 0 && $stmtAdmin->rowCount() > 0) {
-                        $this->error = "Username sudah digunakan sebagai ordinary dan admin user!";
-                        return false;
-                    }
-
-                    $_SESSION['user_id'] = $data['id'];
-                    $_SESSION['user_type'] = $existingUserType;
 
                     return true;
                 } else {
                     $this->error = "Username atau Password Salah";
+                    echo "<script>alert('Username atau Password Salah');</script>";
                     return false;
                 }
             } else {
                 $this->error = "Username atau Password Salah";
+
                 return false;
             }
         } catch (PDOException $e) {
             echo $e->getMessage();
+
             return false;
         }
     }
 
 
-        /**
+    /**
+     * @return true|void
+     *
+     * fungsi cek login user
+     */
+    public function isLoggedIn()
+    {
+        // Apakah user_session sudah ada di session
+
+        if (isset($_SESSION['user_session'])) {
+            return true;
+        }
+    }
+
+    /**
      * @return false
      *
      * fungsi ambil data user yang sudah login
      */
     public function getUser()
     {
+        // Cek apakah sudah login
         if (!$this->isLoggedIn()) {
             return false;
         }
 
         try {
+            // Ambil data user dari database
             $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
             $stmt->bindParam(":id", $_SESSION['user_session']);
             $stmt->execute();
@@ -111,9 +196,36 @@ class Auth{
             return $stmt->fetch();
         } catch (PDOException $e) {
             echo $e->getMessage();
+
             return false;
         }
     }
+
+
+
+    /**
+     * @return array|false
+     *
+     * Get all user and admin data from the database
+     */
+    public function getAllUsersAndAdmins()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT * FROM users WHERE permissions='0'");
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $stmtAdmin = $this->db->prepare("SELECT * FROM users WHERE permissions='1'");
+            $stmtAdmin->execute();
+            $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
+
+            return ['users' => $users, 'admins' => $admins];
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
 
     /**
      * @return true
@@ -122,8 +234,11 @@ class Auth{
      */
     public function logout()
     {
+        // Hapus session
         session_destroy();
+        // Hapus user_session
         unset($_SESSION['user_session']);
+
         return true;
     }
 
@@ -136,119 +251,4 @@ class Auth{
     {
         return $this->error;
     }
-
-    /**
-     * @return bool
-     *
-     * Check if a user is logged in
-     */
-    public function isLoggedIn()
-    {
-        return isset($_SESSION['user_session']);
-    }
-
-
-    /**
-     * @param PDOStatement $stmt
-     * @return bool
-     *
-     * Eksekusi proses registrasi
-     */
-    public function executeRegistration(PDOStatement $stmt)
-    {
-        try {
-            $stmt->execute();
-            return true;
-        } catch (PDOException $e) {
-            if ($e->errorInfo[0] == 23000) {
-                $this->error = "Username sudah digunakan!";
-                echo "Ga bisa bang";
-            } else {
-                echo $e->getMessage();
-            }
-            return false;
-        }
-    }
-
 }
-
-/**
- * Class UserAuth for ordinary users
- */
-class UserAuth extends Auth
-{
-    /**
-     * @param $name
-     * @param $email
-     * @param $password
-     * @return bool
-     *
-     * Registrasi User baru
-     */
-    public function register($name, $email, $password)
-    {
-        $hashPasswd = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $this->db->prepare("INSERT INTO user_account(username, email, password) VALUES(:name, :email, :pass)");
-
-        $stmt->bindParam(":name", $name);
-        $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":pass", $hashPasswd);
-
-        return $this->executeRegistration($stmt);
-    }
-
-    /**
-     * @param $name
-     * @param $password
-     * @return bool
-     *
-     * Login for ordinary users
-     */
-    public function login($name, $password, $userType = 'ordinary')
-    {
-        return $this->loginUserOrAdmin($name, $password, $userType);
-    }
-}
-
-/**
- * Class AdminAuth for administrators
- */
-class AdminAuth extends Auth
-{
-    /**
-     * @param $name
-     * @param $email
-     * @param $password
-     * @param $token
-     * @return bool
-     *
-     * Registrasi Admin baru
-     */
-    public function register($name, $email, $password, $token)
-    {
-        $hashPasswd = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $this->db->prepare("INSERT INTO admin_account(username, email, password, token) VALUES(:name, :email, :pass, :token)");
-
-        $stmt->bindParam(":name", $name);
-        $stmt->bindParam(":email", $email);
-        $stmt->bindParam(":pass", $hashPasswd);
-        $stmt->bindParam(":token", $token);
-
-        return $this->executeRegistration($stmt);
-    }
-
-    /**
-     * @param $name
-     * @param $password
-     * @return bool
-     *
-     * Login for administrators
-     */
-    public function login($name, $password, $userType = 'admin')
-    {
-        return $this->loginUserOrAdmin($name, $password, $userType);
-    }
-}
-
-
-?>

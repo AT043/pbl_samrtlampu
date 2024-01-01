@@ -3,80 +3,46 @@
 // Lampirkan dbconfig
 require_once "dbconfig.php";
 
-// Include Auth.php
-include_once "Auth.php";
-
-// Instantiate UserAuth and AdminAuth
-$UserAuth = new UserAuth($db_conn);
-$AdminAuth = new AdminAuth($db_conn);
-
 // Cek status login user
-if ($UserAuth->isLoggedIn() || $AdminAuth->isLoggedIn()) {
-    // Redirect to the appropriate page based on user type
-    if ($UserAuth->isLoggedIn()) {
-        header("location: userdashboard.html");
+if ($user->isLoggedIn()) {
+    // Check if it's an admin or a regular user
+    $userData = $user->getUser(); // Assuming you have a method to get user data
+    if ($userData['permissions'] == 1) {
+        // Admin
+        header("location: admin/admin.php");
     } else {
-        header("location: admin.html");
+        // User
+        header("location: user/userdashboard.php");
     }
-    exit();
+    exit(); // Ensure the script stops here to prevent further execution
 }
 
 // Cek adanya data yang dikirim
 if (isset($_POST['daftar'])) {
-    $nama = $_POST['newUsername'];
+    $usernama = $_POST['newUsername'];
     $email = $_POST['email'];
     $password = $_POST['newPassword'];
     $repassword = $_POST['rePassword'];
-    $token = $_POST['tokenAdmin']; // Token for admin registration
+    $token = $_POST['token'];
 
-    // Check if the provided token exists in the token_admin table
-    $stmtToken = $db_conn->prepare("SELECT * FROM token_admin WHERE token = :token");
-    $stmtToken->bindParam(":token", $token);
-    $stmtToken->execute();
-
-    // Check if the username already exists in the user_account table
-    $stmtUser = $db_conn->prepare("SELECT * FROM user_account WHERE username = :username");
-    $stmtUser->bindParam(":username", $nama);
-    $stmtUser->execute();
-
-    // Check if the username already exists in the admin_account table
-    $stmtAdmin = $db_conn->prepare("SELECT * FROM admin_account WHERE username = :username");
-    $stmtAdmin->bindParam(":username", $nama);
-    $stmtAdmin->execute();
-
-    if ($stmtToken->rowCount() > 0) {
-        // Token is valid, proceed with admin registration
-        if ($stmtAdmin->rowCount() === 0 && $password == $repassword) {
-            if ($AdminAuth->register($nama, $email, $password, $token, 'admin')) {
-                $success = true;
-                header("location: login.php");
-                exit();
-            } else {
-                $error = $AdminAuth->getLastError();
-            }
+    // Registrasi user baru
+    if ($user->register($usernama, $email, $password, $repassword, $token)) {
+        // Jika berhasil set variable success ke true
+        if ($password == $repassword) {
+            $success = true;
+            header('location: login.php');
         } else {
-            $error = "Invalid admin registration.";
+            $error = "Password dan konfirmasi password tidak sesuai.";
         }
     } else {
-        // Ordinary user registration (no token required)
-        if ($stmtUser->rowCount() === 0 && $password == $repassword) {
-            if ($UserAuth->register($nama, $email, $password, null, 'ordinary')) {
-                $success = true;
-                header("location: login.php");
-                exit();
-            } else {
-                $error = $UserAuth->getLastError();
-            }
-        } else {
-            $error = "Invalid ordinary user registration.";
-            
-        }
+        // Jika gagal, ambil pesan error
+        $error = $user->getLastError();
     }
 }
 
 ?>
 
-
+<!-- HTML -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -85,8 +51,7 @@ if (isset($_POST['daftar'])) {
     <meta charset="utf-8">
     <meta lang="en-us">
     <title>Welcome | SmartLamp</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style type="text/css">
         html, body {
             padding: 0px;
@@ -300,7 +265,7 @@ if (isset($_POST['daftar'])) {
                           <td><!-- <div class="title">Email</div> --></td>
                         </tr>
                         <tr>
-                          <td> <input type="text" id="tokenAdmin" name="tokenAdmin"></td>
+                          <td> <input type="text" id="token" name="token"></td>
                           <td><!-- <input type="email" id="email" name="email" required> --></td>
                         </tr>
                       </table>

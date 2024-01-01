@@ -1,47 +1,38 @@
 <?php
 
+// Lampirkan dbconfig
 require_once "dbconfig.php";
-require_once "Auth.php";
 
-// Instantiate UserAuth and AdminAuth
-$UserAuth = new UserAuth($db_conn);
-$AdminAuth = new AdminAuth($db_conn);
-
-// Check status login user
-if ($UserAuth->isLoggedIn()) {
-    // Redirect to the user dashboard
-    header("location: userdashboard.html");
-    exit();
-} elseif ($AdminAuth->isLoggedIn()) {
-    // Redirect to the admin dashboard
-    header("location: admin.html");
-    exit();
+// Cek status login user
+if ($user->isLoggedIn()) {
+    // Check if it's an admin or a regular user
+    $userData = $user->getUser(); // Assuming you have a method to get user data
+    if ($userData['permissions'] == 1) {
+        // Admin
+        header("location: admin/admin.php");
+    } else {
+        // User
+        header("location: user/userdashboard.php");
+    }
+    exit(); // Ensure the script stops here to prevent further execution
 }
 
-// If form data is submitted
+//jika ada data yg dikirim
 if (isset($_POST['submit'])) {
-    $name = $_POST['username'];
+    $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Process user login
-    if ($AdminAuth->login($name, $password)) {
-        // Redirect to the admin dashboard
-        header("location: admin.html");
-        exit();
-    } elseif ($UserAuth->login($name, $password)) {
-        // Redirect to the user dashboard
-        header("location: userdashboard.html");
-        exit();
+    // Proses login user
+    if ($user->login($username, $password)) {
+        // header("location: index.php");
+      $success = true;
     } else {
-        // If login fails, retrieve the error message
-        $error = $UserAuth->getLastError(); //
-        echo '<script>alert("' . $error . '");</script>';
+        // Jika login gagal, ambil pesan error
+        $error = $user->getLastError();
     }
 }
 
-
 ?>
-
 
 
 <!DOCTYPE html>
