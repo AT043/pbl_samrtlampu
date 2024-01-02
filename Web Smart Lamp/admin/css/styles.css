@@ -508,9 +508,15 @@ div.div-line {
   }
 
   /* Custom Lamp */
-      .material-icons.basecolor { 
+    .material-icons.basecolor { 
         color: #ccc;
     }
+
+    .material-icons.basecolor2 {
+      color: yellow;
+      display: none;
+    }
+
     .material-icons.md-48 { 
         font-size: 48px; 
     }

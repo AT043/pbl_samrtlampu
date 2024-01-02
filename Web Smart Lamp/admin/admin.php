@@ -101,7 +101,7 @@ $currentUser = $user->getUser();
                             <div class="lamp-mode-box">
                             <h3>Mode Manual</h3>
                                 <div class="lamp-mode-box-m">
-                                    <span class="material-icons md-48 basecolor">lightbulb</span>
+                                    <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
                                     <p>Lampu 1</p>
                                     <label class="toggle">
                                         <input type="checkbox">
@@ -110,7 +110,7 @@ $currentUser = $user->getUser();
                                     </label>
                                 </div>
                                 <div class="lamp-mode-box-m">
-                                    <span class="material-icons md-48 basecolor">lightbulb</span>
+                                    <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
                                     <p>Lampu 2</p>
                                     <label class="toggle">
                                         <input type="checkbox">
@@ -119,7 +119,7 @@ $currentUser = $user->getUser();
                                     </label>
                                 </div>
                                 <div class="lamp-mode-box-m">
-                                    <span class="material-icons md-48 basecolor">lightbulb</span>
+                                    <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
                                     <p>Lampu 3</p>
                                     <label class="toggle">
                                         <input type="checkbox">
@@ -128,7 +128,7 @@ $currentUser = $user->getUser();
                                     </label>
                                 </div>
                                 <div class="lamp-mode-box-m">
-                                    <span class="material-icons md-48 basecolor">lightbulb</span>
+                                    <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
                                     <p>Lampu 4</p>
                                     <label class="toggle">
                                         <input type="checkbox">
@@ -174,7 +174,7 @@ $currentUser = $user->getUser();
                                         <h3>Mode Otomatis</h3>
                                         <div class="auto-mode-switch">
                                             <div class="auto-mode-switch-block">
-                                                <span class="material-icons md-48 basecolor">lightbulb</span>
+                                                <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
                                                 <label class="toggle">
                                                     <input type="checkbox">
                                                     <span class="slider"></span>
@@ -192,6 +192,23 @@ $currentUser = $user->getUser();
         </div>   
     </body>
     <script src="../assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all toggle switches
+            var toggleSwitches = document.querySelectorAll('.toggle input[type="checkbox"]');
+
+            // Add a change event listener to each toggle switch
+            toggleSwitches.forEach(function (toggleSwitch) {
+                toggleSwitch.addEventListener('change', function () {
+                    // Get the icon element
+                    var icon = this.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
+
+                    // Change the color based on the toggle state
+                    icon.style.color = this.checked ? 'yellow' : '#ccc';
+                });
+            });
+        });
+    </script>
     <script type="text/javascript">
         function updateClock() {
             // Get current date and time

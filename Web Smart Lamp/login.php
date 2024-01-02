@@ -10,9 +10,11 @@ if ($user->isLoggedIn()) {
     if ($userData['permissions'] == 1) {
         // Admin
         header("location: admin/admin.php");
+        $user->insertLoginHistory();
     } else {
         // User
         header("location: user/userdashboard.php");
+        $user->insertLoginHistory();
     }
     exit(); // Ensure the script stops here to prevent further execution
 }

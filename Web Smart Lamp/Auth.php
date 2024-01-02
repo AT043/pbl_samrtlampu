@@ -132,7 +132,7 @@ class Auth
                 // jika password yang dimasukkan sesuai dengan yg ada di database
                 if (password_verify($password, $data['password'])) {
                     // Insert login history record
-                    $this->insertLoginHistory($data['id'], $data['username']);
+                    $this->insertLoginHistory($data['username']);
 
                     $_SESSION['user_session'] = $data['id'];
 
@@ -169,10 +169,10 @@ class Auth
      * @param int $userId User ID
      * @param string $username Username
      */
-    private function insertLoginHistory($username)
+    public function insertLoginHistory($username)
     {
         try {
-            $stmt = $this->db->prepare("INSERT INTO login_history (username, timestamp) VALUES (:username, NOW())");
+            $stmt = $this->db->prepare("INSERT INTO login_history (username, login_time) VALUES (:username, NOW())");
             $stmt->bindParam(":username", $username);
             $stmt->execute();
         } catch (PDOException $e) {
@@ -182,29 +182,17 @@ class Auth
     }
 
     /**
-     * @return bool
-     * Check if the user is logged in and if the session has not expired.
+     * @return true|void
+     *
+     * fungsi cek login user
      */
     public function isLoggedIn()
     {
         // Apakah user_session sudah ada di session
+
         if (isset($_SESSION['user_session'])) {
-            // Check if the session timeout has not been reached
-            $lastActivity = isset($_SESSION['last_activity']) ? $_SESSION['last_activity'] : 0;
-            $timeoutSeconds = 7200; // 2 hours
-
-            if (time() - $lastActivity < $timeoutSeconds) {
-                // Update the last activity timestamp to the current time
-                $_SESSION['last_activity'] = time();
-                return true;
-            } else {
-                // Session has expired, log the user out
-                $this->logout();
-                return false;
-            }
+            return true;
         }
-
-        return false;
     }
 
     /**
@@ -262,29 +250,29 @@ class Auth
      * @param int $userId User ID
      * @return array|false Array of login history records or false on failure
      */
-    public function getLoginHistory($userId)
+    public function getLoginHistory($username)
     {
         try {
             // Tentukan batas jumlah log yang diizinkan
             $limit = 50;
 
             // Periksa jumlah log saat ini
-            $countQuery = $this->db->prepare("SELECT COUNT(*) AS total FROM login_history WHERE id = :id");
-            $countQuery->bindParam(":id", $userId);
+            $countQuery = $this->db->prepare("SELECT COUNT(*) AS total FROM login_history WHERE username = :username");
+            $countQuery->bindParam(":username", $username);
             $countQuery->execute();
 
             $totalLogs = $countQuery->fetchColumn();
 
             // Jika jumlah log mencapai batas, hapus log tertua
             if ($totalLogs >= $limit) {
-                $deleteQuery = $this->db->prepare("DELETE FROM login_history WHERE user_id = :user_id ORDER BY timestamp ASC LIMIT 1");
-                $deleteQuery->bindParam(":user_id", $userId);
+                $deleteQuery = $this->db->prepare("DELETE FROM login_history WHERE username = :username ORDER BY login_time ASC LIMIT 1");
+                $deleteQuery->bindParam(":username", $username);
                 $deleteQuery->execute();
             }
 
             // Ambil data login history
-            $stmt = $this->db->prepare("SELECT * FROM login_history WHERE id = :id ORDER BY timestamp DESC");
-            $stmt->bindParam(":id", $userId);
+            $stmt = $this->db->prepare("SELECT * FROM login_history WHERE username = :username ORDER BY login_time DESC");
+            $stmt->bindParam(":username", $username);
             $stmt->execute();
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

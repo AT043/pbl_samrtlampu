@@ -95,8 +95,50 @@ $currentUser = $user->getUser();
                     </div>
                 </div>
                 <!-- CONTENT -->
-                <div class="content">
+                <div class="content-i">
+                    <div class="content-main">
+                        <div class="big-box">
+                            <div class="container mt-3">
+                                <div class="user-data" id="user-data">
+                                    <?php
+                                    $auth = new Auth($con);
+                                    $data = $auth->getAllUsersAndAdmins();
+                                    $users = $data['users'];
+                                    ?>
 
+                                    <h3>History Login</h3>
+                                    <table id="loginHistory" class="table table-striped table-bordered" style="width:100%">
+                                        <!-- Table header -->
+                                        <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Waktu Login</th>
+                                                <!-- Add more columns as needed -->
+                                            </tr>
+                                        </thead>
+                                        <!-- Table body -->
+                                        <tbody>
+                                            <?php
+                                            // Get login history for the current user
+                                            $loginHistory = $auth->getLoginHistory($currentUser['id']);
+
+                                            if ($loginHistory) {
+                                                foreach ($loginHistory as $log) {
+                                                    echo "<tr>";
+                                                    echo "<td>{$log['username']}</td>";
+                                                    echo "<td>{$log['login_time']}</td>";
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='2'>No login history found.</td></tr>";
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>   

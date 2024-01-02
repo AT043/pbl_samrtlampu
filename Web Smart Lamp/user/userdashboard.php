@@ -100,8 +100,8 @@ $currentUser = $user->getUser();
                                     <h3 class="user-name"><?php echo $currentUser['username'] ?></h3>
                                 </div>
                                 <div id="myDropdown" class="dropdown-content">
-                                    <a href="#">Edit Passowrd</a>
-                                    <a href="../logout.php">About</a>
+                                    <a href="#">Edit User</a>
+                                    <a href="../logout.php">Logout</a>
                                     <!-- <a href="#contact">Contact</a> -->
                                 </div>
                             </div>
@@ -211,6 +211,23 @@ $currentUser = $user->getUser();
         </div>   
     </body>
     <script src="../assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all toggle switches
+            var toggleSwitches = document.querySelectorAll('.toggle input[type="checkbox"]');
+
+            // Add a change event listener to each toggle switch
+            toggleSwitches.forEach(function (toggleSwitch) {
+                toggleSwitch.addEventListener('change', function () {
+                    // Get the icon element
+                    var icon = this.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
+
+                    // Change the color based on the toggle state
+                    icon.style.color = this.checked ? ' yellow ' : '#ccc';
+                });
+            });
+        });
+    </script>
     <script type="text/javascript">
         function updateClock() {
             // Get current date and time
