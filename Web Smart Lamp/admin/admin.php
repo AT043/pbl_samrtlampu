@@ -222,4 +222,40 @@ $currentUser = $user->getUser();
         // Update the clock every second (1000 milliseconds)
         setInterval(updateClock, 1000);
     </script>
+      <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var checkboxClickCount = 0;
+      var checkboxClickStartTime;
+
+      // Get all toggle switches
+      var toggleSwitches = document.querySelectorAll('.toggle input[type="checkbox"]');
+
+      // Add a click event listener to each toggle switch
+      toggleSwitches.forEach(function (toggleSwitch) {
+        toggleSwitch.addEventListener('click', function () {
+          // Check if it's the first click or if the time difference is more than one second
+          var currentTime = new Date().getTime();
+          if (!checkboxClickStartTime || currentTime - checkboxClickStartTime > 3000) {
+            checkboxClickCount = 1;
+            checkboxClickStartTime = currentTime;
+          } else {
+            checkboxClickCount++;
+          }
+
+          // Check if the click count exceeds the threshold
+          if (checkboxClickCount >= 5) {
+            // Redirect to logout page or trigger your logout mechanism
+            window.location.href = '../logout.php';
+            alert('Too many click');
+          }
+
+          // Get the icon element
+          var icon = this.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
+
+          // Change the color based on the toggle state
+          icon.style.color = this.checked ? 'yellow' : '#ccc';
+        });
+      });
+    });
+  </script>
 </html>

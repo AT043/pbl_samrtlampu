@@ -129,39 +129,104 @@ class Auth
 
             // Jika jumlah baris > 0
             if ($stmt->rowCount() > 0) {
-                // jika password yang dimasukkan sesuai dengan yg ada di database
                 if (password_verify($password, $data['password'])) {
-                    // Insert login history record
                     $this->insertLoginHistory($data['username']);
-
                     $_SESSION['user_session'] = $data['id'];
 
-                    // Check permissions and redirect accordingly
+                    // Implement brute force protection
+                    $this->clearLoginAttempts($username);
+
                     if ($data['permissions'] == 1) {
-                        // Admin
                         header("location: admin/admin.php");
                     } else {
-                        // User
                         header("location: user/userdashboard.php");
                     }
 
                     return true;
                 } else {
-                    $this->error = "Username atau Password Salah";
-                    echo "<script>alert('Username atau Password Salah');</script>";
+                    $this->error = "Username or Password is incorrect";
+                    $this->handleFailedLoginAttempt($username);
                     return false;
                 }
             } else {
-                $this->error = "Username atau Password Salah";
-
+                $this->error = "Username or Password is incorrect";
+                $this->handleFailedLoginAttempt($username);
                 return false;
             }
         } catch (PDOException $e) {
-            echo $e->getMessage();
-
+            $this->handleError($e);
             return false;
         }
     }
+
+
+    // Implementing session_regenerate_id for session security
+    private function regenerateSession()
+    {
+        if (session_status() == PHP_SESSION_ACTIVE) {
+            session_regenerate_id(true);
+        }
+    }
+
+    // Implementing brute force protection
+    public function handleFailedLoginAttempt($username)
+    {
+        $this->regenerateSession();
+
+        if (!isset($_SESSION['login_attempts'][$username])) {
+            $_SESSION['login_attempts'][$username] = 1;
+        } else {
+            $_SESSION['login_attempts'][$username]++;
+        }
+
+        if ($_SESSION['login_attempts'][$username] >= 3) {
+            // Implement time-based lockout or other appropriate actions
+
+            // Check if enough time has passed since the last failed attempt
+            $lastAttemptTime = isset($_SESSION['last_attempt_time']) ? $_SESSION['last_attempt_time'] : 0;
+            $currentTime = time();
+
+            $timeDifference = $currentTime - $lastAttemptTime;
+
+            // Set the lockout duration (5 minutes in this example)
+            $lockoutDuration = 300; // 5 minutes
+
+            if ($timeDifference < $lockoutDuration) {
+                $remainingTime = $lockoutDuration - $timeDifference;
+                echo "<script>alert('Too many failed login attempts. Please try again in $remainingTime seconds.'); window.location.href='login.php';</script>";
+                exit;
+            } else {
+                // Reset the failed attempts counter and update the last attempt time
+                $_SESSION['login_attempts'][$username] = 1;
+                $_SESSION['last_attempt_time'] = $currentTime;
+            }
+        }
+    }
+
+
+
+    private function clearLoginAttempts($username)
+    {
+        if (isset($_SESSION['login_attempts'][$username])) {
+            unset($_SESSION['login_attempts'][$username]);
+        }
+    }
+
+    private function handleError($e)
+    {
+        if ($e->errorInfo[0] == 23000) {
+            $this->error = "Username or email has already been used!";
+        } else {
+            // Log the error instead of echoing it directly
+            error_log($e->getMessage());
+            $this->error = "An error occurred. Please try again later.";
+        }
+
+        // You can customize this part to handle errors in a way suitable for your application
+        echo "<script>alert('" . $this->error . "');</script>";
+    }
+
+
 
     /**
      * Insert a record into the login_history table.
