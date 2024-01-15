@@ -4,13 +4,13 @@
 require_once "../dbconfig.php";  
 
 // Cek status login user  
-if (!$login->isLoggedIn()) {  
+if (!$user->isLoggedIn()) {  
     header("location: ../login.php"); //Redirect ke halaman login  
 }  
 
 // Ambil data user saat ini  
-$currentUser = $login->getUser();  
-?>   
+$currentUser = $user->getUser();  
+?>  
 
 <!DOCTYPE html>
 <html lang="en-us">
@@ -119,26 +119,50 @@ $currentUser = $login->getUser();
                         <div class="slave">
                             <div class="lamp-mode-box">
                             <h3>Mode Manual</h3>
-                            <form method="post">
-                              <?php for ($lampNumber = 1; $lampNumber <= 4; $lampNumber++) : ?>
-                                  <div class="lamp-mode-box-m">
-                                      <span class="material-icons md-48 basecolor">lightbulb</span>
-                                      <p>Lampu <?php echo $lampNumber; ?></p>
-                                      <label class="toggle">
-                                          <input type="checkbox" name="lamp<?php echo $lampNumber; ?>">
-                                          <span class="slider"></span>
-                                          <span class="labels" data-on="ON" data-off="OFF"></span>
-                                      </label>
-                                  </div>
-                              <?php endfor; ?>
-                              <div class="manual-all-lamp">
-                                  <h3>Semua Lampu</h3>
-                                  <div class="all-lamp-btn">
-                                      <button class="btn-all-lamp" type="submit" name="OnAll">ON</button>
-                                      <button class="btn-all-lamp" type="submit" name="OffAll">OFF</button>
-                                  </div>
-                              </div>
-                          </form>
+                                <div class="lamp-mode-box-m">
+                                    <span class="material-icons md-48 basecolor">lightbulb</span>
+                                    <p>Lampu 1</p>
+                                    <label class="toggle">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                                <div class="lamp-mode-box-m">
+                                    <span class="material-icons md-48 basecolor">lightbulb</span>
+                                    <p>Lampu 2</p>
+                                    <label class="toggle">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                                <div class="lamp-mode-box-m">
+                                    <span class="material-icons md-48 basecolor">lightbulb</span>
+                                    <p>Lampu 3</p>
+                                    <label class="toggle">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                                <div class="lamp-mode-box-m">
+                                    <span class="material-icons md-48 basecolor">lightbulb</span>
+                                    <p>Lampu 4</p>
+                                    <label class="toggle">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                                <div class="manual-all-lamp">
+                                    <h3>Semua Lampu</h3>
+                                    <div class="all-lamp-btn">
+                                        <button class="btn-all-lamp" type="submit" name="OnAll">ON</button>
+                                        <button class="btn-all-lamp" type="submit" name="OffAll">OFF</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="slave2">
                             <div class="auto-lamp-mode">
@@ -275,39 +299,6 @@ $currentUser = $login->getUser();
     });
   </script>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get all toggle switches
-            var toggleSwitches = document.querySelectorAll('.toggle input[type="checkbox"]');
-
-            // Add a change event listener to each toggle switch
-            toggleSwitches.forEach(function (toggleSwitch) {
-                toggleSwitch.addEventListener('change', function () {
-                    // Get the icon element
-                    var icon = this.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
-
-                    // Change the color based on the toggle state
-                    icon.style.color = this.checked ? 'yellow' : '#ccc';
-
-                    // Execute the appropriate script based on the toggle state
-                    var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-A" : "http://192.168.31.159/eksekusi-kode-B";
-
-                    fetch(scriptURL)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`HTTP error! Status: ${response.status}`);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log("Script berhasil dijalankan:", data);
-                        })
-                        .catch(error => {
-                            console.error("Ada kesalahan:", error);
-                        });
-                });
-            });
-        });
-    </script>
+<!-- ... Your existing HTML code ... -->
 
 </html>

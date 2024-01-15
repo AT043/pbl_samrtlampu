@@ -1,39 +1,5 @@
 <?php
-
-// Lampirkan dbconfig
 require_once "dbconfig.php";
-
-// Cek status login user
-if ($user->isLoggedIn()) {
-    // Check if it's an admin or a regular user
-    $userData = $user->getUser(); // Assuming you have a method to get user data
-    if ($userData['permissions'] == 1) {
-        // Admin
-        header("location: admin/admin.php");
-        $user->insertLoginHistory();
-    } else {
-        // User
-        header("location: user/userdashboard.php");
-        $user->insertLoginHistory();
-    }
-    exit(); // Ensure the script stops here to prevent further execution
-}
-
-//jika ada data yg dikirim
-if (isset($_POST['submit'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    // Proses login user
-    if ($user->login($username, $password)) {
-        // header("location: index.php");
-      $success = true;
-    } else {
-        // Jika login gagal, ambil pesan error
-        $error = $user->getLastError();
-    }
-}
-
 ?>
 
 
@@ -45,7 +11,7 @@ if (isset($_POST['submit'])) {
     <meta lang="en-us">
     <title>Welcome | SmartLamp</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <style type="text/css">
+       <style type="text/css">
         html, body {
             padding: 0px;
             margin: 0px;
@@ -201,6 +167,7 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
+  <?php show_alert();?>
     <main>
         <div class="main-container">    
         <div class="left-container">
@@ -212,7 +179,7 @@ if (isset($_POST['submit'])) {
             <div class="outter">
               <div class="inner">
                 <div class="form">
-                  <form method="post">
+                  <form method="post" action="login-proccess.php">
                     <div class="inner-form">
                       <div class="title">Username</div>
                       <input type="text" id="username" name="username" required>

@@ -1,0 +1,437 @@
+<?php  
+
+// Lampirkan dbconfig  
+require_once "dbconfig.php";  
+
+// Cek status login user  
+if (!$user->isLoggedIn()) {  
+    header("location: login.php"); //Redirect ke halaman login  
+}  
+
+// Ambil data user saat ini  
+$currentUser = $user->getUser();  
+?>  
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | SmartLamp</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+      <style>
+        .slave2-main {
+          display: flex;
+          width: 100%;
+          font-size: 20px;
+        }
+        .slave2-sub1 {
+          display: flex;
+          flex: 50%;
+          justify-content: center;
+          /*margin: 50px;*/
+        }
+        .slave2-sub2 {
+          display: flex;
+          flex: 50%;
+          justify-content: center;
+          /*margin: 20px 10px;*/
+        }
+
+        .lamp-mode-box {
+          border: 1px solid #ccc;
+          height: 500px;
+          width: 340px;
+          background-color: #ffff;
+          margin: 30px 0px;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        }
+        
+      .lamp-mode-box h3{
+          text-align: center;
+          margin: 20px;
+      }
+      .lamp-mode-box-m {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: nowrap;
+          margin: 30px;
+          text-align: center;
+      }
+
+      .lamp-circle {
+          border: 1px solid #ccc;
+          height: 20px;
+          width: 20px;
+          border-radius: 50%;
+      }
+
+      .manual-all-lamp {
+          margin-top: 20px;
+          border-top: 1px solid #ccc;
+      }
+      .manual-all-lamp h3{
+          margin: auto;
+      }
+
+      .all-lamp-btn {
+          display: flex;
+      }
+
+      .btn-all-lamp{
+          border: 1px solid #ccc;
+          margin: 15px 10px;
+          width: 70px;
+          height: 30px;
+          text-align: center;
+          color: #000;
+          background-color: #fff;
+      }
+      .btn-all-lamp:hover {
+          border: 1px solid black;
+          font-weight: bolder;
+          cursor: pointer;
+          background-color: #000d;
+          color: #ffff;
+      }
+
+      .auto-schedul {
+          border: 1px solid #ccc;
+          width: 400px;
+          height: 320px;
+          margin: 20px 0px;
+          background-color: #ffff;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      .auto-schedul h3 {
+          text-align: center;
+          margin: 20px;
+      }
+
+      .auto-schedul table {
+          display: flex;
+          justify-content: center;
+      }
+
+      .auto-schedul th, td {
+          text-align: center;
+          padding: 5px 10px;
+      }
+
+      .auto-timer {
+          border: 1px solid #ccc;
+          width: 400px;
+          height: 180px;
+          margin: 20px 0px;
+          background-color: #ffff;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      }
+
+      .auto-timer h3{
+          text-align: center;
+          margin: 20px;
+      }
+
+      .auto-mode-switch {
+          display: flex;
+          justify-content: center;
+      }
+      .auto-lamp-block {
+          display: block;
+      }
+  /*
+      .lamp-switch input {
+          position: absolute;
+          opacity: 0;
+      }*/
+
+      .auto-mode-switch-block {
+          display: block;
+   /*       margin: 10px 0;*/
+      }
+
+      .auto-mode-switch-block .lamp-circle{
+          margin: 10px auto;
+      }
+
+          /**
+           * 1. Adjust this to size
+           */
+
+      .toggle {
+        --width: 65px;
+        --height: calc(var(--width) / 2);
+
+        position: relative;
+        display: inline-block;
+        width: var(--width);
+        height: var(--height);
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+        border-radius: var(--height);
+        cursor: pointer;
+      }
+
+      .toggle input {
+        display: none;
+      }
+
+      .toggle .slider {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: var(--height);
+        background-color: #ccc;
+        transition: all 0.4s ease-in-out;
+      }
+
+      .toggle .slider::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: calc(var(--height));
+        height: calc(var(--height));
+        border-radius: calc(var(--height) / 2);
+        background-color: #fff;
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.3);
+        transition: all 0.4s ease-in-out;
+      }
+
+      .toggle input:checked+.slider {
+        background-color: #2196F3;
+      }
+
+      .toggle input:checked+.slider::before {
+        transform: translateX(calc(var(--width) - var(--height)));
+      }
+
+      .toggle .labels {
+        position: absolute;
+        top: 8px;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        font-family: sans-serif;
+        transition: all 0.4s ease-in-out;
+      }
+
+      .toggle .labels::after {
+        content: attr(data-off);
+        position: absolute;
+        right: 5px;
+        color: #4d4d4d;
+        opacity: 1;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+        transition: all 0.4s ease-in-out;
+      }
+
+      .toggle .labels::before {
+        content: attr(data-on);
+        position: absolute;
+        left: 5px;
+        color: #ffffff;
+        opacity: 0;
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.4);
+        transition: all 0.4s ease-in-out;
+      }
+
+      .toggle input:checked~.labels::after {
+        opacity: 0;
+      }
+
+      .toggle input:checked~.labels::before {
+        opacity: 1;
+      }
+
+/*      @media (min-width: 768px) {
+      .slave2-main {
+        flex-wrap: wrap;
+      }
+      .slave2-sub1 {
+        margin: 10px;
+      }
+      .slave2-sub2 {
+        margin: 10px;
+      }
+    }*/
+
+    .material-icons.orange600 { 
+        color: #ccc;
+    }
+    .material-icons.md-36 { 
+        font-size: 48px; 
+    }
+
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="nb-container">
+          <div class="nb-title">SmartLamp</div>
+          <button id="nb-toggle" class="nb-toggle">
+            <div class="nb-i-line"></div>
+            <div class="nb-i-line"></div>
+            <div class="nb-i-line"></div>
+          </button>
+          <p>Tentang</p>
+          <p>Bantuan</p>
+        </div>
+      </nav>
+      <div class="container">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar">
+          <div class="sb-container">
+            <div class="sb-body">
+              <h5 class="sb-title">Menu</h5>
+              <div class="div-line"></div>
+              <a class="sb-item" href="#">
+                <img src="./assets/icons/remote.svg" alt="home icon" >
+                Kontrol Lampu
+              </a>
+              <a class="sb-item" href="#">
+                <img src="./assets/icons/edit.svg" alt="search icon" />
+                Edit Profile
+              </a>
+              <a class="sb-item" href="#">
+                <img src="./assets/icons/edit.svg" alt="products icon" />
+                Bantuan
+              </a>
+              <a class="sb-item" href="#">
+                <img src="./assets/icons/layout.svg" alt="dashboard icon" />
+                Tentang
+              </a>
+              <div class="sb-item" id="datetime"></div>
+            </div>
+            <div class="sb-footer">
+              <img src="./assets/icons/user.svg" alt="user icon" class="user-img" />
+              <h3 class="user-name"><?php echo $currentUser['username'] ?></h3>
+              <a href="#" class="sb-settings-btn">
+                <img src="./assets/icons/settings.svg" alt="settings icon" />
+              </a>
+              <a href="logout.php" class="sb-logout-btn" >
+                <img src="./assets/icons/log-out.svg" alt="logout icon" />
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- Content -->
+        <div class="content">
+        <div class="slave2-main">
+            <div class="slave2-sub1">
+                <div class="lamp-mode-box">
+                <h3>Mode Manual</h3>
+                    <div class="lamp-mode-box-m">
+                        <span class="material-icons md-36 orange600">lightbulb</span>
+                        <p>Lampu 1</p>
+                        <label class="toggle">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                        </label>
+                    </div>
+                    <div class="lamp-mode-box-m">
+                        <span class="material-icons md-36 orange600">lightbulb</span>
+                        <p>Lampu 2</p>
+                        <label class="toggle">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                        </label>
+                    </div>
+                    <div class="lamp-mode-box-m">
+                        <span class="material-icons md-36 orange600">lightbulb</span>
+                        <p>Lampu 3</p>
+                        <label class="toggle">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                    </label>
+                    </div>
+                    <div class="lamp-mode-box-m">
+                        <span class="material-icons md-36 orange600">lightbulb</span>
+                        <p>Lampu 4</p>
+                        <label class="toggle">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                    </label>
+                    </div>
+                <div class="manual-all-lamp">
+                    <h3>Semua Lampu</h3>
+                    <div class="all-lamp-btn">
+                        <button class="btn-all-lamp" type="submit" name="OnAll">ON</button>
+                        <button class="btn-all-lamp" type="submit" name="OffAll">OFF</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="slave2-sub2">
+                <div class="auto-lamp-mode">
+                    <div class="auto-lamp-block">
+                        <div class="auto-schedul">
+                            <h3>Mode Terjadwal</h3>
+                            <table>
+                                <tr>
+                                  <td colspan="2">Tanggal</td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2"><input type="date" name="date"></td>
+                                </tr>
+                                <tr>
+                                  <td>Waktu Mulai</td>
+                                  <td>Waktu Selesai</td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <input type="time" name="startTime">
+                                  </td>
+                                  <td>
+                                    <input type="time" name="endTime">
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td colspan="2"><button type="submit" name="submit" class="btn-all-lamp">Simpan</button></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="auto-timer">
+                            <h3>Mode Otomatis</h3>
+                            <div class="auto-mode-switch">
+                                <div class="auto-mode-switch-block">
+                                    <span class="material-icons md-36 orange600">lightbulb</span>
+                                    <label class="toggle">
+                                    <input type="checkbox">
+                                    <span class="slider"></span>
+                                    <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <script src="./assets/js/main.js"></script>
+    <script type="text/javascript">
+            function updateClock() {
+            // Get current date and time
+            var now = new Date();
+            var datetime = now.toLocaleString();
+
+            // Insert date and time into HTML
+            document.getElementById("datetime").innerHTML = datetime;
+        }
+    </script>
+    </body>
+</html>

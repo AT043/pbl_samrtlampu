@@ -4,47 +4,38 @@
 require_once "dbconfig.php";
 
 // Cek status login user
-if ($user->checkLogin()) {
+if ($user->isLoggedIn()) {
     // Check if it's an admin or a regular user
-    $userData = $user->checkLoginr(); // Assuming you have a method to get user data
+    $userData = $user->getUser(); // Assuming you have a method to get user data
     if ($userData['permissions'] == 1) {
         // Admin
         header("location: admin/admin.php");
+        $user->insertLoginHistory();
     } else {
         // User
         header("location: user/userdashboard.php");
+        $user->insertLoginHistory();
     }
     exit(); // Ensure the script stops here to prevent further execution
 }
 
-// Cek adanya data yang dikirim
-if (isset($_POST['daftar'])) {
-    $username = $_POST['newUsername'];
-    $email = $_POST['email'];
-    $password = $_POST['newPassword'];
-    $repassword = $_POST['rePassword'];
-    $token = $_POST['token'];
+//jika ada data yg dikirim
+if (isset($_POST['submit'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
 
-    // Registrasi user baru
-    if ($reg->register($username, $email, $password, $repassword, $token)) {
-        // Jika berhasil set variable success ke true
-        if ($password == $repassword) {
-            $success = true;
-            header('location: login.php');
-        } else {
-            // $error = "Password dan konfirmasi password tidak sesuai.";
-            create_alert('error', 'Password dan Re-Password tidak sesuai!', 'register.php');
-        }
+    // Proses login user
+    if ($user->login($username, $password)) {
+        // header("location: index.php");
+      $success = true;
     } else {
-        // Jika gagal, ambil pesan error
-        // $error = $reg->getLastError();
-        create_alert('error', 'unknown error', 'register.php');
+        // Jika login gagal, ambil pesan error
+        $error = $user->getLastError();
     }
 }
 
 ?>
 
-<!-- HTML -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -75,7 +66,7 @@ if (isset($_POST['daftar'])) {
             }
 
             .left-container {
-                flex: 35%;
+                flex: 40%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -91,7 +82,7 @@ if (isset($_POST['daftar'])) {
                 line-height: 1%;
                 text-align: center; /* Keep the text in the middle */
                 letter-spacing: .1em;
-                margin: 0px 0px 0px 120px; /* Adjust the margin as needed */
+                margin: 0px 0px 0px 200px; /* Adjust the margin as needed */
                 animation:
                     typing 4.5s steps(20, end),
                     blink-caret .5s step-end infinite;
@@ -113,7 +104,7 @@ if (isset($_POST['daftar'])) {
 
 
             .right-container {
-                flex: 65%;
+                flex: 60%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -177,31 +168,28 @@ if (isset($_POST['daftar'])) {
           align-items: center;
         }
         .inner {
-          width: 600px;
-          height: 480px;
+          width: 300px;
+          height: 380px;
           border: 1px solid #ccc;
           background-color: #fff;
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
           border-radius: 5px;
+          overflow: hidden;
         }
         .form {
           margin: 10px 20px;
         }
-        /*.inner-form {
+        .inner-form {
           margin: 20px 0;
           display: block;
         }
         .inner-form input {
-          width: 50%;
+          width: 97%;
           height: 25px;
-        }*/
-        .submit-button {
-          display: flex;
-          justify-content: center;
         }
         .submit-button button {
-          background-color: #ccc;
-          width: 50%;
+          background-color: yellowgreen;
+          width: 100%;
           height: 35px;
           margin: 10px auto;
         }
@@ -209,35 +197,15 @@ if (isset($_POST['daftar'])) {
           cursor: pointer;
         }
 
-        table {
-          margin: 20px 0;
-          padding: 20px 0;
-        }
-
-        .form-table {
-          display: flex;
-          justify-content: center;
-        }
-        table input {
-          width: 90%;
-          height: 25px;
-          margin: 10px 10px;
-        }
-        .check1 {
-          display: flex;
-          justify-content: center;
-        }
-
     </style>
 </head>
 
 <body>
-  <?php show_alert();?>
     <main>
         <div class="main-container">    
         <div class="left-container">
             <div class="welcome-text">
-                <p>Silahkan Daftar</p>
+                <p>Selamat Datang</p>
             </div>
         </div>
         <div class="right-container">
@@ -245,49 +213,27 @@ if (isset($_POST['daftar'])) {
               <div class="inner">
                 <div class="form">
                   <form method="post">
-                    <div class="form-table">
-                      <table width="500">
-                        <tr>
-                          <td><div class="title">Username</div></td>
-                          <td><div class="title">Email</div></td>
-                        </tr>
-                        <tr>
-                          <td><input type="text" id="newUsername" name="newUsername" required></td>
-                          <td><input type="email" id="email" name="email" required></td>
-                        </tr>
-                        <tr>
-                          <td><div class="title">Password</div></td>
-                          <td><div class="title">Re-Passowrd</div></td>
-                        </tr>
-                        <tr>
-                          <td> <input type="password" id="newPassword" name="newPassword" required></td>
-                          <td><input type="password" id="rePassword" name="rePassword" required></td>
-                        </tr>
-                        <tr>
-                          <td><div class="title">Token Admin (Opsional)</div></td>
-                          <td><!-- <div class="title">Email</div> --></td>
-                        </tr>
-                        <tr>
-                          <td> <input type="text" id="token" name="token"></td>
-                          <td><!-- <input type="email" id="email" name="email" required> --></td>
-                        </tr>
-                      </table>
+                    <div class="inner-form">
+                      <div class="title">Username</div>
+                      <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="inner-form">
+                      <div>Password</div>
+                      <input type="password" id="password" name="password" required>
                     </div>
                     <div class="submit-button">
-                      <button type="submit" name="daftar">Masuk</button>
+                      <button type="submit" name="submit">Masuk</button>
                     </div>
                   </form>
-                  <div class="check1">
-                    <p>Sudah Punya Akun? <a href="index.php">Login</a></p>
-                    <!-- <div class="show-password-label">
+                   <div class="input show-password-label">
                       <table>
                         <tr>
-                          <td><input type="checkbox" id="showPassword" class="checkbox" onclick="seePass()" ></td>
-                          <td><p>Tampilkan Password</p></td>
+                            <td><input type="checkbox" id="showPassword" class="checkbox" onclick="seePass()" ></td>
+                            <td><p>Tampilkan Password</p></td>
                         </tr>
                       </table>
-                    </div> -->
                   </div>
+                  <p>belum punya akun? <a href="register.php">Daftar</a></p>
                 </div>
               </div>
             </div>
@@ -301,15 +247,6 @@ if (isset($_POST['daftar'])) {
     </div> -->
     </main>
     <script type="text/javascript">
-
-        var signin = document.querySelector("#signin");
-        var register = document.querySelector("#register");
-        setTimeout(function () {
-           register.checked = true;
-        }, 1000);
-        setTimeout(function () {
-           signin.checked = true;
-        }, 2000);
 
          function seePass(){
             var x = document.getElementById("password");

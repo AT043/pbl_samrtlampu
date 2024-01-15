@@ -64,24 +64,24 @@ $currentUser = $user->getUser();
                     <div class="sb-container">
                         <div class="sb-body">
                             <h5 class="sb-title">Menu</h5>
-                             <div class="div-line"></div>
+                            <div class="div-line"></div>
                                 <a class="sb-item" href="admin.php">
                                     <img src="../assets/icons/remote.svg" alt="home icon" >
                                     Kontrol Lampu
                                 </a>
-                                <a class="sb-item" href="admin3.php">
-                                    <img src="../assets/icons/edit.svg" alt="search icon" />
-                                    Tambah User
-                                </a>
                                 <a class="sb-item" href="admin2.php">
-                                    <img src="../assets/icons/edit.svg" alt="products icon" />
+                                    <img src="../assets/icons/edit.svg" alt="search icon" />
                                     Data User
                                 </a>
-                                <a class="sb-item" href="#">
-                                    <img src="../assets/icons/layout.svg" alt="dashboard icon" />
-                                    Data Sensor
+                                <a class="sb-item" href="admin3.php">
+                                    <img src="../assets/icons/edit.svg" alt="products icon" />
+                                    History
                                 </a>
-                            </div>
+                                <!-- <a class="sb-item" href="#">
+                                    <img src="../assets/icons/layout.svg" alt="dashboard icon" />
+                                    Tentang
+                                </a> -->
+                        </div>
                         <div class="sb-footer">
                             <img src="../assets/icons/user.svg" alt="user icon" class="user-img" />
                             <h3 class="user-name"><?php echo $currentUser['username'] ?></h3>

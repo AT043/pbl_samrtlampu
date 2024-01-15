@@ -4,13 +4,13 @@
 require_once "../dbconfig.php";  
 
 // Cek status login user  
-if (!$login->isLoggedIn()) {  
+if (!$user->isLoggedIn()) {  
     header("location: ../login.php"); //Redirect ke halaman login  
 }  
 
 // Ambil data user saat ini  
-$currentUser = $login->getUser();  
-?>   
+$currentUser = $user->getUser();  
+?>  
 
 <!DOCTYPE html>
 <html lang="en-us">
@@ -100,28 +100,52 @@ $currentUser = $login->getUser();
                         <div class="slave">
                             <div class="lamp-mode-box">
                             <h3>Mode Manual</h3>
-                            <form method="post" action="update_status.php" id="lampForm">
-                                <?php for ($i = 1; $i <= 4; $i++) { ?>
-                                    <div class="lamp-mode-box-m" id="lamp<?php echo $i; ?>Container">
-                                        <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
-                                        <p>Lampu <?php echo $i; ?></p>
-                                        <label class="toggle">
-                                            <input type="checkbox" id="lamp<?php echo $i; ?>Checkbox" class="lampCheckbox">
-                                            <span class="slider"></span>
-                                            <span class="labels" data-on="ON" data-off="OFF"></span>
-                                        </label>
-                                    </div>
-                                <?php } ?>
+                                <div class="lamp-mode-box-m">
+                                    <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
+                                    <p>Lampu 1</p>
+                                    <label class="toggle">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                                <div class="lamp-mode-box-m">
+                                    <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
+                                    <p>Lampu 2</p>
+                                    <label class="toggle" id="kodeBButton">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                                <div class="lamp-mode-box-m">
+                                    <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
+                                    <p>Lampu 3</p>
+                                    <label class="toggle">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                                <div class="lamp-mode-box-m">
+                                    <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
+                                    <p>Lampu 4</p>
+                                    <label class="toggle">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
                                 <div class="manual-all-lamp">
                                     <h3>Semua Lampu</h3>
                                     <div class="all-lamp-btn">
-                                        <button class="btn-all-lamp" type="button" id="btnOnAll" name="OnAll">ON</button>
-                                        <button class="btn-all-lamp" type="button" id="btnOffAll" name="OffAll">OFF</button>
+                                        <button class="btn-all-lamp" type="submit" name="OnAll">ON</button>
+                                        <button class="btn-all-lamp" type="submit" name="OffAll">OFF</button>
                                     </div>
                                 </div>
-                            </form>
                             </div>
                         </div>
+
                         <div class="slave2">
                             <div class="auto-lamp-mode">
                                 <div class="auto-lamp-block">
@@ -266,7 +290,6 @@ $currentUser = $login->getUser();
           });
         });
     </script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Get all toggle switches

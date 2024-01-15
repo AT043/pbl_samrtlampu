@@ -4,9 +4,9 @@
 require_once "dbconfig.php";
 
 // Cek status login user
-if ($user->checkLogin()) {
+if ($user->isLoggedIn()) {
     // Check if it's an admin or a regular user
-    $userData = $user->checkLoginr(); // Assuming you have a method to get user data
+    $userData = $user->getUser(); // Assuming you have a method to get user data
     if ($userData['permissions'] == 1) {
         // Admin
         header("location: admin/admin.php");
@@ -19,26 +19,24 @@ if ($user->checkLogin()) {
 
 // Cek adanya data yang dikirim
 if (isset($_POST['daftar'])) {
-    $username = $_POST['newUsername'];
+    $usernama = $_POST['newUsername'];
     $email = $_POST['email'];
     $password = $_POST['newPassword'];
     $repassword = $_POST['rePassword'];
     $token = $_POST['token'];
 
     // Registrasi user baru
-    if ($reg->register($username, $email, $password, $repassword, $token)) {
+    if ($user->register($usernama, $email, $password, $repassword, $token)) {
         // Jika berhasil set variable success ke true
         if ($password == $repassword) {
             $success = true;
             header('location: login.php');
         } else {
-            // $error = "Password dan konfirmasi password tidak sesuai.";
-            create_alert('error', 'Password dan Re-Password tidak sesuai!', 'register.php');
+            $error = "Password dan konfirmasi password tidak sesuai.";
         }
     } else {
         // Jika gagal, ambil pesan error
-        // $error = $reg->getLastError();
-        create_alert('error', 'unknown error', 'register.php');
+        $error = $user->getLastError();
     }
 }
 
@@ -232,7 +230,6 @@ if (isset($_POST['daftar'])) {
 </head>
 
 <body>
-  <?php show_alert();?>
     <main>
         <div class="main-container">    
         <div class="left-container">

@@ -6,6 +6,15 @@ try {
     echo $e->getMessage();
 }
 
-include_once 'Auth.php';
+include 'Auth.php';
+include 'ClassLogin.php';
+include 'ClassRegister.php';
+include 'User.php';
+include 'library.php';
 
-$user = new Auth($con);
+// $user = new Auth($con);
+$login = new Login($con);
+$reg = new Register($con);
+// $user = new User($con);
+
+// $dev = new Dev($con);
