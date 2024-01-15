@@ -171,50 +171,66 @@ $currentUser = $login->getUser();
     <script src="../assets/js/main.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Get all toggle switches
-            var toggleSwitches = document.querySelectorAll('.toggle input[type="checkbox"]');
+            // Get all toggle switches in Mode Manual
+            var manualToggleSwitches = document.querySelectorAll('.lamp-mode-box input[type="checkbox"]');
 
-            // Get the buttons for All ON and All OFF
-            var btnOnAll = document.querySelector('button[name="OnAll"]');
-            var btnOffAll = document.querySelector('button[name="OffAll"]');
+            // Get the buttons for All ON and All OFF in Mode Manual
+            var btnOnAllManual = document.querySelector('#btnOnAll');
+            var btnOffAllManual = document.querySelector('#btnOffAll');
 
-            // Add a click event listener to the ON button
-            btnOnAll.addEventListener('click', function () {
-                toggleSwitches.forEach(function (toggleSwitch) {
-                    // Set the toggle state to checked
+            // Add a click event listener to the ON button in Mode Manual
+            btnOnAllManual.addEventListener('click', function () {
+                manualToggleSwitches.forEach(function (toggleSwitch) {
                     toggleSwitch.checked = true;
-
-                    // Get the icon element
-                    var icon = toggleSwitch.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
-                    // Change the color based on the toggle state
+                    var icon = toggleSwitch.closest('.lamp-mode-box-m').querySelector('.material-icons');
                     icon.style.color = 'yellow';
                 });
             });
 
-            // Add a click event listener to the OFF button
-            btnOffAll.addEventListener('click', function () {
-                toggleSwitches.forEach(function (toggleSwitch) {
-                    // Set the toggle state to unchecked
+            // Add a click event listener to the OFF button in Mode Manual
+            btnOffAllManual.addEventListener('click', function () {
+                manualToggleSwitches.forEach(function (toggleSwitch) {
                     toggleSwitch.checked = false;
-
-                    // Get the icon element
-                    var icon = toggleSwitch.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
-                    // Change the color based on the toggle state
+                    var icon = toggleSwitch.closest('.lamp-mode-box-m').querySelector('.material-icons');
                     icon.style.color = '#ccc';
                 });
             });
 
-            // Add a change event listener to each toggle switch
-            toggleSwitches.forEach(function (toggleSwitch) {
+            // Add a change event listener to each toggle switch in Mode Manual
+            manualToggleSwitches.forEach(function (toggleSwitch) {
                 toggleSwitch.addEventListener('change', function () {
-                    // Get the icon element
-                    var icon = this.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
-
-                    // Change the color based on the toggle state
+                    var icon = this.closest('.lamp-mode-box-m').querySelector('.material-icons');
                     icon.style.color = this.checked ? 'yellow' : '#ccc';
                 });
             });
+
+            // Get the toggle switch in Mode Otomatis
+            var autoToggleSwitch = document.querySelector('.auto-mode-switch input[type="checkbox"]');
+
+            // Add a change event listener to the toggle switch in Mode Otomatis
+            autoToggleSwitch.addEventListener('change', function () {
+                var icon = this.closest('.auto-mode-switch-block').querySelector('.material-icons');
+                icon.style.color = this.checked ? 'yellow' : '#ccc';
+
+                // Execute the appropriate script based on the toggle state
+                var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-A" : "http://192.168.31.159/eksekusi-kode-B";
+
+                fetch(scriptURL)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Script berhasil dijalankan:", data);
+                    })
+                    .catch(error => {
+                        console.error("Ada kesalahan:", error);
+                    });
+            });
         });
+
     </script>
 
     <script type="text/javascript">
@@ -272,6 +288,9 @@ $currentUser = $login->getUser();
             // Get all toggle switches
             var toggleSwitches = document.querySelectorAll('.toggle input[type="checkbox"]');
 
+            // Get the button for All ON in Mode Manual
+            var btnOnAll = document.querySelector('#btnOnAll');
+
             // Add a change event listener to each toggle switch
             toggleSwitches.forEach(function (toggleSwitch) {
                 toggleSwitch.addEventListener('change', function () {
@@ -281,8 +300,40 @@ $currentUser = $login->getUser();
                     // Change the color based on the toggle state
                     icon.style.color = this.checked ? 'yellow' : '#ccc';
 
-                    // Execute the appropriate script based on the toggle state
-                    var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-A" : "http://192.168.31.159/eksekusi-kode-B";
+                    // Execute the appropriate script based on the toggle state and lamp ID
+                    var lampID = this.id.replace('lamp', ''); // Extract lamp ID
+                    var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-A-" + lampID : "http://192.168.31.159/eksekusi-kode-B-" + lampID;
+
+                    fetch(scriptURL)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log("Script berhasil dijalankan:", data);
+                        })
+                        .catch(error => {
+                            console.error("Ada kesalahan:", error);
+                        });
+                });
+            });
+
+            // Add a click event listener to the ON button in Mode Manual
+            btnOnAll.addEventListener('click', function () {
+                toggleSwitches.forEach(function (toggleSwitch) {
+                    // Set the toggle state to checked
+                    toggleSwitch.checked = true;
+
+                    // Get the icon element
+                    var icon = toggleSwitch.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
+                    // Change the color based on the toggle state
+                    icon.style.color = 'yellow';
+
+                    // Execute the script for turning on all lamps
+                    var lampID = toggleSwitch.id.replace('lamp', ''); // Extract lamp ID
+                    var scriptURL = "http://192.168.31.159/eksekusi-kode-A-" + lampID : "http://192.168.31.159/eksekusi-kode-B-" + lampID;
 
                     fetch(scriptURL)
                         .then(response => {
@@ -300,6 +351,7 @@ $currentUser = $login->getUser();
                 });
             });
         });
+
     </script>
 
 </html>
