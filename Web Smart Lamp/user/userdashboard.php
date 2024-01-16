@@ -188,7 +188,7 @@ $currentUser = $person->getUser();
         </div>   
     </body>
     <script src="../assets/js/main.js"></script>
-    <script>
+        <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Get all toggle switches in Mode Manual
             var manualToggleSwitches = document.querySelectorAll('.lamp-mode-box input[type="checkbox"]');
@@ -372,5 +372,25 @@ $currentUser = $person->getUser();
         });
 
     </script>
+    <script>
+        function myFunction() {
+            var dropdownContent = document.getElementById("myDropdown");
+            dropdownContent.classList.toggle("show");
+        }
 
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
+    
 </html>
