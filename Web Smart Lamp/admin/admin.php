@@ -391,5 +391,163 @@ $currentUser = $person->getUser();
         });
 
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to initialize lamp status from local storage
+            function initializeLampStatus() {
+                for (let i = 1; i <= 4; i++) {
+                    const lampStatus = localStorage.getItem(`lamp${i}Status`);
+                    if (lampStatus !== null) {
+                        document.getElementById(`lamp${i}Checkbox`).checked = lampStatus === '1';
+                        updateStatus(document.getElementById(`lamp${i}Checkbox`));
+                    }
+                }
+            }
+
+            // Get all toggle switches in Mode Manual
+            var manualToggleSwitches = document.querySelectorAll('.lampCheckbox');
+
+            // Get the buttons for All ON and All OFF in Mode Manual
+            var btnOnAllManual = document.querySelector('#btnOnAll');
+            var btnOffAllManual = document.querySelector('#btnOffAll');
+
+            // Initialize lamp status from local storage
+            initializeLampStatus();
+
+            // Add a click event listener to the ON button in Mode Manual
+            btnOnAllManual.addEventListener('click', function () {
+                manualToggleSwitches.forEach(function (toggleSwitch) {
+                    toggleSwitch.checked = true;
+                    updateStatus(toggleSwitch);
+                });
+            });
+
+            // Add a click event listener to the OFF button in Mode Manual
+            btnOffAllManual.addEventListener('click', function () {
+                manualToggleSwitches.forEach(function (toggleSwitch) {
+                    toggleSwitch.checked = false;
+                    updateStatus(toggleSwitch);
+                });
+            });
+
+            // Add a change event listener to each toggle switch in Mode Manual
+            manualToggleSwitches.forEach(function (toggleSwitch) {
+                toggleSwitch.addEventListener('change', function () {
+                    updateStatus(this);
+                });
+            });
+
+            // Add a click event listener to the ON button in Mode Semua Lampu
+            btnOnAllManual.addEventListener('click', function () {
+                updateStatusForAll(1); // 1 represents ON
+            });
+
+            // Add a click event listener to the OFF button in Mode Semua Lampu
+            btnOffAllManual.addEventListener('click', function () {
+                updateStatusForAll(0); // 0 represents OFF
+            });
+
+            // Function to update status for a specific lamp
+            function updateStatus(element) {
+                var lampNumber = element.id.replace('lamp', '');
+                var status = element.checked ? 1 : 0;
+
+                // Update local storage
+                localStorage.setItem(`lamp${lampNumber}Status`, status);
+
+                // You can add an AJAX call here to update the database
+                // Example: sendUpdateToServer(lampNumber, status);
+            }
+
+            // Function to update status for all lamps
+            function updateStatusForAll(status) {
+                manualToggleSwitches.forEach(function (toggleSwitch) {
+                    toggleSwitch.checked = status === 1;
+                    updateStatus(toggleSwitch);
+                });
+            }
+
+            // You can add an AJAX function to send updates to the server if needed
+            function sendUpdateToServer(lampNumber, status) {
+                // Example AJAX call
+                fetch('update_status.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        lampNumber: lampNumber,
+                        status: status,
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+        });
+    </script>
 
 </html>
+btnOnAll.addEventListener('click', function () {
+    toggleSwitches.forEach(function (toggleSwitch) {
+        // Set the toggle state to checked
+        toggleSwitch.checked = true;
+
+        // Get the icon element
+        var icon = toggleSwitch.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
+        // Change the color based on the toggle state
+        icon.style.color = 'yellow';
+
+        // Execute the script for turning on all lamps
+        var lampID = toggleSwitch.id.replace('lamp', ''); // Extract lamp ID
+        var scriptURL = "http://192.168.31.159/eksekusi-kode-A-" + lampID;
+
+        fetch(scriptURL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Script berhasil dijalankan:", data);
+            })
+            .catch(error => {
+                console.error("Ada kesalahan:", error);
+            });
+    });
+});
+
+btnOffAll.addEventListener('click', function () {
+    toggleSwitches.forEach(function (toggleSwitch) {
+        // Set the toggle state to unchecked
+        toggleSwitch.checked = false;
+
+        // Get the icon element
+        var icon = toggleSwitch.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
+        // Change the color based on the toggle state
+        icon.style.color = '#ccc';
+
+        // Execute the script for turning off all lamps
+        var lampID = toggleSwitch.id.replace('lamp', ''); // Extract lamp ID
+        var scriptURL = "http://192.168.31.159/eksekusi-kode-B-" + lampID;
+
+        fetch(scriptURL)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Script berhasil dijalankan:", data);
+            })
+            .catch(error => {
+                console.error("Ada kesalahan:", error);
+            });
+    });
+});
