@@ -4,9 +4,9 @@
 require_once "dbconfig.php";
 
 // Cek status login user
-if ($user->checkLogin()) {
+if ($person->isLoggedIn()) {
     // Check if it's an admin or a regular user
-    $userData = $user->checkLoginr(); // Assuming you have a method to get user data
+    $userData = $person->isLoggedIn(); // Assuming you have a method to get user data
     if ($userData['permissions'] == 1) {
         // Admin
         header("location: admin/admin.php");
@@ -26,7 +26,7 @@ if (isset($_POST['daftar'])) {
     $token = $_POST['token'];
 
     // Registrasi user baru
-    if ($reg->register($username, $email, $password, $repassword, $token)) {
+    if ($person->register($username, $email, $password, $repassword, $token)) {
         // Jika berhasil set variable success ke true
         if ($password == $repassword) {
             $success = true;
@@ -278,7 +278,7 @@ if (isset($_POST['daftar'])) {
                     </div>
                   </form>
                   <div class="check1">
-                    <p>Sudah Punya Akun? <a href="index.php">Login</a></p>
+                    <p>Sudah Punya Akun? <a href="login.php">Login</a></p>
                     <!-- <div class="show-password-label">
                       <table>
                         <tr>

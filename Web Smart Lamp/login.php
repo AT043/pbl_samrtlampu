@@ -1,5 +1,24 @@
 <?php
+
+// Lampirkan dbconfig
 require_once "dbconfig.php";
+
+// Cek status login user
+if ($person->isLoggedIn()) {
+    // Check if it's an admin or a regular user
+    $userData = $person->getUser(); // Assuming you have a method to get user data
+    if ($userData['permissions'] == 1) {
+        // Admin
+        header("location: admin/admin.php");
+        $person->insertpersonHistory();
+    } else {
+        // User
+        header("location: user/userdashboard.php");
+        $person->insertpersonHistory();
+    }
+    exit(); // Ensure the script stops here to prevent further execution
+}
+
 ?>
 
 

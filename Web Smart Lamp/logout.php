@@ -4,10 +4,10 @@
 require_once "dbconfig.php";  
 
 // Logout! hapus session user  
-$login->logout();  
+$person->logout();  
 
 // Redirect ke login  
-$login->logout();
+$person->logout();
 create_alert("Success","Anda sudah logout dari sistem","login.php");
 show_alert();
 //header('location: login.php');
