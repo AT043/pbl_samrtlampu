@@ -252,6 +252,19 @@ $currentUser = $person->getUser();
 
     </script>
 
+    <script type="text/javascript">
+        function updateClock() {
+            // Get current date and time
+            var now = new Date();
+            var datetime = now.toLocaleString();
+
+            // Insert date and time into HTML
+            document.getElementById("datetime").innerHTML = datetime;
+        }
+
+        // Update the clock every second (1000 milliseconds)
+        setInterval(updateClock, 1000);
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
           var checkboxClickCount = 0;
