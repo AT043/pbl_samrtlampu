@@ -305,7 +305,7 @@ $currentUser = $user->getUser();
                     icon.style.color = this.checked ? 'yellow' : '#ccc';
 
                     // Execute the appropriate script based on the toggle state
-                    var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-A" : "http://192.168.31.159/eksekusi-kode-B";
+                    var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-A" : "http://192.168.157.3/eksekusi-kode-B";
 
                     fetch(scriptURL)
                         .then(response => {

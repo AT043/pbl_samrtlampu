@@ -12,6 +12,7 @@ try {
 include 'ClassPerson.php';
 // include 'User.php';
 include 'library.php';
+include 'retrieve_lamp_stat.php';
 
 // $user = new Auth($con);
 // $login = new Login($con);

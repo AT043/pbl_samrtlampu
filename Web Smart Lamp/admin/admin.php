@@ -104,23 +104,28 @@ $currentUser = $person->getUser();
                         <div class="slave">
                             <div class="lamp-mode-box">
                             <h3>Mode Manual</h3>
-                            <form method="post" action="update_status.php" id="lampForm">
+                            <form method="post" action="../update_status.php" id="LampStatus">
                                 <?php for ($i = 1; $i <= 4; $i++) { ?>
                                     <div class="lamp-mode-box-m" id="lamp<?php echo $i; ?>Container">
-                                        <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
+                                        <?php
+                                        $lampNumber = $i; // Adjust this based on the lamp number
+                                        $lampStatus = getLampStatusFromStorage($lampNumber);
+                                        ?>
+                                        <span class="material-icons md-48" style="color: <?php echo ($lampStatus === 'On') ? 'yellow' : '#ccc'; ?>">lightbulb</span>
                                         <p>Lampu <?php echo $i; ?></p>
                                         <label class="toggle">
-                                            <input type="checkbox" id="lamp<?php echo $i; ?>Checkbox" class="lampCheckbox">
+                                            <input type="checkbox" id="lamp<?php echo $i; ?>Checkbox" name="lamp<?php echo $i; ?>Checkbox" class="lampCheckbox" value="On" onchange="submitForm()" <?php if ($lampStatus === 'On') echo 'checked'; ?>>
                                             <span class="slider"></span>
                                             <span class="labels" data-on="ON" data-off="OFF"></span>
                                         </label>
                                     </div>
                                 <?php } ?>
+
                                 <div class="manual-all-lamp">
                                     <h3>Semua Lampu</h3>
                                     <div class="all-lamp-btn">
-                                        <button class="btn-all-lamp" type="button" id="btnOnAll" name="OnAll">ON</button>
-                                        <button class="btn-all-lamp" type="button" id="btnOffAll" name="OffAll">OFF</button>
+                                        <button class="btn-all-lamp" type="button" id="btnOnAll" name="OnAll" onclick="submitForm()">ON</button>
+                                        <button class="btn-all-lamp" type="button" id="btnOffAll" name="OffAll" onclick="submitForm()">OFF</button>
                                     </div>
                                 </div>
                             </form>
@@ -139,6 +144,7 @@ $currentUser = $person->getUser();
                                                 <td>Waktu Mulai</td>
                                                 <td>Waktu Selesai</td>
                                             </tr>
+                                            <form method="post" action="lamp_schedule.php">
                                             <tr>
                                                 <td><input type="time" name="startTime"></td>
                                                 <td><input type="time" name="endTime"></td>
@@ -146,6 +152,7 @@ $currentUser = $person->getUser();
                                             <tr>
                                                 <td colspan="2"><button type="submit" name="submit" class="btn-all-lamp">Simpan</button></td>
                                             </tr>
+                                            </form>
                                         </table>
                                     </div>
                                     <div class="auto-timer">
@@ -170,70 +177,6 @@ $currentUser = $person->getUser();
         </div>   
     </body>
     <script src="../assets/js/main.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Get all toggle switches in Mode Manual
-            var manualToggleSwitches = document.querySelectorAll('.lamp-mode-box input[type="checkbox"]');
-
-            // Get the buttons for All ON and All OFF in Mode Manual
-            var btnOnAllManual = document.querySelector('#btnOnAll');
-            var btnOffAllManual = document.querySelector('#btnOffAll');
-
-            // Add a click event listener to the ON button in Mode Manual
-            btnOnAllManual.addEventListener('click', function () {
-                manualToggleSwitches.forEach(function (toggleSwitch) {
-                    toggleSwitch.checked = true;
-                    var icon = toggleSwitch.closest('.lamp-mode-box-m').querySelector('.material-icons');
-                    icon.style.color = 'yellow';
-                });
-            });
-
-            // Add a click event listener to the OFF button in Mode Manual
-            btnOffAllManual.addEventListener('click', function () {
-                manualToggleSwitches.forEach(function (toggleSwitch) {
-                    toggleSwitch.checked = false;
-                    var icon = toggleSwitch.closest('.lamp-mode-box-m').querySelector('.material-icons');
-                    icon.style.color = '#ccc';
-                });
-            });
-
-            // Add a change event listener to each toggle switch in Mode Manual
-            manualToggleSwitches.forEach(function (toggleSwitch) {
-                toggleSwitch.addEventListener('change', function () {
-                    var icon = this.closest('.lamp-mode-box-m').querySelector('.material-icons');
-                    icon.style.color = this.checked ? 'yellow' : '#ccc';
-                });
-            });
-
-            // Get the toggle switch in Mode Otomatis
-            var autoToggleSwitch = document.querySelector('.auto-mode-switch input[type="checkbox"]');
-
-            // Add a change event listener to the toggle switch in Mode Otomatis
-            autoToggleSwitch.addEventListener('change', function () {
-                var icon = this.closest('.auto-mode-switch-block').querySelector('.material-icons');
-                icon.style.color = this.checked ? 'yellow' : '#ccc';
-
-                // Execute the appropriate script based on the toggle state
-                var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-A" : "http://192.168.31.159/eksekusi-kode-B";
-
-                fetch(scriptURL)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log("Script berhasil dijalankan:", data);
-                    })
-                    .catch(error => {
-                        console.error("Ada kesalahan:", error);
-                    });
-            });
-        });
-
-    </script>
-
     <script type="text/javascript">
         function updateClock() {
             // Get current date and time
@@ -310,12 +253,6 @@ $currentUser = $person->getUser();
                 window.location.href = '../logout.php';
                 alert('Too many click');
               }
-
-              // Get the icon element
-              var icon = this.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
-
-              // Change the color based on the toggle state
-              icon.style.color = this.checked ? 'yellow' : '#ccc';
             });
           });
         });
@@ -323,231 +260,142 @@ $currentUser = $person->getUser();
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Get all toggle switches
-            var toggleSwitches = document.querySelectorAll('.toggle input[type="checkbox"]');
+            
+            var btnOnAll = document.getElementById('btnOnAll');
 
-            // Get the button for All ON in Mode Manual
-            var btnOnAll = document.querySelector('#btnOnAll');
-
-            // Add a change event listener to each toggle switch
-            toggleSwitches.forEach(function (toggleSwitch) {
-                toggleSwitch.addEventListener('change', function () {
-                    // Get the icon element
-                    var icon = this.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
-
-                    // Change the color based on the toggle state
-                    icon.style.color = this.checked ? 'yellow' : '#ccc';
-
-                    // Execute the appropriate script based on the toggle state and lamp ID
-                    var lampID = this.id.replace('lamp', ''); // Extract lamp ID
-                    var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-A-" + lampID : "http://192.168.31.159/eksekusi-kode-B-" + lampID;
-
-                    fetch(scriptURL)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`HTTP error! Status: ${response.status}`);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log("Script berhasil dijalankan:", data);
-                        })
-                        .catch(error => {
-                            console.error("Ada kesalahan:", error);
-                        });
-                });
-            });
-
-            // Add a click event listener to the ON button in Mode Manual
             btnOnAll.addEventListener('click', function () {
-                toggleSwitches.forEach(function (toggleSwitch) {
-                    // Set the toggle state to checked
-                    toggleSwitch.checked = true;
+                // Execute the appropriate script based on the toggle state
+                var scriptURLs = [
+                    "http://192.168.157.3/eksekusi-kode-A",
+                    "http://192.168.157.3/eksekusi-kode-C",
+                    "http://192.168.157.3/eksekusi-kode-E"
+                ];
 
-                    // Get the icon element
-                    var icon = toggleSwitch.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
-                    // Change the color based on the toggle state
-                    icon.style.color = 'yellow';
-
-                    // Execute the script for turning on all lamps
-                    var lampID = toggleSwitch.id.replace('lamp', ''); // Extract lamp ID
-                    var scriptURL = "http://192.168.31.159/eksekusi-kode-A-" + lampID : "http://192.168.31.159/eksekusi-kode-B-" + lampID;
-
-                    fetch(scriptURL)
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`HTTP error! Status: ${response.status}`);
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            console.log("Script berhasil dijalankan:", data);
-                        })
-                        .catch(error => {
-                            console.error("Ada kesalahan:", error);
-                        });
-                });
+                // Use Promise.all to wait for all fetch requests to complete
+                Promise.all(scriptURLs.map(url => fetch(url)))
+                    .then(responses => Promise.all(responses.map(response => response.json())))
+                    .then(data => {
+                        console.log("All scripts executed successfully:", data);
+                    })
+                    .catch(error => {
+                        console.error("Error executing scripts:", error);
+                    });
             });
         });
-
     </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Function to initialize lamp status from local storage
-            function initializeLampStatus() {
-                for (let i = 1; i <= 4; i++) {
-                    const lampStatus = localStorage.getItem(`lamp${i}Status`);
-                    if (lampStatus !== null) {
-                        document.getElementById(`lamp${i}Checkbox`).checked = lampStatus === '1';
-                        updateStatus(document.getElementById(`lamp${i}Checkbox`));
-                    }
-                }
-            }
+            
+            var btnOnAll = document.getElementById('btnOffAll');
 
-            // Get all toggle switches in Mode Manual
-            var manualToggleSwitches = document.querySelectorAll('.lampCheckbox');
+            btnOnAll.addEventListener('click', function () {
+                // Execute the appropriate script based on the toggle state
+                var scriptURLs = [
+                    "http://192.168.157.3/eksekusi-kode-B",
+                    "http://192.168.157.3/eksekusi-kode-D",
+                    "http://192.168.157.3/eksekusi-kode-F"
+                ];
 
-            // Get the buttons for All ON and All OFF in Mode Manual
-            var btnOnAllManual = document.querySelector('#btnOnAll');
-            var btnOffAllManual = document.querySelector('#btnOffAll');
-
-            // Initialize lamp status from local storage
-            initializeLampStatus();
-
-            // Add a click event listener to the ON button in Mode Manual
-            btnOnAllManual.addEventListener('click', function () {
-                manualToggleSwitches.forEach(function (toggleSwitch) {
-                    toggleSwitch.checked = true;
-                    updateStatus(toggleSwitch);
-                });
+                // Use Promise.all to wait for all fetch requests to complete
+                Promise.all(scriptURLs.map(url => fetch(url)))
+                    .then(responses => Promise.all(responses.map(response => response.json())))
+                    .then(data => {
+                        console.log("All scripts executed successfully:", data);
+                    })
+                    .catch(error => {
+                        console.error("Error executing scripts:", error);
+                    });
             });
-
-            // Add a click event listener to the OFF button in Mode Manual
-            btnOffAllManual.addEventListener('click', function () {
-                manualToggleSwitches.forEach(function (toggleSwitch) {
-                    toggleSwitch.checked = false;
-                    updateStatus(toggleSwitch);
-                });
-            });
-
-            // Add a change event listener to each toggle switch in Mode Manual
-            manualToggleSwitches.forEach(function (toggleSwitch) {
-                toggleSwitch.addEventListener('change', function () {
-                    updateStatus(this);
-                });
-            });
-
-            // Add a click event listener to the ON button in Mode Semua Lampu
-            btnOnAllManual.addEventListener('click', function () {
-                updateStatusForAll(1); // 1 represents ON
-            });
-
-            // Add a click event listener to the OFF button in Mode Semua Lampu
-            btnOffAllManual.addEventListener('click', function () {
-                updateStatusForAll(0); // 0 represents OFF
-            });
-
-            // Function to update status for a specific lamp
-            function updateStatus(element) {
-                var lampNumber = element.id.replace('lamp', '');
-                var status = element.checked ? 1 : 0;
-
-                // Update local storage
-                localStorage.setItem(`lamp${lampNumber}Status`, status);
-
-                // You can add an AJAX call here to update the database
-                // Example: sendUpdateToServer(lampNumber, status);
-            }
-
-            // Function to update status for all lamps
-            function updateStatusForAll(status) {
-                manualToggleSwitches.forEach(function (toggleSwitch) {
-                    toggleSwitch.checked = status === 1;
-                    updateStatus(toggleSwitch);
-                });
-            }
-
-            // You can add an AJAX function to send updates to the server if needed
-            function sendUpdateToServer(lampNumber, status) {
-                // Example AJAX call
-                fetch('update_status.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        lampNumber: lampNumber,
-                        status: status,
-                    }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Success:', data);
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            }
         });
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            var toggleSwitch = document.getElementById('lamp1Checkbox');
+
+            toggleSwitch.addEventListener('change', function () {
+
+                // Execute the appropriate script based on the toggle state
+                var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-A" : "http://192.168.157.3/eksekusi-kode-B";
+                // var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-C" : "http://192.168.157.3/eksekusi-kode-D";
+
+                fetch(scriptURL)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Script berhasil dijalankan:", data);
+                    })
+                    .catch(error => {
+                        console.error("Ada kesalahan:", error);
+                    });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            var toggleSwitch = document.getElementById('lamp2Checkbox');
+
+            toggleSwitch.addEventListener('change', function () {
+
+                // Execute the appropriate script based on the toggle state
+                var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-C" : "http://192.168.157.3/eksekusi-kode-D";
+                // var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-C" : "http://192.168.157.3/eksekusi-kode-D";
+
+                fetch(scriptURL)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Script berhasil dijalankan:", data);
+                    })
+                    .catch(error => {
+                        console.error("Ada kesalahan:", error);
+                    });
+            });
+        });
+    </script>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            var toggleSwitch = document.getElementById('lamp3Checkbox');
+
+            toggleSwitch.addEventListener('change', function () {
+
+                // Execute the appropriate script based on the toggle state
+                var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-E" : "http://192.168.157.3/eksekusi-kode-F";
+
+                fetch(scriptURL)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Script berhasil dijalankan:", data);
+                    })
+                    .catch(error => {
+                        console.error("Ada kesalahan:", error);
+                    });
+            });
+        });
+    </script>
+    <script>
+        function submitForm() {
+            document.getElementById("LampStatus").submit();
+        }
+    </script>
 </html>
-btnOnAll.addEventListener('click', function () {
-    toggleSwitches.forEach(function (toggleSwitch) {
-        // Set the toggle state to checked
-        toggleSwitch.checked = true;
 
-        // Get the icon element
-        var icon = toggleSwitch.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
-        // Change the color based on the toggle state
-        icon.style.color = 'yellow';
-
-        // Execute the script for turning on all lamps
-        var lampID = toggleSwitch.id.replace('lamp', ''); // Extract lamp ID
-        var scriptURL = "http://192.168.31.159/eksekusi-kode-A-" + lampID;
-
-        fetch(scriptURL)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Script berhasil dijalankan:", data);
-            })
-            .catch(error => {
-                console.error("Ada kesalahan:", error);
-            });
-    });
-});
-
-btnOffAll.addEventListener('click', function () {
-    toggleSwitches.forEach(function (toggleSwitch) {
-        // Set the toggle state to unchecked
-        toggleSwitch.checked = false;
-
-        // Get the icon element
-        var icon = toggleSwitch.closest('.lamp-mode-box-m, .auto-timer').querySelector('.material-icons');
-        // Change the color based on the toggle state
-        icon.style.color = '#ccc';
-
-        // Execute the script for turning off all lamps
-        var lampID = toggleSwitch.id.replace('lamp', ''); // Extract lamp ID
-        var scriptURL = "http://192.168.31.159/eksekusi-kode-B-" + lampID;
-
-        fetch(scriptURL)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Script berhasil dijalankan:", data);
-            })
-            .catch(error => {
-                console.error("Ada kesalahan:", error);
-            });
-    });
-});
