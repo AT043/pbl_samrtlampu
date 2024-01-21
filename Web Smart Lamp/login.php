@@ -1,128 +1,240 @@
 <?php
 
+// Lampirkan dbconfig
+require_once "dbconfig.php";
 
-if (isset($_POST['submit'])) {
-    $error = false;
-    if ($_POST["username"] == "admine" && $_POST["password"] == "12310") {
-        header("Location: admin.html");
-        exit;
-    } elseif (isset($_POST["submit"])) {
-        if ($_POST["username"] == "user" && $_POST["password"] == "user12310") {
-            header("Location: userdashboard.html");
-            exit;
-        }   
+// Cek status login user
+if ($person->isLoggedIn()) {
+    // Check if it's an admin or a regular user
+    $userData = $person->getUser(); // Assuming you have a method to get user data
+    if ($userData['permissions'] == 1) {
+        // Admin
+        header("location: admin/admin.php");
+        $person->insertpersonHistory();
     } else {
-        $error = true;
+        // User
+        header("location: user/userdashboard.php");
+        $person->insertpersonHistory();
     }
+    exit(); // Ensure the script stops here to prevent further execution
 }
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <title>Masuk | Smart LampU</title>
-    <style>
-        input:focus {
-            background-color: lightblue;
-        }
-        .sign-in a:hover {
-            color: red;
-            font-weight: bold;
-            text-decoration: none;
+    <meta charset="utf-8">
+    <meta lang="en-us">
+    <title>Welcome | SmartLamp</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+       <style type="text/css">
+        html, body {
+            padding: 0px;
+            margin: 0px;
+            font-family: "Tahoma";
+            color: black;
+            height: 100%;
+            font-size: 22px;
+            background-color: #f0efed;
         }
 
-        button{
-            height: 30px;
-            width: 70px;
-            border: 1px solid black;
-            box-shadow: 3px 3px black;
+        main {
+            height: 100%;
+        }
+
+            .main-container {
+                display: flex;
+                height: 100%;
+            }
+
+            .left-container {
+                flex: 40%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .welcome-text {
+                font-size: 48px;
+                color: #000;
+                font-weight: bold;
+                overflow: hidden;
+                white-space: nowrap;
+                border-right: .05em solid rgb(34, 33, 33);
+                line-height: 1%;
+                text-align: center; /* Keep the text in the middle */
+                letter-spacing: .1em;
+                margin: 0px 0px 0px 200px; /* Adjust the margin as needed */
+                animation:
+                    typing 4.5s steps(20, end),
+                    blink-caret .5s step-end infinite;
+            }
+
+            @keyframes typing {
+                from {
+                    width: 0;
+                }
+                to {
+                    width: 100%;
+                }
+            }
+
+            @keyframes blink-caret {
+                from, to { border-color: transparent }
+                50% { border-color: rgb(58, 57, 56) }
+            }
+
+
+            .right-container {
+                flex: 60%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+        @media only screen and (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .left-container, .right-container {
+                flex: 100%;
+            }
+
+            .welcome-text {
+                margin: 0; /* Adjust the margin for smaller screens */
+            }
+
+            .container {
+                width: 100%;
+                margin: 20px auto; /* Adjust the margin for smaller screens */
+            }
+
+            .tabs .tab {
+                flex: 100%;
+            }
+        }
+
+        .show-password-label {
+            display: flex;
+        }
+        .show-password-label p{
+            margin-top: 15px;
             font-size: 18px;
-            margin-bottom: 15px;
-            margin-left: 5px;
+        }
+        /*.show-password-label table {
+            padding: 10px;
+        }*/
+        .show-password-label input[type="checkbox"]{
+            height: 20px;
+            width: 25px;
+        }
+        .footer {
+          display: flex;
+          justify-content: center;
+          background-color: skyblue;
+          margin-bottom:  10px;
+         /* height: 50%;*/
+        }
+        .footer-content {
+            height: 30%;
+            width: 80%;
+            /*padding: 10px;*/
+            text-align: center;
+            color: black;
         }
 
-        button:hover {
-            font-weight: bold;
-            box-shadow: 1px 1px black;
-            cursor:pointer;
+        .outter {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .inner {
+          width: 300px;
+          height: 380px;
+          border: 1px solid #ccc;
+          background-color: #fff;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          border-radius: 5px;
+          overflow: hidden;
+        }
+        .form {
+          margin: 10px 20px;
+        }
+        .inner-form {
+          margin: 20px 0;
+          display: block;
+        }
+        .inner-form input {
+          width: 97%;
+          height: 25px;
+        }
+        .submit-button button {
+          background-color: yellowgreen;
+          width: 100%;
+          height: 35px;
+          margin: 10px auto;
+        }
+        .submit-button button:hover {
+          cursor: pointer;
         }
 
-        footer{
-            margin-top: 80px;
-        }
     </style>
 </head>
+
 <body>
-    <header>
-        <div class="logo">
-            <img src="assets/logo2.png" alt="logo1">
-        </div>
-    </header>
+  <?php show_alert();?>
     <main>
-        <?php 
-        if ($error) {
-                echo '<script language="javascript">';
-                echo 'alert("Password/username salah!")';
-                echo '</script>';
-            }
-        ?>
-       <div class="input-box">
-            <div class="input-box1">        
-                <h1>Masuk</h1>
-                <form method="post">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="newPassword">Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <div class="form-group show-password-label">
-                        <label for="showPassword">Tampilkan Password</label>
-                        <input type="checkbox" id="showPassword" class="checkbox" onclick="seePass()" >
-                    </div>
-                    <button type="submit" name="submit">Masuk</button>
-                </form>
-                <div class="sign-in">Belum punya akun? <a href="signup.html">Daftar</a></div>
-                <div class="sign-in">atau perlu <a href="help.html">Bantuan</a></div>
-            </div>
-       </div>
-    </main>
-    <footer>
-    <div class="footer-box">
-            <div class="footer-column">
-                <div class="footer-logo-main">
-                    <img src="assets/logo2.png" alt="" width="240">
-                    <img src="assets/help.png" alt="" width="120">
-                </div>
-                <!-- <div class="footer-logo-sub">
-                    <img src="assets/hmtk.JPG" alt="" width="50">
-                    <img src="assets/Tmje.JPG" alt="" width="50">
-                    <img src="assets/logopnj.png" alt="" width="50">
-                </div> -->
-            </div>
-            <div class="footer-column footer-center">
-                <p>&#169; Smart LampU 2023</p>
-                <!-- <p>Site is still under</p>
-                <p>construction.</p> -->
-            </div>
-            <div class="footer-column">
-                <div class="footer-contact">
-                    <h3>Kontak</h3>
-                    <a href="mailto:diegogomez81655@gmail.com"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                    <a href=""><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                    <a href=""><i class="fa fa-x" aria-hidden="true"></i></a>
-                </div>
+        <div class="main-container">    
+        <div class="left-container">
+            <div class="welcome-text">
+                <p>Selamat Datang</p>
             </div>
         </div>
-    </footer>
-    <script>
-        function seePass(){
+        <div class="right-container">
+            <div class="outter">
+              <div class="inner">
+                <div class="form">
+                  <form method="post" action="login-proccess.php">
+                    <div class="inner-form">
+                      <div class="title">Username</div>
+                      <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="inner-form">
+                      <div>Password</div>
+                      <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="submit-button">
+                      <button type="submit" name="submit">Masuk</button>
+                    </div>
+                  </form>
+                   <div class="input show-password-label">
+                      <table>
+                        <tr>
+                            <td><input type="checkbox" id="showPassword" class="checkbox" onclick="seePass()" ></td>
+                            <td><p>Tampilkan Password</p></td>
+                        </tr>
+                      </table>
+                  </div>
+                  <p>belum punya akun? <a href="register.php">Daftar</a></p>
+                </div>
+              </div>
+            </div>
+        </div>    
+      </div>
+     <!--  <div class="footer">
+        <div class="footer-content">
+          <p>&copy; Tim Smart Lamp</p>
+          <small>2023</small>
+        </div>
+    </div> -->
+    </main>
+    <script type="text/javascript">
+
+         function seePass(){
             var x = document.getElementById("password");
             if (x.type === "password") {
                 x.type = "text";
@@ -132,4 +244,6 @@ if (isset($_POST['submit'])) {
         }
     </script>
 </body>
+
 </html>
+

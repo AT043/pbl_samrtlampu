@@ -1,0 +1,27 @@
+Web Smart Lamp.rar
+
+captcha.php
+
+firstlamp.html
+
+index2.html
+
+index2u.html
+
+indexR.html
+
+koak
+
+Dev.php
+
+hoho
+
+mysql.py
+
+ClassRegister.php
+
+Auth.php
+
+ClassLogin.php
+
+
