@@ -1,0 +1,27 @@
+<?php
+//conn/library.php
+#isinya adalah fungsi standar untuk pengiriman pesan sukses/error
+#fungsi-fungsi kit tambahan lainnya juga bisa sekalian dimasukkan disini
+
+function create_alert($type, $pesan, $header=null){
+	$_SESSION['adm-type'] = $type;
+	$_SESSION['adm-message'] = $pesan;
+
+	if($header!==null){
+		header("location:".$header);
+		exit();
+	}
+}
+
+function show_alert(){
+	if(isset($_SESSION['adm-type'])){
+		$type = ucfirst($_SESSION['adm-type']);
+		unset($_SESSION['adm-type']);
+		$message = $_SESSION['adm-message'];
+		unset($_SESSION['adm-message']);
+
+		echo "
+		<script>alert('$type, <br> $message')</script>
+		";
+	}
+}
