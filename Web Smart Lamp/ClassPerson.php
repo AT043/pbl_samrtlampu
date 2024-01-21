@@ -131,20 +131,22 @@ class Person{
                     // Implement brute force protection
                     $this->clearLoginAttempts($username);
 
-                    if ($data['permissions'] == 1) {
-                        header("location: admin/admin.php");
-                    } else {
-                        header("location: user/userdashboard.php");
-                    }
+				if ($data['permissions'] == 1 || $data['permissions'] == 2) {
+				    header("location: admin/admin.php");
+				} else {
+				    header("location: user/userdashboard.php");
+				}
 
                     return true;
                 } else {
-                    $this->error = "Username or Password is incorrect";
+                    // $this->error = "Username or Password is incorrect";
+                    create_alert('error', 'Username dan Password Salah!', 'login.php');
                     $this->handleFailedLoginAttempt($username);
                     return false;
                 }
             } else {
-                $this->error = "Username or Password is incorrect";
+                // $this->error = "Username or Password is incorrect";
+                create_alert('error', 'Username dan Password Salah!', 'login.php');
                 $this->handleFailedLoginAttempt($username);
                 return false;
             }
@@ -255,95 +257,44 @@ class Person{
         }
     }
 
-    /**
-     * @return false
-     *
-     * fungsi ambil data user yang sudah login
-     */
-    public function getUser()
-    {
-        // Cek apakah sudah login
-        if (!$this->isLoggedIn()) {
-            return false;
-        }
-
-        try {
-            // Ambil data user dari database
-            $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
-            $stmt->bindParam(":id", $_SESSION['user_session']);
-            $stmt->execute();
-
-            return $stmt->fetch();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-
-            return false;
-        }
-    }
-
-    /**
-     * @return array|false
-     *
-     * Get all user and admin data from the database
-     */
-    public function getAllUsersAndAdmins()
+    public function getOTP($username)
     {
         try {
-            $stmt = $this->db->prepare("SELECT * FROM users WHERE permissions='0'");
+            $stmt = $this->db->prepare("SELECT otp FROM users WHERE username = :username");
+            $stmt->bindParam(":username", $username, PDO::PARAM_STR);
             $stmt->execute();
-            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            $stmtAdmin = $this->db->prepare("SELECT * FROM users WHERE permissions='1'");
-            $stmtAdmin->execute();
-            $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
-
-            return ['users' => $users, 'admins' => $admins];
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            return false;
-        }
-    }
-
-    /**
-     * Get login history for a specific user.
-     *
-     * @param int $userId User ID
-     * @return array|false Array of login history records or false on failure
-     */
-    public function getLoginHistory()
-	{
-	    try {
-	        // Tentukan batas jumlah log yang diizinkan
-	        $limit = 10;
-
-	        //Periksa jumlah log saat ini
-            $countQuery = $this->db->prepare("SELECT COUNT(*) AS total FROM login_history WHERE username = :username");
-            $countQuery->bindParam(":username", $username);
-            $countQuery->execute();
-
-            $totalLogs = $countQuery->fetchColumn();
-
-            // Jika jumlah log mencapai batas, hapus log tertua
-            if ($totalLogs >= $limit) {
-                $deleteQuery = $this->db->prepare("DELETE FROM login_history WHERE username = :username ORDER BY login_time ASC LIMIT 1");
-                $deleteQuery->bindParam(":username", $username);
-                $deleteQuery->execute();
+            if ($result) {
+                return $result['otp'];
+            } else {
+                return false; // Jika tidak ada data atau username tidak ditemukan
             }
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
 
-	        // Ambil data login history
-	        $stmt = $this->db->prepare("SELECT * FROM login_history ORDER BY login_time DESC LIMIT :limit");
-	        $stmt->bindParam(":limit", $limit, PDO::PARAM_INT);
-	        $stmt->execute();
-	        $logs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    public function saveOTP($username, $otp, $otpExpirationTime)
+    {
+        try {
+            $stmt = $this->db->prepare("UPDATE users SET otp = :otp, otp_expiration = :otpExpiration WHERE username = :username");
+            $stmt->bindParam(":otp", $otp, PDO::PARAM_STR);
+            $stmt->bindParam(":otpExpiration", $otpExpirationTime, PDO::PARAM_INT);
+            $stmt->bindParam(":username", $username, PDO::PARAM_STR);
 
-	        return ['logs' => $logs];
-	    } catch (PDOException $e) {
-	        // Handle error if needed
-	        echo $e->getMessage();
-	        return false;
-	    }
-	}
+            // Tambahkan baris berikut untuk debug
+            echo "SQL Statement: " . $stmt->queryString . "<br>";
+            echo "Username: $username, OTP: $otp, Expiration: $otpExpirationTime <br>";
 
+            $stmt->execute();
+            return true;
+        } catch (PDOException $e) {
+            echo "Error: " . $e->getMessage();
+            return false;
+        }
+    }
 
     /**
      * @return true

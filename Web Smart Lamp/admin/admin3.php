@@ -9,7 +9,7 @@ if (!$person->isLoggedIn()) {
 }  
 
 // Ambil data user saat ini  
-$currentUser = $person->getUser();  
+$currentUser = $admin->getUser();  
 ?>  
 
 <!DOCTYPE html>
@@ -141,7 +141,7 @@ $currentUser = $person->getUser();
                                 <img src="../assets/icons/edit.svg" alt="products icon" />
                                 Data Lampu
                             </a>
-                            <div style= margin-top: 20%; background-color: #000d">
+                            <div style="margin-top: 20%; background-color: #000d">
                                 <p id="time" style="color: lightgreen; font-family: monospace; font-size: 24px; text-align: center;"></p>
                                 <p id="date" style="color: lightgreen; font-family: monospace; font-size: 24px; text-align: center;"></p>
                             </div>
@@ -177,7 +177,7 @@ $currentUser = $person->getUser();
                                     <tbody>
                                         <?php
                                         // Get login history for the current user
-                                            $loginHistory = $person->getLoginHistory();
+                                            $loginHistory = $admin->getLoginHistory();
 
                                             if ($loginHistory && isset($loginHistory['logs'])) {
                                                 foreach ($loginHistory['logs'] as $log) {

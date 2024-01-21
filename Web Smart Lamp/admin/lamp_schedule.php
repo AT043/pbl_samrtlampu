@@ -9,7 +9,7 @@ if (!$person->isLoggedIn()) {
 }
 
 // Ambil data user saat ini
-$currentUser = $person->getUser();
+$currentUser = $admin->getUser();
 
 // Cek apakah form telah disubmit
 if (isset($_POST['submit'])) {
@@ -22,7 +22,6 @@ if (isset($_POST['submit'])) {
     try {
         // Insert data ke tabel scheduling
         $query = "UPDATE scheduling SET mulai = :startTime, selesai = :endTime, tanggal = NOW() WHERE id = 1 AND username = :username";
-    $stmt = $con->prepare($query);
         $stmt = $con->prepare($query);
 
         // Bind parameters
@@ -32,14 +31,18 @@ if (isset($_POST['submit'])) {
 
         // Execute the statement
         if ($stmt->execute()) {
-            echo "Jadwal berhasil disimpan!";
+            header("location: admin.php");
+            echo "<script>alert('Data Berhasil Disimpan!')</script>";
         } else {
-            echo "Error: " . $stmt->errorInfo()[2];
+            echo json_encode(["error" => "Error: " . $stmt->errorInfo()[2]]);
         }
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        echo json_encode(["error" => "Error: " . $e->getMessage()]);
     }
 
     $stmt->closeCursor();
 }
+
+// Fetch scheduling data
+getScheduleData();
 ?>

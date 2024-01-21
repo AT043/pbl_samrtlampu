@@ -35,11 +35,6 @@ class User{
      */
     public function getUser()
     {
-        // Cek apakah sudah login
-        if (!$this->isLoggedIn()) {
-            return false;
-        }
-
         try {
             // Ambil data user dari database
             $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
@@ -54,28 +49,6 @@ class User{
         }
     }
 
-    /**
-     * @return array|false
-     *
-     * Get all user and admin data from the database
-     */
-    public function getAllUsersAndAdmins()
-    {
-        try {
-            $stmt = $this->db->prepare("SELECT * FROM users WHERE permissions='0'");
-            $stmt->execute();
-            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $stmtAdmin = $this->db->prepare("SELECT * FROM users WHERE permissions='1'");
-            $stmtAdmin->execute();
-            $admins = $stmtAdmin->fetchAll(PDO::FETCH_ASSOC);
-
-            return ['users' => $users, 'admins' => $admins];
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-            return false;
-        }
-    }
 
 }
 

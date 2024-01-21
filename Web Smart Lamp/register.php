@@ -19,26 +19,50 @@ if ($person->isLoggedIn()) {
 
 // Cek adanya data yang dikirim
 if (isset($_POST['daftar'])) {
-    $username = $_POST['newUsername'];
+    $usernama = $_POST['newUsername'];
     $email = $_POST['email'];
     $password = $_POST['newPassword'];
     $repassword = $_POST['rePassword'];
     $token = $_POST['token'];
 
-    // Registrasi user baru
-    if ($person->register($username, $email, $password, $repassword, $token)) {
-        // Jika berhasil set variable success ke true
+     
+      {  // Proceed with user registration logic
         if ($password == $repassword) {
-            $success = true;
-            header('location: login.php');
+            // Generate OTP
+            $generatedOTP = (int) rand(100000, 999999);
+
+            // Save the generated OTP to the database
+            $person->saveOTP($usernama, $generatedOTP, $otpExpirationTime);
+
+            $to = $email;
+            $subject = "Verifikasi OTP";
+            $message = "Kode OTP Anda adalah: $generatedOTP";
+            $headers = "From: daffa.assyam.thariq.an21@mhsw.pnj.ac.id";
+
+            mail($to, $subject, $message, $headers);
+
+            // Store the generated OTP in the session
+            $_SESSION["otp"] = $generatedOTP;
+
+            /// Set expiration time for OTP 
+            $otpExpirationTime = time() + (2 * 60);
+            $_SESSION["otp_expiration"] = $otpExpirationTime;
+            //Set user save OTP
+            $person->saveOTP($usernama, $generatedOTP, $otpExpirationTime);
+
+            // Store user information in the session
+            $_SESSION['newUsername'] = $usernama;
+            $_SESSION['email'] = $email;
+            $_SESSION['newPassword'] = $password;
+            $_SESSION['rePassword'] = $repassword;
+            $_SESSION["otp_expiration"] = $otpExpirationTime;
+
+            // Redirect ke halaman verifikasi OTP
+            header("location: otp_verification.php");
+            exit();
         } else {
-            // $error = "Password dan konfirmasi password tidak sesuai.";
             create_alert('error', 'Password dan Re-Password tidak sesuai!', 'register.php');
         }
-    } else {
-        // Jika gagal, ambil pesan error
-        // $error = $reg->getLastError();
-        create_alert('error', 'unknown error', 'register.php');
     }
 }
 

@@ -9,7 +9,7 @@ if (!$person->isLoggedIn()) {
 }  
 
 // Ambil data user saat ini  
-$currentUser = $person->getUser();  
+$currentUser = $admin->getUser();  
 ?>  
 
 <!DOCTYPE html>
@@ -19,13 +19,58 @@ $currentUser = $person->getUser();
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Dashboard | SmartLamp</title>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <link rel="stylesheet" href="../assets/css/styles.css"/>
-        <style>
+        <link rel="stylesheet" href="css/styles.css"/>
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-            #datetime {
-                color: #ffff;
-                background-color: #000d;
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
+
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+        <!-- DataTables JS -->
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+        
+        <style>
+            .big-box {
+                background-color: #fff;
+                border: 1px solid #ccc;
+                width: 900px;
+                height: 600px;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
             }
+
+            .medium-box {
+                background-color: #fff;
+                border: 1px solid #ccc;
+                width: 900px;
+                height: 400px;
+                box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            }
+
+            .content-main {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .btn-edit {
+                width: 30px;
+                background-color: skyblue;
+                color: white;
+                padding: 5px;
+                margin: 0 10px; 
+            }
+
+            .btn-delete {
+                width: 30px;
+                background-color: red;
+                color: white;
+                padding: 5px;
+                margin: 0 10px;
+            }
+
       /* @media (min-width: 768px) {
             .slave2-main {
                 flex-wrap: wrap;
@@ -40,9 +85,9 @@ $currentUser = $person->getUser();
         </style>
     </head>
     <body>
-        <div class="wrapper">
+        <div class="wrapper-i">
             <!-- Navbar -->
-            <nav class="navbar">
+            <nav class="navbar-i">
                 <div class="nb-container">
                     <div class="nb-left">
                         <div class="nb-title">SmartLamp</div>
@@ -58,7 +103,7 @@ $currentUser = $person->getUser();
                     </div>
                 </div>
             </nav>
-            <div class="container">
+            <div class="container-i">
                 <!-- Sidebar -->
                 <div id="sidebar" class="sidebar">
                     <div class="sb-container">
@@ -103,7 +148,8 @@ $currentUser = $person->getUser();
                     <div class="content-main">
                         <div class="big-box">
                             <div class="container mt-3">
-                                
+                                <h3>Data Sensor</h3>
+ 
                             </div>
                         </div>
                     </div>
@@ -116,13 +162,57 @@ $currentUser = $person->getUser();
         function updateClock() {
             // Get current date and time
             var now = new Date();
-            var datetime = now.toLocaleString();
 
-            // Insert date and time into HTML
-            document.getElementById("datetime").innerHTML = datetime;
+            // Extract hours, minutes, and seconds
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+
+            // Add leading zero if needed
+            hours = (hours < 10) ? "0" + hours : hours;
+            minutes = (minutes < 10) ? "0" + minutes : minutes;
+            seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+            // Concatenate hours, minutes, and seconds
+            var time = hours + ":" + minutes + ":" + seconds;
+
+            // Insert time into HTML
+            document.getElementById("time").innerHTML = time;
         }
 
         // Update the clock every second (1000 milliseconds)
         setInterval(updateClock, 1000);
+    </script>
+    <script type="text/javascript">
+        function updateDate() {
+            // Get current date
+            var now = new Date();
+
+            // Extract year, month, and day
+            var year = now.getFullYear();
+            var month = now.getMonth() + 1; // Months are zero-based
+            var day = now.getDate();
+
+            // Add leading zero if needed
+            month = (month < 10) ? "0" + month : month;
+            day = (day < 10) ? "0" + day : day;
+
+            // Concatenate year, month, and day
+            var date = year + "-" + month + "-" + day;
+
+            // Insert date into HTML
+            document.getElementById("date").innerHTML = date;
+        }
+
+        // Update the date every second (1000 milliseconds)
+        setInterval(updateDate, 1000);
+    </script>
+    <script>
+        jQuery(document).ready(function($) {
+            $('#loginHistory').DataTable({
+                "lengthMenu": [3, 5, 7], // Set the available choices for the number of rows per page
+                "pageLength": 7  // Set the default number of rows per page
+            });
+        });
     </script>
 </html>

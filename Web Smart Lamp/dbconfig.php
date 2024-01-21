@@ -10,14 +10,20 @@ try {
 // include 'ClassLogin.php';
 // include 'ClassRegister.php';
 include 'ClassPerson.php';
-// include 'User.php';
+include 'ClassUser.php';
+include 'ClassAdmin.php';
+include 'ClassLamp.php';
 include 'library.php';
-include 'retrieve_lamp_stat.php';
+//include 'update_status.php';
+
+//include '/admin/delete_schedule.php';
+// include '/admin/lamp_schedule.php';
 
 // $user = new Auth($con);
 // $login = new Login($con);
 // $reg = new Register($con);
 $person = new Person($con);
-// $user = new User($con);
-
+$admin = new Admin($con);
+$user = new User($con);
+$lamp = new Lamp($con);
 // $dev = new Dev($con);

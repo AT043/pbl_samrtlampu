@@ -9,7 +9,7 @@ if (!$person->isLoggedIn()) {
 }  
 
 // Ambil data user saat ini  
-$currentUser = $person->getUser();  
+$currentUser = $user->getUser();  
 ?>   
 
 <!DOCTYPE html>

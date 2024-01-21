@@ -9,7 +9,7 @@ if (!$person->isLoggedIn()) {
 }  
 
 // Ambil data user saat ini  
-$currentUser = $person->getUser();  
+$currentUser = $admin->getUser();  
 ?>  
 
 <!DOCTYPE html>
@@ -62,7 +62,7 @@ $currentUser = $person->getUser();
                 text-align: center;
                 height: 10px;
                 padding: 5px; /* Adjust the padding as needed */
-                font-size: 22px; /* Adjust the font size as needed */
+                font-size: 18px; /* Adjust the font size as needed */
             }
 
             .content-main {
@@ -82,6 +82,14 @@ $currentUser = $person->getUser();
             .btn-delete {
                 width: 30px;
                 background-color: red;
+                color: white;
+                padding: 5px;
+                margin: 0 10px;
+            }
+
+            .btn-permission {
+                width: 60px;
+                background-color: green;
                 color: white;
                 padding: 5px;
                 margin: 0 10px;
@@ -208,11 +216,11 @@ $currentUser = $person->getUser();
                                 <div class="user-data" id="user-data">
                                     <?php
                                     //$auth = new Auth($con);
-                                    $data = $person->getAllUsersAndAdmins();
+                                    $data = $admin->getAllUsersAndAdmins();
                                     $users = $data['users'];
                                     ?>
                                     <h3>Daftar User</h3>
-                                    <table id="userdata" class="table table-striped table-bordered" style="width:100%">
+                                    <table id="userdata" class="table table-striped table-bordered" style="width:100%;">
                                         <!-- Table header -->
                                         <thead>
                                             <tr>
@@ -225,7 +233,7 @@ $currentUser = $person->getUser();
                                         <tbody>
                                             <?php
                                             foreach ($users as $user) {
-                                                echo "<tr><td>{$user['username']}</td><td>{$user['email']}</td></td><td><a class='btn-edit' onclick='openModal()'>Edit</a> <a class='btn-delete' href='admin2.php?delete_id={$user['username']}'>Hapus</a></td></tr>";
+                                                echo "<tr><td>{$user['username']}</td><td>{$user['email']}</td></td><td><a class='btn-edit' onclick='openModal()'>Edit</a> <a class='btn-delete' href='admin2.php?delete_id={$user['username']}'>Hapus</a><a class='btn-permission' href='admin2.php?jadiadmin_id={$user['username']}'>Jadi Admin</a></td></tr>";
                                             }
                                             ?>
                                         </tbody>
@@ -255,7 +263,7 @@ $currentUser = $person->getUser();
                                     $admins = $data['admins'];
                                     ?>
                                     <h3>Daftar Admin</h3>
-                                    <table id="admindata" class="table table-striped table-bordered" style="width:100%">
+                                    <table id="admindata" class="table table-striped table-bordered" style="width:100%;">
                                         <!-- Table header -->
                                         <thead>
                                             <tr>
@@ -268,7 +276,7 @@ $currentUser = $person->getUser();
                                         <tbody>
                                             <?php
                                             foreach ($admins as $admin) {
-                                                echo "<tr><td>{$admin['username']}</td><td>{$admin['email']}</td><td><a class='btn-edit' href='update.php?id={$admin['id']}'>Edit</a> <a class='btn-delete' href='admin2.php?delete_id={$admin['username']}'>Hapus</a></td></tr>";
+                                                echo "<tr><td>{$admin['username']}</td><td>{$admin['email']}</td><td><a class='btn-edit' href='update.php?id={$admin['id']}'>Edit</a> <a class='btn-delete' href='admin2.php?delete_id={$admin['username']}'>Hapus</a><a class='btn-permission' href='admin2.php?jadiuser_id={$admin['username']}'>Jadi User</a></td></tr>";
                                             }
                                             ?>
                                         </tbody>
@@ -292,13 +300,57 @@ $currentUser = $person->getUser();
 
             // Execute the query
             if ($deleteStatement->execute()) {
+                echo "<script>alert('Yakin mau dihapus?')</script>";
                 echo "<meta http-equiv=Refresh content=0;url=index.php>";
             } else {
                 echo "Error deleting user.";
             }
         }
         ?>
-   
+
+        <?php 
+        if(isset($_GET['jadiadmin_id'])) {
+            $userJadiAdmin = $_GET['jadiadmin_id'];
+
+            $mauJadiAdmin = $con->prepare("UPDATE users SET permissions = 1 WHERE username = :username");
+            $mauJadiAdmin->bindParam(":username", $userJadiAdmin);
+
+            if ($mauJadiAdmin->execute()) {
+                //echo "<script>alert('Yakin mau dihapus?')</script>";
+                echo "<meta http-equiv=Refresh content=0;url=../admin/admin2.php>";
+            } else {
+                echo "Error Jadikan User Sebagai Admin.";
+            }
+        }
+        ?>
+
+        <?php 
+        if(isset($_GET['jadiuser_id'])){
+            $adminJadiUser = $_GET['jadiuser_id'];
+
+            // Assuming $con is your database connection
+            $query = "SELECT * FROM users WHERE username = :username";
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(":username", $adminJadiUser);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($currentUser['username'] === 'admine1') {
+                $yahJadiUser = $con->prepare("UPDATE users SET permissions = 0 WHERE username = :username");
+                $yahJadiUser->bindParam(":username", $adminJadiUser);
+
+                if ($yahJadiUser->execute()) {
+                    //echo "<script>alert('Yakin mau dihapus?')</script>";
+                    echo "<meta http-equiv=Refresh content=0;url=../admin/admin2.php>";
+                } else {
+                    echo "Error Jadikan User Sebagai Admin.";
+                }
+            } else {
+                echo "<script>alert('Maaf Anda tidak bisa!')</script>";
+            }
+        }
+        ?>
+
     </body>
     <script src="../assets/js/main.js"></script>
     <script type="text/javascript">

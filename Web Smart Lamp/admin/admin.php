@@ -1,7 +1,7 @@
 <?php  
 
 // Lampirkan dbconfig  
-require_once "../dbconfig.php";  
+require_once "../dbconfig.php";
 
 // Cek status login user  
 if (!$person->isLoggedIn()) {  
@@ -9,7 +9,8 @@ if (!$person->isLoggedIn()) {
 }  
 
 // Ambil data user saat ini  
-$currentUser = $person->getUser();  
+$currentUser = $admin->getUser(); 
+
 ?>   
 
 <!DOCTYPE html>
@@ -109,7 +110,7 @@ $currentUser = $person->getUser();
                                     <div class="lamp-mode-box-m" id="lamp<?php echo $i; ?>Container">
                                         <?php
                                         $lampNumber = $i; // Adjust this based on the lamp number
-                                        $lampStatus = getLampStatusFromStorage($lampNumber);
+                                        $lampStatus = $lamp->getLampStatusFromStorage($lampNumber);
                                         ?>
                                         <span class="material-icons md-48" style="color: <?php echo ($lampStatus === 'On') ? 'yellow' : '#ccc'; ?>">lightbulb</span>
                                         <p>Lampu <?php echo $i; ?></p>
@@ -150,7 +151,7 @@ $currentUser = $person->getUser();
                                                 <td><input type="time" name="endTime"></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2"><button type="submit" name="submit" class="btn-all-lamp">Simpan</button></td>
+                                                <td colspan="2"><button type="submit" name="submit" class="btn-all-lamp" id="button-schedule">Simpan</button></td>
                                             </tr>
                                             </form>
                                         </table>
@@ -309,6 +310,139 @@ $currentUser = $person->getUser();
             });
         });
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Function to check and execute scripts based on scheduling data
+    function checkAndExecuteScripts() {
+        var scheduleData = <?php echo json_encode($lamp->getScheduleData()); ?>;
+
+        if (scheduleData) {
+            var startTime = scheduleData['mulai'];
+            var endTime = scheduleData['selesai'];
+            var dateOn = scheduleData['tanggal'];
+
+            // Remove colons and format with leading zeros
+            startTime = startTime.replace(/:/g, '').padStart(6, '0');
+            endTime = endTime.replace(/:/g, '').padStart(6, '0');
+
+            // Check if the current time is within the scheduled time range
+            var currentTime = new Date().toLocaleTimeString('en-US', { hour12: false });
+            // Remove colons and format with leading zeros
+            currentTime = currentTime.replace(/:/g, '').padStart(6, '0');
+
+            console.log("Start Time:", startTime);
+            console.log("End Time:", endTime);
+            console.log("Current Time:", currentTime);
+
+            var currentDateObject = new Date();
+
+            // Extract year, month, and day components
+            var year = currentDateObject.getFullYear();
+            var month = (currentDateObject.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+            var day = currentDateObject.getDate().toString().padStart(2, '0');
+
+            // Format the date
+            var currentDate = year + month + day;
+            dateOn = dateOn.replace(/-/g, '').padStart(6, '0');
+            console.log(currentDate); // Output: yyyy:mm:dd
+            console.log(dateOn);
+
+            // Get the lamp container element
+            var lampContainer = document.querySelector('.auto-schedul .material-icons.basecolor2');
+
+            // Create a new lamp element
+            var newLampElement = document.createElement('span');
+            newLampElement.className = 'material-icons md-48 basecolor basecolor2';
+
+            // Status variable to be updated in the scheduling table
+            var statusToUpdate = 0;
+
+            if (currentTime >= startTime && currentTime <= endTime && currentDate === dateOn) {
+                // Show an alert indicating that scheduling has started
+                // alert('Scheduling has started!');
+
+                // Set the new lamp element content and style
+                newLampElement.textContent = 'lightbulb';
+                newLampElement.style.color = 'yellow';
+
+                // Execute the appropriate script based on the toggle state
+                var scriptURLsOn = [
+                    "http://192.168.157.3/eksekusi-kode-A",
+                    "http://192.168.157.3/eksekusi-kode-C",
+                    "http://192.168.157.3/eksekusi-kode-E"
+                ];
+
+                // Update status variable to 1
+                statusToUpdate = 1;
+
+                // Use Promise.all to wait for all fetch requests to complete
+                Promise.all(scriptURLsOn.map(url => fetch(url)))
+                    .then(responses => Promise.all(responses.map(response => response.json())))
+                    .then(data => {
+                        console.log("All scripts executed successfully:", data);
+                    })
+                    .catch(error => {
+                        console.error("Error executing scripts:", error);
+                    });
+            } else {
+                // Set the new lamp element content and style
+                newLampElement.textContent = 'lightbulb';
+                newLampElement.style.color = '#ccc';
+
+                var scriptURLsOff = [
+                    "http://192.168.157.3/eksekusi-kode-B",
+                    "http://192.168.157.3/eksekusi-kode-D",
+                    "http://192.168.157.3/eksekusi-kode-F"
+                ];
+
+                // Update status variable to 0
+                statusToUpdate = 1;
+
+                // Use Promise.all to wait for all fetch requests to complete
+                Promise.all(scriptURLsOff.map(url => fetch(url)))
+                    .then(responses => Promise.all(responses.map(response => response.json())))
+                    .then(data => {
+                        console.log("All scripts executed successfully:", data);
+                    })
+                    .catch(error => {
+                        console.error("Error executing scripts:", error);
+                    });
+            }
+
+            // Update the status in the scheduling table
+            fetch('../schedule_statud.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    status: statusToUpdate,
+                    // Add other data to send to the server if needed
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Status updated successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error updating status:', error);
+            });
+
+            // Replace the existing lamp element with the new one
+            lampContainer.innerHTML = '';
+            lampContainer.appendChild(newLampElement);
+        } else {
+            console.error("Error fetching scheduling data.");
+        }
+    }
+
+    // Check and execute scripts every 30 seconds
+    setInterval(checkAndExecuteScripts, 30000);
+});
+</script>
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
