@@ -243,6 +243,27 @@ class Person{
         }
     }
 
+     /**
+     * @return false
+     *
+     * fungsi ambil data user yang sudah login
+     */
+    public function getUser()
+    {
+        try {
+            // Ambil data user dari database
+            $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
+            $stmt->bindParam(":id", $_SESSION['user_session']);
+            $stmt->execute();
+
+            return $stmt->fetch();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+
+            return false;
+        }
+    }
+
     /**
      * @return true|void
      *

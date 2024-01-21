@@ -130,7 +130,7 @@ $currentUser = $admin->getUser();
                                 Kontrol Lampu
                             </a>
                             <a class="sb-item" href="admin2.php">
-                                <img src="../assets/icons/edit.svg" alt="search icon" />
+                                <img src="../assets/icons/layout.svg" alt="search icon" />
                                 Data User
                             </a>
                             <a class="sb-item" href="admin3.php">
@@ -138,7 +138,7 @@ $currentUser = $admin->getUser();
                                 History
                             </a>
                             <a class="sb-item" href="admin4.php">
-                                <img src="../assets/icons/edit.svg" alt="products icon" />
+                                <img src="../assets/icons/grid.svg" alt="products icon" />
                                 Data Lampu
                             </a>
                             <div style="margin-top: 20%; background-color: #000d">
@@ -149,9 +149,9 @@ $currentUser = $admin->getUser();
                         <div class="sb-footer">
                             <img src="../assets/icons/user.svg" alt="user icon" class="user-img" />
                             <h3 class="user-name"><?php echo $currentUser['username'] ?></h3>
-                            <a href="#" class="sb-settings-btn">
+<!--                             <a href="#" class="sb-settings-btn">
                                 <img src="../assets/icons/settings.svg" alt="settings icon" />
-                            </a>
+                            </a> -->
                             <a href="../logout.php" class="sb-logout-btn" >
                                 <img src="../assets/icons/log-out.svg" alt="logout icon" />
                             </a>

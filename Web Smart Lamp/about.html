@@ -6,9 +6,78 @@
     <title>Tentang | Smart LampU</title>
     <link rel="stylesheet" href="assets/style.css">
     <style>
-        body, html {
-           font-family: Tahoma;
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
         }
+
+        body {
+            background-color: #f0efed;
+            font-size: 22px;
+            color: black;
+            font-family: Tahoma;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: inline;
+            top: 0;
+        }
+
+        /*Navbar*/
+        .navbar {
+            border-bottom: 1px solid #ccc;
+            background-color: white;
+            position: sticky;
+            z-index: 1;
+            top: 0;
+        }
+        .navbar ul{
+            display: flex;
+            align-items: center;
+            justify-content: right;
+        }
+        .navbar li {
+            display: inline;
+            list-style-type: none;
+            margin: 0px 30px;
+        }
+        .navbar a {
+            z-index: 1;
+            text-decoration: none;
+            color: black;
+        }
+
+        .navbar a:hover{
+            font-weight: bold;
+            font-size: 26px;
+            background-color: black;
+            color: white;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* border-bottom: 1px solid black; */
+            padding: 30px;
+        }
+        .inner-nav {
+            display: flex;
+        }
+        .inner-nav p {
+            margin-right: auto;
+            margin-left: 60px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+    /*=================================================*/
+
 
         /* The hero image */
         .hero-image {
@@ -116,6 +185,22 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
+        }
+
+        /* FOOTER */
+        footer {
+            font-size: 18px;
+            width: 100%;
+            text-align: center;
+            bottom: 0;
+            background-color: #fff;
+            height: 60px;
+            margin: auto 0;
+            border: 1px solid #ccc;
+        }
+
+        footer p, small {
+            margin: auto 0;
         }
 
     @media only screen and (max-width: 768px) {

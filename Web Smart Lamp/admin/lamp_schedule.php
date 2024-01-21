@@ -21,7 +21,7 @@ if (isset($_POST['submit'])) {
 
     try {
         // Insert data ke tabel scheduling
-        $query = "UPDATE scheduling SET mulai = :startTime, selesai = :endTime, tanggal = NOW() WHERE id = 1 AND username = :username";
+        $query = "UPDATE scheduling SET username = :username, mulai = :startTime, selesai = :endTime, tanggal = NOW() WHERE id = 1";
         $stmt = $con->prepare($query);
 
         // Bind parameters

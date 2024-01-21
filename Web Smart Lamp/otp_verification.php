@@ -50,6 +50,62 @@ if (isset($_POST['verify'])) {
     <meta charset="utf-8">
     <meta lang="en-us">
     <title>OTP Verification | SmartLamp</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+
+        main {
+            text-align: center;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        p.error-message {
+            color: red;
+        }
+    </style>
 </head>
 
 <body>
@@ -57,7 +113,7 @@ if (isset($_POST['verify'])) {
         <div class="container">
             <h2>OTP Verification</h2>
             <?php if (isset($error)) : ?>
-                <p style="color: red;"><?php echo $error; ?></p>
+                <p class="error-message"><?php echo $error; ?></p>
             <?php endif; ?>
             <form method="post">
                 <label for="otp">Enter OTP:</label>
