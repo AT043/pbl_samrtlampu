@@ -197,7 +197,7 @@ void setup() {
     if (automodeToggle = false){
       digitalWrite(output7, HIGH);
       server.sendHeader("Access-Control-Allow-Origin", "*");
-      server.send(200, "application/json", "{\"status\": \"Kode F (Kedip) berhasil dijalankan\"}");
+      server.send(200, "application/json", "{\"status\": \"Kode G (Kedip) berhasil dijalankan\"}");
     }
     else{
       server.send(200, "application/json", "{\"status\": \"Mode auto sedang berjalan\"}");
@@ -208,7 +208,7 @@ void setup() {
     if (automodeToggle = false){
       digitalWrite(output7, LOW);
       server.sendHeader("Access-Control-Allow-Origin", "*");
-      server.send(200, "application/json", "{\"status\": \"Kode F (Kedip) berhasil dijalankan\"}");
+      server.send(200, "application/json", "{\"status\": \"Kode H (Kedip) berhasil dijalankan\"}");
     }
     else{
       server.send(200, "application/json", "{\"status\": \"Mode auto sedang berjalan\"}");
