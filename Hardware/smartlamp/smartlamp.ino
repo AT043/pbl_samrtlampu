@@ -130,14 +130,23 @@ void setup() {
     digitalWrite(output5, LOW);
     digitalWrite(output6, LOW);
     digitalWrite(output7, LOW);
+
     startTimer1 = false;
     motion1 = false;
+    lastTrigger1 = 0;
+
     startTimer2 = false;
     motion2 = false;
+    lastTrigger2 = 0;
+
     startTimer3 = false;
     motion3 = false;
+    lastTrigger3 = 0;
+
     startTimer4 = false;
     motion4 = false;
+    lastTrigger4 = 0;
+    
     server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send(200, "application/json", "{\"status\": \"Mode auto berhasil dimatikan\"}");
   });
