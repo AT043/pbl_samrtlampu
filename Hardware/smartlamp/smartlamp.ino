@@ -116,14 +116,30 @@ void setup() {
 
   server.on("/mode-auto-on", HTTP_GET, [](){
     automodeToggle = true;
+    digitalWrite(output4, LOW);
+    digitalWrite(output5, LOW);
+    digitalWrite(output6, LOW);
+    digitalWrite(output7, LOW);
     server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send(200, "application/json", "{\"status\": \"Mode auto berhasil dinyalakan\"}");
   });
 
   server.on("/mode-auto-off", HTTP_GET, [](){
-  automodeToggle = false;
-  server.sendHeader("Access-Control-Allow-Origin", "*");
-  server.send(200, "application/json", "{\"status\": \"Mode auto berhasil dimatikan\"}");
+    automodeToggle = false;
+    digitalWrite(output4, LOW);
+    digitalWrite(output5, LOW);
+    digitalWrite(output6, LOW);
+    digitalWrite(output7, LOW);
+    startTimer1 = false;
+    motion1 = false;
+    startTimer2 = false;
+    motion2 = false;
+    startTimer3 = false;
+    motion3 = false;
+    startTimer4 = false;
+    motion4 = false;
+    server.sendHeader("Access-Control-Allow-Origin", "*");
+    server.send(200, "application/json", "{\"status\": \"Mode auto berhasil dimatikan\"}");
   });
 
 
