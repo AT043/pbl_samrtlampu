@@ -232,7 +232,8 @@ $currentUser = $admin->getUser();
                 var scriptURLs = [
                     "http://192.168.157.3/eksekusi-kode-A",
                     "http://192.168.157.3/eksekusi-kode-C",
-                    "http://192.168.157.3/eksekusi-kode-E"
+                    "http://192.168.157.3/eksekusi-kode-E",
+                    "http://192.168.157.3/eksekusi-kode-G"
                 ];
 
                 // Use Promise.all to wait for all fetch requests to complete
@@ -258,7 +259,8 @@ $currentUser = $admin->getUser();
                 var scriptURLs = [
                     "http://192.168.157.3/eksekusi-kode-B",
                     "http://192.168.157.3/eksekusi-kode-D",
-                    "http://192.168.157.3/eksekusi-kode-F"
+                    "http://192.168.157.3/eksekusi-kode-F",
+                    "http://192.168.157.3/eksekusi-kode-H"
                 ];
 
                 // Use Promise.all to wait for all fetch requests to complete
@@ -331,7 +333,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     var scriptURLsOn = [
                         "http://192.168.157.3/eksekusi-kode-A",
                         "http://192.168.157.3/eksekusi-kode-C",
-                        "http://192.168.157.3/eksekusi-kode-E"
+                        "http://192.168.157.3/eksekusi-kode-E",
+                        "http://192.168.157.3/eksekusi-kode-G"
                     ];
 
                     // Update status variable to 1
@@ -354,7 +357,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     var scriptURLsOff = [
                         "http://192.168.157.3/eksekusi-kode-B",
                         "http://192.168.157.3/eksekusi-kode-D",
-                        "http://192.168.157.3/eksekusi-kode-F"
+                        "http://192.168.157.3/eksekusi-kode-F",
+                        "http://192.168.157.3/eksekusi-kode-H"
                     ];
 
                     // Update status variable to 0
