@@ -171,7 +171,7 @@ $currentUser = $admin->getUser();
                                                     <!-- <input type="checkbox" id="autoToggleon" name="autoToggleon"> -->
                                                     <!-- <span class="slider"></span>
                                                     <span class="labels" data-on="ON" data-off="OFF"></span> -->
-                                                    <button type="submit" id="autoToggleon" name="autoToggleon">ON</button>
+                                                    <input type="submit" id="autoToggleon" name="autoToggleon" value="on">ON</input>
                                                 </label>
                                             </form>
                                             <form action="http://192.168.157.3/toggle-auto-mode" method="post">
@@ -179,7 +179,7 @@ $currentUser = $admin->getUser();
                                                     <!-- <input type="checkbox" id="autoToggleoff" name="autoToggleoff"> -->
                                                     <!-- <span class="slider"></span>
                                                     <span class="labels" data-on="ON" data-off="OFF"></span> -->
-                                                    <button type="submit" id="autoToggleoff" name="autoToggleoff">OFF</button>
+                                                    <input type="submit" id="autoToggleoff" name="autoToggleoff" value="on">OFF</input>
                                                 </label>
                                             </form>
                                             </div>

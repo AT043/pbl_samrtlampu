@@ -7,7 +7,7 @@ require_once "dbconfig.php";
 if ($person->isLoggedIn()) {
     // Check if it's an admin or a regular user
     $userData = $person->getUser(); // Assuming you have a method to get user data
-    if ($userData['permissions'] == 1) {
+    if ($userData['permissions'] == 1 && $userData['permissions'] == 2) {
         // Admin
         header("location: admin/admin.php");
         $person->insertpersonHistory();
