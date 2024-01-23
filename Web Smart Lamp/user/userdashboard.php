@@ -135,14 +135,14 @@ $currentUser = $user->getUser();
                                         </label>
                                     </div>
                                 <?php } ?>
-
+<!-- 
                                 <div class="manual-all-lamp">
                                     <h3>Semua Lampu</h3>
                                     <div class="all-lamp-btn">
                                         <button class="btn-all-lamp" type="button" id="btnOnAll" name="OnAll" onclick="submitForm()">ON</button>
                                         <button class="btn-all-lamp" type="button" id="btnOffAll" name="OffAll" onclick="submitForm()">OFF</button>
                                     </div>
-                                </div>
+                                </div> -->
                             </form>
                             </div>
                         </div>
@@ -552,6 +552,27 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
             });
         });
+    </script>
+
+    <script>
+        function myFunction() {
+            var dropdownContent = document.getElementById("myDropdown");
+            dropdownContent.classList.toggle("show");
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.matches('.dropbtn')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                var i;
+                for (i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
     </script>
 
     <script>
