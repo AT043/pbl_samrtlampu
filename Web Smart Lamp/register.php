@@ -45,7 +45,7 @@ if (isset($_POST['daftar'])) {
             $_SESSION["otp"] = $generatedOTP;
 
             /// Set expiration time for OTP 
-            $otpExpirationTime = time() + (2 * 60);
+            $otpExpirationTime = time() + (5 * 60);
             $_SESSION["otp_expiration"] = $otpExpirationTime;
             //Set user save OTP
             $person->saveOTP($usernama, $generatedOTP, $otpExpirationTime);
