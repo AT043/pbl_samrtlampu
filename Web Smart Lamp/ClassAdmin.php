@@ -50,7 +50,7 @@ class Admin{
             $stmt->bindParam(':username', $username);
             $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':id')
+            $stmt->bindParam(':id');
 
             // Execute the statement
             $stmt->execute();
@@ -61,8 +61,6 @@ class Admin{
             return false; // Update failed
         }
     }
-
-
 
     /**
      * @return array|false

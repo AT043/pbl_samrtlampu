@@ -122,13 +122,13 @@ $currentUser = $admin->getUser();
                                     </div>
                                 <?php } ?>
 
-                                <div class="manual-all-lamp">
+<!--                                 <div class="manual-all-lamp">
                                     <h3>Semua Lampu</h3>
                                     <div class="all-lamp-btn">
                                         <button class="btn-all-lamp" type="button" id="btnOnAll" name="OnAll" onclick="submitForm()">ON</button>
                                         <button class="btn-all-lamp" type="button" id="btnOffAll" name="OffAll" onclick="submitForm()">OFF</button>
                                     </div>
-                                </div>
+                                </div> -->
                             </form>
                             </div>
                         </div>
@@ -412,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //var statusToUpdate = 0;
             if (current >= start) {
                 checkAndExecuteScripts();
-                //setInterval(checkAndExecuteScripts, 30000);
+                setInterval(checkAndExecuteScripts, 30000);
             } else {
                 console.log('Stop');
             }
