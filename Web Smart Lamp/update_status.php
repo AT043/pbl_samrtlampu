@@ -31,19 +31,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Execute the statement
             if ($stmt->execute()) {
                     //echo "Update successful for Lamp {$i}. Status set to {$lampStatus}.<br>";
-                    $userData = $person->getUser();
-                if ($userData['permissions'] == 1 && $userData['permissions'] == 2) {
+                $userData = $person->getUser();
+                if ($userData['permissions'] == 1 || $userData['permissions'] == 2) {
                     // Admin
                     header("location: admin/admin.php");
-                    $person->insertpersonHistory();
                 } else {
                     // User
                     header("location: user/userdashboard.php");
-                    $person->insertpersonHistory();
                 }
             } else {
-                //echo "Error updating data for Lamp {$i}: " . $stmt->errorInfo()[2] . "<br>";
-                header("location: user/userdashboard.php");
+                //echo "<script>alert('Error updating data for Lamp {$i}: " . $stmt->errorInfo()[2] . "')</script>";
+                $userData = $person->getUser();
+                if ($userData['permissions'] == 1 || $userData['permissions'] == 2) {
+                    // Admin
+                    header("location: admin/admin.php");
+                } else {
+                    // User
+                    header("location: user/userdashboard.php");
+                }
             }
         } catch (PDOException $e){
             echo "Error: " . $e->getMessage() . "<br>";

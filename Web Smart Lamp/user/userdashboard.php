@@ -155,11 +155,11 @@ $currentUser = $user->getUser();
                                             <tr>
                                                 <td colspan="2"><span class="material-icons md-48 basecolor basecolor2">lightbulb</span></td>
                                             </tr>
-                                            <tr>
+<!--                                             <tr>
                                                 <?php $stime = $lamp->getScheduleData(); ?>
                                                 <td><?php echo $stime['mulai'];?></td>
                                                 <td><?php echo $stime['selesai'];?></td>
-                                            </tr>
+                                            </tr> -->
                                             <tr>
                                                 <td>Waktu Mulai</td>
                                                 <td>Waktu Selesai</td>
@@ -182,18 +182,18 @@ $currentUser = $user->getUser();
                                             <form action="http://192.168.157.3/toggle-auto-mode" method="post">
                                                 <!-- <span class="material-icons md-48 basecolor basecolor2">lightbulb</span> -->
                                                 <label class="toggle">
-                                                    <input type="checkbox" id="autoToggleon" name="autoToggleon">
+                                                    <!-- <input type="checkbox" id="autoToggleon" name="autoToggleon"> -->
                                                     <!-- <span class="slider"></span>
                                                     <span class="labels" data-on="ON" data-off="OFF"></span> -->
-                                                    <button type="submit">Submit</button>
+                                                    <input type="submit" id="autoToggleon" name="autoToggleon" value="on">ON</input>
                                                 </label>
                                             </form>
                                             <form action="http://192.168.157.3/toggle-auto-mode" method="post">
                                                 <label class="toggle">
-                                                    <input type="checkbox" id="autoToggleoff" name="autoToggleoff">
+                                                    <!-- <input type="checkbox" id="autoToggleoff" name="autoToggleoff"> -->
                                                     <!-- <span class="slider"></span>
                                                     <span class="labels" data-on="ON" data-off="OFF"></span> -->
-                                                    <button type="submit">Submit</button>
+                                                    <input type="submit" id="autoToggleoff" name="autoToggleoff" value="on">OFF</input>
                                                 </label>
                                             </form>
                                             </div>
