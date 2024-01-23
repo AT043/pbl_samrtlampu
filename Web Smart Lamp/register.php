@@ -246,6 +246,7 @@ if (isset($_POST['daftar'])) {
           width: 90%;
           height: 25px;
           margin: 10px 10px;
+          font-size: 20px;
         }
         .check1 {
           display: flex;
@@ -287,12 +288,16 @@ if (isset($_POST['daftar'])) {
                           <td> <input type="password" id="newPassword" name="newPassword" required></td>
                           <td><input type="password" id="rePassword" name="rePassword" required></td>
                         </tr>
-                        <tr>
+<!--                         <tr>
                           <td><div class="title">Token Admin (Opsional)</div></td>
-                          <td><!-- <div class="title">Email</div> --></td>
-                        </tr>
+                          <td><!-- <div class="title">Email</div> </td>-->
+                        </tr> 
                         <tr>
-                          <td> <input type="text" id="token" name="token"></td>
+                          <td>
+                            <div class="show-password-label">
+                              <input type="checkbox" id="showPassword" class="checkbox" onclick="seePass()" >
+                              <p>Tampilkan Password</p>
+                            </div>
                           <td><!-- <input type="email" id="email" name="email" required> --></td>
                         </tr>
                       </table>
@@ -324,23 +329,16 @@ if (isset($_POST['daftar'])) {
         </div>
     </div> -->
     </main>
-    <script type="text/javascript">
-
-        var signin = document.querySelector("#signin");
-        var register = document.querySelector("#register");
-        setTimeout(function () {
-           register.checked = true;
-        }, 1000);
-        setTimeout(function () {
-           signin.checked = true;
-        }, 2000);
-
-         function seePass(){
-            var x = document.getElementById("password");
-            if (x.type === "password") {
+    <script>
+        function seePass(){
+            var x = document.getElementById("newPassword");
+            var y = document.getElementById("rePassword")
+            if (x.type === "password" && y.type === "password") {
                 x.type = "text";
+                y.type = "text";
             } else {
                 x.type = "password";
+                y.type = "password";
             }
         }
     </script>

@@ -71,6 +71,28 @@ $currentUser = $admin->getUser();
                 margin: 0 10px;
             }
 
+            #wntable {
+              border-collapse: collapse;
+              width: 50%;
+            }
+
+            #wntable td, #wntable th {
+              border: 1px solid #ddd;
+              padding: 8px;
+            }
+
+            #wntable tr:nth-child(even){background-color: #f2f2f2;}
+
+            #wntable tr:hover {background-color: #ddd;}
+
+            #wntable th {
+              padding-top: 12px;
+              padding-bottom: 12px;
+              text-align: left;
+              background-color: #00A8A9;
+              color: white;
+            }
+
       /* @media (min-width: 768px) {
             .slave2-main {
                 flex-wrap: wrap;
@@ -148,8 +170,41 @@ $currentUser = $admin->getUser();
                     <div class="content-main">
                         <div class="big-box">
                             <div class="container mt-3">
-                                <h3>Data Sensor</h3>
- 
+                                <div id="cards" class="cards" align="center">
+                                  <h1> Data Sensor</h1>
+                                  <table id="wntable">
+                                  <tr>
+                                    <th>No</th>
+                                    <th>Tanggal</th>
+                                    <th>Waktu</th>
+                                  </tr>
+                                    <?php
+
+                                    // Assuming $pdo is your PDO database connection
+
+                                    $query = "SELECT * FROM wemos_table ORDER BY id DESC";
+                                    $stmt = $con->query($query);
+
+                                    if ($stmt->rowCount() == 0) {
+                                        echo '<tr><td colspan="14">Data Tidak Ada.</td></tr>';
+                                    } else {
+                                        $no = 6483;
+                                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                            echo '
+                                            <tr>
+                                                <td>' . $row['id'] . '</td>
+                                                <td>' . $row['date'] . '</td>
+                                                <td>' . $row['time'] . '</td>
+                                            </tr>
+                                            ';
+                                            $no++;
+                                        }
+                                    }
+                                    ?>
+
+                                </table>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -158,55 +213,7 @@ $currentUser = $admin->getUser();
         </div>   
     </body>
     <script src="../assets/js/main.js"></script>
-    <script type="text/javascript">
-        function updateClock() {
-            // Get current date and time
-            var now = new Date();
-
-            // Extract hours, minutes, and seconds
-            var hours = now.getHours();
-            var minutes = now.getMinutes();
-            var seconds = now.getSeconds();
-
-            // Add leading zero if needed
-            hours = (hours < 10) ? "0" + hours : hours;
-            minutes = (minutes < 10) ? "0" + minutes : minutes;
-            seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-            // Concatenate hours, minutes, and seconds
-            var time = hours + ":" + minutes + ":" + seconds;
-
-            // Insert time into HTML
-            document.getElementById("time").innerHTML = time;
-        }
-
-        // Update the clock every second (1000 milliseconds)
-        setInterval(updateClock, 1000);
-    </script>
-    <script type="text/javascript">
-        function updateDate() {
-            // Get current date
-            var now = new Date();
-
-            // Extract year, month, and day
-            var year = now.getFullYear();
-            var month = now.getMonth() + 1; // Months are zero-based
-            var day = now.getDate();
-
-            // Add leading zero if needed
-            month = (month < 10) ? "0" + month : month;
-            day = (day < 10) ? "0" + day : day;
-
-            // Concatenate year, month, and day
-            var date = year + "-" + month + "-" + day;
-
-            // Insert date into HTML
-            document.getElementById("date").innerHTML = date;
-        }
-
-        // Update the date every second (1000 milliseconds)
-        setInterval(updateDate, 1000);
-    </script>
+    <script src="../assets/js/time.js"></script>
     <script>
         jQuery(document).ready(function($) {
             $('#loginHistory').DataTable({

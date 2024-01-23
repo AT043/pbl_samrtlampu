@@ -160,12 +160,23 @@ $currentUser = $admin->getUser();
                                         <h3>Mode Otomatis</h3>
                                         <div class="auto-mode-switch">
                                             <div class="auto-mode-switch-block">
-                                                <span class="material-icons md-48 basecolor basecolor2">lightbulb</span>
+                                            <form action="http://192.168.157.3/toggle-auto-mode" method="post">
+                                                <!-- <span class="material-icons md-48 basecolor basecolor2">lightbulb</span> -->
                                                 <label class="toggle">
-                                                    <input type="checkbox">
-                                                    <span class="slider"></span>
-                                                    <span class="labels" data-on="ON" data-off="OFF"></span>
+                                                    <input type="checkbox" id="autoToggleon" name="autoToggleon">
+                                                    <!-- <span class="slider"></span>
+                                                    <span class="labels" data-on="ON" data-off="OFF"></span> -->
+                                                    <button type="submit">Submit</button>
                                                 </label>
+                                            </form>
+                                            <form action="http://192.168.157.3/toggle-auto-mode" method="post">
+                                                <label class="toggle">
+                                                    <input type="checkbox" id="autoToggleoff" name="autoToggleoff">
+                                                    <!-- <span class="slider"></span>
+                                                    <span class="labels" data-on="ON" data-off="OFF"></span> -->
+                                                    <button type="submit">Submit</button>
+                                                </label>
+                                            </form>
                                             </div>
                                         </div>
                                     </div>
@@ -178,56 +189,8 @@ $currentUser = $admin->getUser();
         </div>   
     </body>
     <script src="../assets/js/main.js"></script>
-    <script type="text/javascript">
-        function updateClock() {
-            // Get current date and time
-            var now = new Date();
-
-            // Extract hours, minutes, and seconds
-            var hours = now.getHours();
-            var minutes = now.getMinutes();
-            var seconds = now.getSeconds();
-
-            // Add leading zero if needed
-            hours = (hours < 10) ? "0" + hours : hours;
-            minutes = (minutes < 10) ? "0" + minutes : minutes;
-            seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-            // Concatenate hours, minutes, and seconds
-            var time = hours + ":" + minutes + ":" + seconds;
-
-            // Insert time into HTML
-            document.getElementById("time").innerHTML = time;
-        }
-
-        // Update the clock every second (1000 milliseconds)
-        setInterval(updateClock, 1000);
-    </script>
-    <script type="text/javascript">
-        function updateDate() {
-            // Get current date
-            var now = new Date();
-
-            // Extract year, month, and day
-            var year = now.getFullYear();
-            var month = now.getMonth() + 1; // Months are zero-based
-            var day = now.getDate();
-
-            // Add leading zero if needed
-            month = (month < 10) ? "0" + month : month;
-            day = (day < 10) ? "0" + day : day;
-
-            // Concatenate year, month, and day
-            var date = year + "-" + month + "-" + day;
-
-            // Insert date into HTML
-            document.getElementById("date").innerHTML = date;
-        }
-
-        // Update the date every second (1000 milliseconds)
-        setInterval(updateDate, 1000);
-    </script>
-
+    <script src="../assets/js/time.js"></script>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
           var checkboxClickCount = 0;
@@ -314,9 +277,7 @@ $currentUser = $admin->getUser();
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Function to check and execute scripts based on scheduling data
-    
-    // Status variable to be updated in the scheduling table
-    statusToUpdate = 0;
+    var statusToUpdate = 0;    
     function checkAndExecuteScripts() {
         var scheduleData = <?php echo json_encode($lamp->getScheduleData()); ?>;
 
@@ -358,93 +319,112 @@ document.addEventListener('DOMContentLoaded', function () {
             var newLampElement = document.createElement('span');
             newLampElement.className = 'material-icons md-48 basecolor basecolor2';
 
-            if (currentTime >= startTime && currentTime <= endTime && currentDate === dateOn) {
-                // Show an alert indicating that scheduling has started
-                // alert('Scheduling has started!');
+                if (currentTime >= startTime && currentTime <= endTime && currentDate === dateOn) {
+                    // Show an alert indicating that scheduling has started
+                    // alert('Scheduling has started!');
 
-                // Set the new lamp element content and style
-                newLampElement.textContent = 'lightbulb';
-                newLampElement.style.color = 'yellow';
+                    // Set the new lamp element content and style
+                    newLampElement.textContent = 'lightbulb';
+                    newLampElement.style.color = 'yellow';
 
-                // Execute the appropriate script based on the toggle state
-                var scriptURLsOn = [
-                    "http://192.168.157.3/eksekusi-kode-A",
-                    "http://192.168.157.3/eksekusi-kode-C",
-                    "http://192.168.157.3/eksekusi-kode-E"
-                ];
+                    // Execute the appropriate script based on the toggle state
+                    var scriptURLsOn = [
+                        "http://192.168.157.3/eksekusi-kode-A",
+                        "http://192.168.157.3/eksekusi-kode-C",
+                        "http://192.168.157.3/eksekusi-kode-E"
+                    ];
 
-                // Update status variable to 1
-                statusToUpdate = 1;
+                    // Update status variable to 1
+                    statusToUpdate = 1;
 
-                // Use Promise.all to wait for all fetch requests to complete
-                Promise.all(scriptURLsOn.map(url => fetch(url)))
-                    .then(responses => Promise.all(responses.map(response => response.json())))
-                    .then(data => {
-                        console.log("All scripts executed successfully:", data);
-                    })
-                    .catch(error => {
-                        console.error("Error executing scripts:", error);
-                    });
-            } else {
-                // Set the new lamp element content and style
-                newLampElement.textContent = 'lightbulb';
-                newLampElement.style.color = '#ccc';
+                    // Use Promise.all to wait for all fetch requests to complete
+                    Promise.all(scriptURLsOn.map(url => fetch(url)))
+                        .then(responses => Promise.all(responses.map(response => response.json())))
+                        .then(data => {
+                            console.log("All scripts executed successfully:", data);
+                        })
+                        .catch(error => {
+                            console.error("Error executing scripts:", error);
+                        });
+                } else if(currentTime >= endTime && currentDate === dateOn){
+                    // Set the new lamp element content and style
+                    newLampElement.textContent = 'lightbulb';
+                    newLampElement.style.color = '#ccc';
 
-                var scriptURLsOff = [
-                    "http://192.168.157.3/eksekusi-kode-B",
-                    "http://192.168.157.3/eksekusi-kode-D",
-                    "http://192.168.157.3/eksekusi-kode-F"
-                ];
+                    var scriptURLsOff = [
+                        "http://192.168.157.3/eksekusi-kode-B",
+                        "http://192.168.157.3/eksekusi-kode-D",
+                        "http://192.168.157.3/eksekusi-kode-F"
+                    ];
 
-                // Update status variable to 0
-                statusToUpdate = 0;
+                    // Update status variable to 0
+                    statusToUpdate = 0;
 
-                // Use Promise.all to wait for all fetch requests to complete
-                Promise.all(scriptURLsOff.map(url => fetch(url)))
-                    .then(responses => Promise.all(responses.map(response => response.json())))
-                    .then(data => {
-                        console.log("All scripts executed successfully:", data);
-                    })
-                    .catch(error => {
-                        console.error("Error executing scripts:", error);
-                    });
-            }
+                    // Use Promise.all to wait for all fetch requests to complete
+                    Promise.all(scriptURLsOff.map(url => fetch(url)))
+                        .then(responses => Promise.all(responses.map(response => response.json())))
+                        .then(data => {
+                            console.log("All scripts executed successfully:", data);
+                        })
+                        .catch(error => {
+                            console.error("Error executing scripts:", error);
+                        });
+                }
 
-            // Update the status in the scheduling table
-            fetch('../schedule_statud.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    status: statusToUpdate,
-                    // Add other data to send to the server if needed
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Status updated successfully:', data);
-            })
-            .catch(error => {
-                console.error('Error updating status:', error);
-            });
+                // Update the status in the scheduling table
+                fetch('../schedule_statud.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        status: statusToUpdate,
+                            // Add other data to send to the server if needed
+                    }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Status updated successfully:', data);
+                })
+                .catch(error => {
+                    console.error('Error updating status:', error);
+                });
 
-            // Replace the existing lamp element with the new one
-            lampContainer.innerHTML = '';
-            lampContainer.appendChild(newLampElement);
+                // Replace the existing lamp element with the new one
+                lampContainer.innerHTML = '';
+                lampContainer.appendChild(newLampElement);
         } else {
             console.error("Error fetching scheduling data.");
         }
     }
 
-    // Check and execute scripts every 30 seconds
-    if (statusToUpdate === 1) {
-        setTimeout(function() {
-            setInterval(checkAndExecuteScripts, 30000);
-        }, 0);
-    } else {
-        console.log('Stop');
+    function checkForUpdateScript() {
+        var checkScheduleUpdate = <?php echo json_encode($lamp->getScheduleData()); ?>;
+        if (checkScheduleUpdate) {
+            var start = checkScheduleUpdate['mulai'];
+            start = start.replace(/:/g, '').padStart(6, '0');
+
+            var current = new Date().toLocaleTimeString('en-US', { hour12: false });
+            current = current.replace(/:/g, '').padStart(6, '0');
+
+            console.log("Start Time:", start);
+
+            //var statusToUpdate = 0;
+            if (current >= start) {
+                checkAndExecuteScripts();
+                //setInterval(checkAndExecuteScripts, 30000);
+            } else {
+                console.log('Stop');
+            }
+        } else {
+            console.log('Stop');
+        }
+        // Set the interval here
+        //setInterval(checkForUpdateScript, 30000);
     }
+
+    setInterval(checkForUpdateScript, 30000);
+
 });
 </script>
 
@@ -532,9 +512,38 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            var toggleSwitch = document.getElementById('lamp4Checkbox');
+
+            toggleSwitch.addEventListener('change', function () {
+
+                // Execute the appropriate script based on the toggle state
+                var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-G" : "http://192.168.157.3/eksekusi-kode-H";
+
+                fetch(scriptURL)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Script berhasil dijalankan:", data);
+                    })
+                    .catch(error => {
+                        console.error("Ada kesalahan:", error);
+                    });
+            });
+        });
+    </script>
+
     <script>
         function submitForm() {
             document.getElementById("LampStatus").submit();
+            document
         }
     </script>
 </html>

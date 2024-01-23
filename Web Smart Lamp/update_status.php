@@ -30,9 +30,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             // Execute the statement
             if ($stmt->execute()) {
-                echo "Update successful for Lamp {$i}. Status set to {$lampStatus}.<br>";
+                //echo "Update successful for Lamp {$i}. Status set to {$lampStatus}.<br>";
+                header('location: admin/admin.php');
             } else {
-                echo "Error updating data for Lamp {$i}: " . $stmt->errorInfo()[2] . "<br>";
+                //echo "Error updating data for Lamp {$i}: " . $stmt->errorInfo()[2] . "<br>";
+                header('location: admin/admin.php');
             }
         } catch (PDOException $e){
             echo "Error: " . $e->getMessage() . "<br>";

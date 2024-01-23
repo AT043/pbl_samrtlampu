@@ -29,6 +29,41 @@ class Admin{
     }
 
 
+        /**
+     * Insert a new user into the database.
+     *
+     * @param string $username
+     * @param string $password
+     * @param string $email
+     * @return bool
+     */
+    public function updateUser($username, $password, $email)
+    {
+        try {
+            // Hash the password
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            // Prepare the SQL statement
+            $stmt = $this->db->prepare("UPDATE users SET username = :username, password = :password, email = :email WHERE id = :id");
+
+            // Bind parameters
+            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':password', $hashedPassword);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':id')
+
+            // Execute the statement
+            $stmt->execute();
+
+            return true; // Update successful
+        } catch (PDOException $e) {
+            $this->error = $e->getMessage();
+            return false; // Update failed
+        }
+    }
+
+
+
     /**
      * @return array|false
      *
@@ -91,6 +126,37 @@ class Admin{
 	        return false;
 	    }
 	}
+
+    public function displayConfirmationDialog($usernameToDelete) {
+        echo "<script>
+            var userConfirmed = confirm('Are you sure you want to delete this user?');
+            if (userConfirmed) {
+                // Redirect to the delete URL if the user clicks 'OK'
+                window.location.href = 'admin/admin2.php?delete_id={$user['username']}';
+            } else {
+                // Redirect to another page or do nothing if the user clicks 'Cancel'
+                window.location.href = 'admin/admin2.php';
+            }
+        </script>";
+    }
+
+    public function deleteUser($usernameToDelete) {
+        // Use a prepared statement to avoid SQL injection
+        $deleteStatement = $con->prepare("DELETE FROM users WHERE username = :username");
+        $deleteStatement->bindParam(":username", $usernameToDelete);
+
+        // Execute the query
+        if ($deleteStatement->execute()) {
+            echo "<script>alert('User deleted successfully.')</script>";
+            echo "<meta http-equiv=Refresh content=0;url=../admin/admin2.php>";
+        } else {
+            echo "Error deleting user.";
+        }
+    }
+
+    // Example usage:
+    //confirmAndDeleteUser($con); // Assuming $con is your database connection
+
 
         /**
      * @return false

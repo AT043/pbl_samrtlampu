@@ -139,7 +139,7 @@ $currentUser = $admin->getUser();
                             </a>
                             <a class="sb-item" href="admin4.php">
                                 <img src="../assets/icons/grid.svg" alt="products icon" />
-                                Data Lampu
+                                Data Sensor
                             </a>
                             <div style="margin-top: 20%; background-color: #000d">
                                 <p id="time" style="color: lightgreen; font-family: monospace; font-size: 24px; text-align: center;"></p>
@@ -200,55 +200,7 @@ $currentUser = $admin->getUser();
         </div>   
     </body>
     <script src="../assets/js/main.js"></script>
-    <script type="text/javascript">
-        function updateClock() {
-            // Get current date and time
-            var now = new Date();
-
-            // Extract hours, minutes, and seconds
-            var hours = now.getHours();
-            var minutes = now.getMinutes();
-            var seconds = now.getSeconds();
-
-            // Add leading zero if needed
-            hours = (hours < 10) ? "0" + hours : hours;
-            minutes = (minutes < 10) ? "0" + minutes : minutes;
-            seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-            // Concatenate hours, minutes, and seconds
-            var time = hours + ":" + minutes + ":" + seconds;
-
-            // Insert time into HTML
-            document.getElementById("time").innerHTML = time;
-        }
-
-        // Update the clock every second (1000 milliseconds)
-        setInterval(updateClock, 1000);
-    </script>
-    <script type="text/javascript">
-        function updateDate() {
-            // Get current date
-            var now = new Date();
-
-            // Extract year, month, and day
-            var year = now.getFullYear();
-            var month = now.getMonth() + 1; // Months are zero-based
-            var day = now.getDate();
-
-            // Add leading zero if needed
-            month = (month < 10) ? "0" + month : month;
-            day = (day < 10) ? "0" + day : day;
-
-            // Concatenate year, month, and day
-            var date = year + "-" + month + "-" + day;
-
-            // Insert date into HTML
-            document.getElementById("date").innerHTML = date;
-        }
-
-        // Update the date every second (1000 milliseconds)
-        setInterval(updateDate, 1000);
-    </script>
+    <script src="../assets/js/time.js"></script>
     <script>
         jQuery(document).ready(function($) {
             $('#loginHistory').DataTable({

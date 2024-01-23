@@ -105,36 +105,38 @@ $currentUser = $admin->getUser();
                 height: 100%;
                 overflow: auto;
                 background-color: rgba(0, 0, 0, 0.4);
-          }
+            }
 
             .modal-content {
-              background-color: #fefefe;
-              margin: 15% auto;
-              padding: 20px;
-              border: 1px solid #888;
-              width: 50%; /* Adjust the width as needed */
-              display: flex;
-              flex-direction: column; /* Set the layout to top-bottom */
+                background-color: #fefefe;
+                margin: auto; /* Center the modal horizontally */
+                margin-top: 10%; /* Center the modal vertically */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 50%;
+                display: flex;
+                flex-direction: column;
             }
 
             .modal-content label,
             .modal-content input {
-              margin-bottom: 10px;
+                margin-bottom: 10px;
             }
 
-          .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-          }
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
 
-          .close:hover,
-          .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-          }
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
 
       /* @media (min-width: 768px) {
             .slave2-main {
@@ -221,7 +223,6 @@ $currentUser = $admin->getUser();
                                     ?>
                                     <h3>Daftar User</h3>
                                     <table id="userdata" class="table table-striped table-bordered" style="width:100%;">
-                                        <!-- Table header -->
                                         <thead>
                                             <tr>
                                                 <th>Username</th>
@@ -229,11 +230,14 @@ $currentUser = $admin->getUser();
                                                 <th>Update</th>
                                             </tr>
                                         </thead>
-                                        <!-- Table body -->
                                         <tbody>
                                             <?php
                                             foreach ($users as $user) {
-                                                echo "<tr><td>{$user['username']}</td><td>{$user['email']}</td></td><td><a class='btn-edit' onclick='openModal()'>Edit</a> <a class='btn-delete' href='admin2.php?delete_id={$user['username']}'>Hapus</a><a class='btn-permission' href='admin2.php?jadiadmin_id={$user['username']}'>Jadi Admin</a></td></tr>";
+                                                echo "<tr><td>{$user['username']}</td><td>{$user['email']}</td><td>
+                                                    <a class='btn-edit' onclick='openModal()'>Edit</a>
+                                                    <a class='btn-delete' href='admin2.php?delete_id={$user['username']}&confirmed=true'>Hapus</a>
+                                                    <a class='btn-permission' href='admin2.php?jadiadmin_id={$user['username']}'>Jadi Admin</a>
+                                                  </td></tr>";
                                             }
                                             ?>
                                         </tbody>
@@ -246,25 +250,24 @@ $currentUser = $admin->getUser();
                                   <!-- Modal content -->
                                   <div class="modal-content">
                                     <span class="close" onclick="closeModal()">&times;</span>
-                                    <form id="editForm">
-                                      <label for="password">Password:</label>
-                                      <input type="password" id="password" name="password" required>
-                                      <br>
-                                      <label for="username">Username:</label>
-                                      <input type="text" id="username" name="username" required>
-
-                                      <button type="button" onclick="submitForm()">Submit</button>
+                                    <form id="editForm" method="post" action="edituser.php">
+                                        <label for="password">Password:</label>
+                                        <input type="password" id="password" name="password" required>
+                                        <br>
+                                        <label for="username">Username:</label>
+                                        <input type="text" id="username" name="username" required>
+                                        <label for="email">Email:</label>
+                                        <input type="email" name="email" id="email">
+                                        <button type="submit" name="submit" value="submit">Submit</button>
                                     </form>
                                   </div>
                                 </div>
-
                                 <div class="admin-data" id="admin-data" style="display: none;">
                                     <?php
                                     $admins = $data['admins'];
                                     ?>
                                     <h3>Daftar Admin</h3>
                                     <table id="admindata" class="table table-striped table-bordered" style="width:100%;">
-                                        <!-- Table header -->
                                         <thead>
                                             <tr>
                                                 <th>Username</th>
@@ -272,11 +275,14 @@ $currentUser = $admin->getUser();
                                                 <th>Update</th>
                                             </tr>
                                         </thead>
-                                        <!-- Table body -->
                                         <tbody>
                                             <?php
                                             foreach ($admins as $admin) {
-                                                echo "<tr><td>{$admin['username']}</td><td>{$admin['email']}</td><td><a class='btn-edit' href='update.php?id={$admin['id']}'>Edit</a> <a class='btn-delete' href='admin2.php?delete_id={$admin['username']}'>Hapus</a><a class='btn-permission' href='admin2.php?jadiuser_id={$admin['username']}'>Jadi User</a></td></tr>";
+                                            echo "<tr><td>{$admin['username']}</td><td>{$admin['email']}</td></td><td>
+                                                    <a class='btn-edit' onclick='openModal()'>Edit</a>
+                                                    <a class='btn-delete' href='admin2.php?delete_id={$admin['username']}&confirmed=true'>Hapus</a>
+                                                    <a class='btn-permission' href='admin2.php?jadiuser_id={$admin['username']}'>Jadi User</a>
+                                                  </td></tr>";
                                             }
                                             ?>
                                         </tbody>
@@ -294,33 +300,16 @@ $currentUser = $admin->getUser();
         if (isset($_GET['delete_id'])) {
             $usernameToDelete = $_GET['delete_id'];
 
-            // Use a prepared statement to avoid SQL injection
-            $deleteStatement = $con->prepare("DELETE FROM users WHERE username = :username");
-            $deleteStatement->bindParam(":username", $usernameToDelete);
-
-            // Execute the query
-            if ($deleteStatement->execute()) {
-                echo "<script>alert('Yakin mau dihapus?')</script>";
-                echo "<meta http-equiv=Refresh content=0;url=../admin/admin2.php>";
-            } else {
-                echo "Error deleting user.";
-            }
-        }
-        ?>
-
-        <?php 
-        if(isset($_GET['jadiadmin_id'])) {
-            $userJadiAdmin = $_GET['jadiadmin_id'];
-
-            $mauJadiAdmin = $con->prepare("UPDATE users SET permissions = 1 WHERE username = :username");
-            $mauJadiAdmin->bindParam(":username", $userJadiAdmin);
-
-            if ($mauJadiAdmin->execute()) {
-                //echo "<script>alert('Yakin mau dihapus?')</script>";
-                echo "<meta http-equiv=Refresh content=0;url=../admin/admin2.php>";
-            } else {
-                echo "Error Jadikan User Sebagai Admin.";
-            }
+            // Display confirmation dialog
+            echo "<script>
+                    var userConfirmed = confirm('Are you sure you want to delete this user?');
+                    if (userConfirmed) {
+                        window.location.href = 'admin2.php?delete_id={$usernameToDelete}&confirmed=true';
+                    } else {
+                        // Do nothing or redirect to another page if the user cancels
+                        window.location.href = 'admin2.php';
+                    }
+                  </script>";
         }
         ?>
 
@@ -353,55 +342,7 @@ $currentUser = $admin->getUser();
 
     </body>
     <script src="../assets/js/main.js"></script>
-    <script type="text/javascript">
-        function updateClock() {
-            // Get current date and time
-            var now = new Date();
-
-            // Extract hours, minutes, and seconds
-            var hours = now.getHours();
-            var minutes = now.getMinutes();
-            var seconds = now.getSeconds();
-
-            // Add leading zero if needed
-            hours = (hours < 10) ? "0" + hours : hours;
-            minutes = (minutes < 10) ? "0" + minutes : minutes;
-            seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-            // Concatenate hours, minutes, and seconds
-            var time = hours + ":" + minutes + ":" + seconds;
-
-            // Insert time into HTML
-            document.getElementById("time").innerHTML = time;
-        }
-
-        // Update the clock every second (1000 milliseconds)
-        setInterval(updateClock, 1000);
-    </script>
-    <script type="text/javascript">
-        function updateDate() {
-            // Get current date
-            var now = new Date();
-
-            // Extract year, month, and day
-            var year = now.getFullYear();
-            var month = now.getMonth() + 1; // Months are zero-based
-            var day = now.getDate();
-
-            // Add leading zero if needed
-            month = (month < 10) ? "0" + month : month;
-            day = (day < 10) ? "0" + day : day;
-
-            // Concatenate year, month, and day
-            var date = year + "-" + month + "-" + day;
-
-            // Insert date into HTML
-            document.getElementById("date").innerHTML = date;
-        }
-
-        // Update the date every second (1000 milliseconds)
-        setInterval(updateDate, 1000);
-    </script>
+    <script src="../assets/js/time.js"></script>
     <script>
         jQuery(document).ready(function($) {
             $('#userdata').DataTable({
@@ -413,8 +354,8 @@ $currentUser = $admin->getUser();
     <script>
         jQuery(document).ready(function($) {
             $('#admindata').DataTable({
-                "lengthMenu": [3, 5, 7], // Set the available choices for the number of rows per page
-                "pageLength": 7  // Set the default number of rows per page
+                "lengthMenu": [2, 4, 6, 8], // Set the available choices for the number of rows per page
+                "pageLength": 8  // Set the default number of rows per page
             });
         });
         function show(shown, hidden) {
@@ -445,20 +386,6 @@ $currentUser = $admin->getUser();
   // Close the modal
   function closeModal() {
     document.getElementById('editModal').style.display = 'none';
-  }
-
-  // Submit the form (you may need to adjust this based on your needs)
-  function submitForm() {
-    // Get values from the form
-    var password = document.getElementById('password').value;
-    var username = document.getElementById('username').value;
-
-    // Perform actions with the values (you may need to customize this part)
-    console.log('Password:', password);
-    console.log('Username:', username);
-
-    // Close the modal (you can adjust this based on your needs)
-    closeModal();
   }
 </script>
 </html>
