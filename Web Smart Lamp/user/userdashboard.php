@@ -156,6 +156,11 @@ $currentUser = $user->getUser();
                                                 <td colspan="2"><span class="material-icons md-48 basecolor basecolor2">lightbulb</span></td>
                                             </tr>
                                             <tr>
+                                                <?php $stime = $lamp->getScheduleData(); ?>
+                                                <td><?php echo $stime['mulai'];?></td>
+                                                <td><?php echo $stime['selesai'];?></td>
+                                            </tr>
+                                            <tr>
                                                 <td>Waktu Mulai</td>
                                                 <td>Waktu Selesai</td>
                                             </tr>
@@ -246,7 +251,8 @@ $currentUser = $user->getUser();
                 var scriptURLs = [
                     "http://192.168.157.3/eksekusi-kode-A",
                     "http://192.168.157.3/eksekusi-kode-C",
-                    "http://192.168.157.3/eksekusi-kode-E"
+                    "http://192.168.157.3/eksekusi-kode-E",
+                    "http://192.168.157.3/eksekusi-kode-G"
                 ];
 
                 // Use Promise.all to wait for all fetch requests to complete
@@ -272,7 +278,8 @@ $currentUser = $user->getUser();
                 var scriptURLs = [
                     "http://192.168.157.3/eksekusi-kode-B",
                     "http://192.168.157.3/eksekusi-kode-D",
-                    "http://192.168.157.3/eksekusi-kode-F"
+                    "http://192.168.157.3/eksekusi-kode-F",
+                    "http://192.168.157.3/eksekusi-kode-H"
                 ];
 
                 // Use Promise.all to wait for all fetch requests to complete
@@ -345,7 +352,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     var scriptURLsOn = [
                         "http://192.168.157.3/eksekusi-kode-A",
                         "http://192.168.157.3/eksekusi-kode-C",
-                        "http://192.168.157.3/eksekusi-kode-E"
+                        "http://192.168.157.3/eksekusi-kode-E",
+                        "http://192.168.157.3/eksekusi-kode-G"
                     ];
 
                     // Update status variable to 1
@@ -368,7 +376,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     var scriptURLsOff = [
                         "http://192.168.157.3/eksekusi-kode-B",
                         "http://192.168.157.3/eksekusi-kode-D",
-                        "http://192.168.157.3/eksekusi-kode-F"
+                        "http://192.168.157.3/eksekusi-kode-F",
+                        "http://192.168.157.3/eksekusi-kode-H"
                     ];
 
                     // Update status variable to 0
@@ -426,7 +435,7 @@ document.addEventListener('DOMContentLoaded', function () {
             //var statusToUpdate = 0;
             if (current >= start) {
                 checkAndExecuteScripts();
-                //setInterval(checkAndExecuteScripts, 30000);
+                setInterval(checkAndExecuteScripts, 30000);
             } else {
                 console.log('Stop');
             }
@@ -552,6 +561,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
             });
         });
+    </script>
+
+    <script>
+        function submitForm() {
+            document.getElementById("LampStatus").submit();
+            document
+        }
     </script>
 
     <script>
