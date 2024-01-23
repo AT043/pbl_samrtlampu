@@ -43,16 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 }
             } else {
                 //echo "Error updating data for Lamp {$i}: " . $stmt->errorInfo()[2] . "<br>";
-                $userData = $person->getUser();
-                if ($userData['permissions'] == 1 && $userData['permissions'] == 2) {
-                    // Admin
-                    header("location: admin/admin.php");
-                    $person->insertpersonHistory();
-                } else {
-                    // User
-                    header("location: user/userdashboard.php");
-                    $person->insertpersonHistory();
-                }
+                header("location: user/userdashboard.php");
             }
         } catch (PDOException $e){
             echo "Error: " . $e->getMessage() . "<br>";
