@@ -1,14 +1,13 @@
-<?php
-require('koneksi.php');
+<?php  
 
-session_start();
+// Lampirkan dbconfig  
+require_once "dbconfig.php";  
 
+// Logout! hapus session user  
+$person->logout();  
 
-session_unset();
+create_alert("Success","Anda sudah logout dari sistem","login.php");
+show_alert();
+header('location: login.php');
 
-
-session_destroy();
-
-header('Location: index.html');
-exit;
 ?>
