@@ -37,28 +37,30 @@ class Admin{
      * @param string $email
      * @return bool
      */
+
     public function updateUser($username, $password, $email)
     {
         try {
-            // Hash the password
+            // Enkripsi password dengan password_hash (default)
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             // Prepare the SQL statement
-            $stmt = $this->db->prepare("UPDATE users SET username = :username, password = :password, email = :email WHERE id = :id");
+            $stmt = $this->db->prepare("UPDATE users SET username = :new_username, password = :password, email = :email WHERE email = :old_email OR username = :old_username");
 
             // Bind parameters
-            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':new_username', $username);
             $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':email', $email);
-            $stmt->bindParam(':id');
+            $stmt->bindParam(':old_email', $email);
+            $stmt->bindParam(':old_username', $username);
 
-            // Execute the statement
+            // Eksekusi statement
             $stmt->execute();
 
-            return true; // Update successful
+            return true; // Update berhasil
         } catch (PDOException $e) {
             $this->error = $e->getMessage();
-            return false; // Update failed
+            return false; // Update gagal
         }
     }
 

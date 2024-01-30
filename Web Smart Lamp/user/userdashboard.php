@@ -100,7 +100,7 @@ $currentUser = $user->getUser();
                                     <h3 class="user-name"><?php echo $currentUser['username'] ?></h3>
                                 </div>
                                 <div id="myDropdown" class="dropdown-content">
-                                    <a href="#">Edit User</a>
+                                    <!-- <a href="#">Edit User</a> -->
                                     <a href="../logout.php">Logout</a>
                                     <!-- <a href="#contact">Contact</a> -->
                                 </div>

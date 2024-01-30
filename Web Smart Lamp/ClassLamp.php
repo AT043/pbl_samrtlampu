@@ -89,11 +89,8 @@ class Lamp{
         global $con, $currentUser;
 
         try {
-            $query = "SELECT mulai, selesai, tanggal, status FROM scheduling WHERE id = 1 AND username = :username";
+            $query = "SELECT mulai, selesai, tanggal, status FROM scheduling";
             $stmt = $con->prepare($query);
-
-            // Bind parameters
-            $stmt->bindParam(':username', $currentUser['username']);
 
             // Execute the statement
             if ($stmt->execute()) {

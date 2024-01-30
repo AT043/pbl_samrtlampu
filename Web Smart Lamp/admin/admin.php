@@ -165,21 +165,25 @@ $currentUser = $admin->getUser();
                                         <h3>Mode Otomatis</h3>
                                         <div class="auto-mode-switch">
                                             <div class="auto-mode-switch-block">
-                                            <form action="http://192.168.157.3/toggle-auto-mode" method="post">
+                                            <form action="http://192.168.31.159/toggle-auto-mode" method="post">
                                                 <!-- <span class="material-icons md-48 basecolor basecolor2">lightbulb</span> -->
                                                 <label class="toggle">
                                                     <!-- <input type="checkbox" id="autoToggleon" name="autoToggleon"> -->
                                                     <!-- <span class="slider"></span>
                                                     <span class="labels" data-on="ON" data-off="OFF"></span> -->
-                                                    <input type="submit" id="autoToggleon" name="autoToggleon" value="on">ON</input>
+                                                    <input type="submit" id="autoToggleon" name="autoToggleon" value="on">
+                                                        <p style="text-align: center;">ON</p>
+                                                    </input>
                                                 </label>
                                             </form>
-                                            <form action="http://192.168.157.3/toggle-auto-mode" method="post">
+                                            <form action="http://192.168.31.159/toggle-auto-mode" method="post">
                                                 <label class="toggle">
                                                     <!-- <input type="checkbox" id="autoToggleoff" name="autoToggleoff"> -->
                                                     <!-- <span class="slider"></span>
                                                     <span class="labels" data-on="ON" data-off="OFF"></span> -->
-                                                    <input type="submit" id="autoToggleoff" name="autoToggleoff" value="on">OFF</input>
+                                                    <input type="submit" id="autoToggleoff" name="autoToggleoff" value="on">
+                                                        <p align="center">OFF</p>
+                                                    </input>
                                                 </label>
                                             </form>
                                             </div>
@@ -227,7 +231,7 @@ $currentUser = $admin->getUser();
         });
     </script>
 
-    <script>
+<!--     <script>
         document.addEventListener('DOMContentLoaded', function () {
             
             var btnOnAll = document.getElementById('btnOnAll');
@@ -235,10 +239,10 @@ $currentUser = $admin->getUser();
             btnOnAll.addEventListener('click', function () {
                 // Execute the appropriate script based on the toggle state
                 var scriptURLs = [
-                    "http://192.168.157.3/eksekusi-kode-A",
-                    "http://192.168.157.3/eksekusi-kode-C",
-                    "http://192.168.157.3/eksekusi-kode-E",
-                    "http://192.168.157.3/eksekusi-kode-G"
+                    "http://192.168.31.159/eksekusi-kode-A",
+                    "http://192.168.31.159/eksekusi-kode-C",
+                    "http://192.168.31.159/eksekusi-kode-E",
+                    "http://192.168.31.159/eksekusi-kode-G"
                 ];
 
                 // Use Promise.all to wait for all fetch requests to complete
@@ -262,10 +266,10 @@ $currentUser = $admin->getUser();
             btnOnAll.addEventListener('click', function () {
                 // Execute the appropriate script based on the toggle state
                 var scriptURLs = [
-                    "http://192.168.157.3/eksekusi-kode-B",
-                    "http://192.168.157.3/eksekusi-kode-D",
-                    "http://192.168.157.3/eksekusi-kode-F",
-                    "http://192.168.157.3/eksekusi-kode-H"
+                    "http://192.168.31.159/eksekusi-kode-B",
+                    "http://192.168.31.159/eksekusi-kode-D",
+                    "http://192.168.31.159/eksekusi-kode-F",
+                    "http://192.168.31.159/eksekusi-kode-H"
                 ];
 
                 // Use Promise.all to wait for all fetch requests to complete
@@ -279,9 +283,9 @@ $currentUser = $admin->getUser();
                     });
             });
         });
-    </script>
+    </script> -->
 
-<script>
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function () {
     // Function to check and execute scripts based on scheduling data
     var statusToUpdate = 0;    
@@ -336,10 +340,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // Execute the appropriate script based on the toggle state
                     var scriptURLsOn = [
-                        "http://192.168.157.3/eksekusi-kode-A",
-                        "http://192.168.157.3/eksekusi-kode-C",
-                        "http://192.168.157.3/eksekusi-kode-E",
-                        "http://192.168.157.3/eksekusi-kode-G"
+                        "http://192.168.31.159/eksekusi-kode-A",
+                        "http://192.168.31.159/eksekusi-kode-C",
+                        "http://192.168.31.159/eksekusi-kode-E",
+                        "http://192.168.31.159/eksekusi-kode-G"
                     ];
 
                     // Update status variable to 1
@@ -360,10 +364,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     newLampElement.style.color = '#ccc';
 
                     var scriptURLsOff = [
-                        "http://192.168.157.3/eksekusi-kode-B",
-                        "http://192.168.157.3/eksekusi-kode-D",
-                        "http://192.168.157.3/eksekusi-kode-F",
-                        "http://192.168.157.3/eksekusi-kode-H"
+                        "http://192.168.31.159/eksekusi-kode-B",
+                        "http://192.168.31.159/eksekusi-kode-D",
+                        "http://192.168.31.159/eksekusi-kode-F",
+                        "http://192.168.31.159/eksekusi-kode-H"
                     ];
 
                     // Update status variable to 0
@@ -435,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setInterval(checkForUpdateScript, 30000);
 
 });
-</script>
+</script> -->
 
 
 
@@ -447,8 +451,8 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleSwitch.addEventListener('change', function () {
 
                 // Execute the appropriate script based on the toggle state
-                var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-A" : "http://192.168.157.3/eksekusi-kode-B";
-                // var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-C" : "http://192.168.157.3/eksekusi-kode-D";
+                var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-A" : "http://192.168.31.159/eksekusi-kode-B";
+                // var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-C" : "http://192.168.31.159/eksekusi-kode-D";
 
                 fetch(scriptURL)
                     .then(response => {
@@ -475,8 +479,8 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleSwitch.addEventListener('change', function () {
 
                 // Execute the appropriate script based on the toggle state
-                var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-C" : "http://192.168.157.3/eksekusi-kode-D";
-                // var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-C" : "http://192.168.157.3/eksekusi-kode-D";
+                var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-C" : "http://192.168.31.159/eksekusi-kode-D";
+                // var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-C" : "http://192.168.31.159/eksekusi-kode-D";
 
                 fetch(scriptURL)
                     .then(response => {
@@ -503,7 +507,7 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleSwitch.addEventListener('change', function () {
 
                 // Execute the appropriate script based on the toggle state
-                var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-E" : "http://192.168.157.3/eksekusi-kode-F";
+                var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-E" : "http://192.168.31.159/eksekusi-kode-F";
 
                 fetch(scriptURL)
                     .then(response => {
@@ -530,7 +534,7 @@ document.addEventListener('DOMContentLoaded', function () {
             toggleSwitch.addEventListener('change', function () {
 
                 // Execute the appropriate script based on the toggle state
-                var scriptURL = this.checked ? "http://192.168.157.3/eksekusi-kode-G" : "http://192.168.157.3/eksekusi-kode-H";
+                var scriptURL = this.checked ? "http://192.168.31.159/eksekusi-kode-G" : "http://192.168.31.159/eksekusi-kode-H";
 
                 fetch(scriptURL)
                     .then(response => {

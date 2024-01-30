@@ -50,7 +50,7 @@ if (isset($_POST['daftar'])) {
             //Set user save OTP
             $person->saveOTP($usernama, $generatedOTP, $otpExpirationTime);
 
-            // Store user information in the session
+            // Menyimpan informasi user di sesi
             $_SESSION['newUsername'] = $usernama;
             $_SESSION['email'] = $email;
             $_SESSION['newPassword'] = $password;

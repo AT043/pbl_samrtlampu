@@ -113,7 +113,7 @@ $currentUser = $admin->getUser();
                 margin-top: 10%; /* Center the modal vertically */
                 padding: 20px;
                 border: 1px solid #888;
-                width: 50%;
+                width: 400px;
                 display: flex;
                 flex-direction: column;
             }
@@ -252,13 +252,15 @@ $currentUser = $admin->getUser();
                                     <span class="close" onclick="closeModal()">&times;</span>
                                     <form id="editForm" method="post" action="edituser.php">
                                         <label for="password">Password:</label>
-                                        <input type="password" id="password" name="password" required>
+                                        <input type="password" id="password" name="password">
                                         <br>
                                         <label for="username">Username:</label>
                                         <input type="text" id="username" name="username" required>
+                                        <br>
                                         <label for="email">Email:</label>
-                                        <input type="email" name="email" id="email">
-                                        <button type="submit" name="submit" value="submit">Submit</button>
+                                        <input type="email" name="email" id="email" required>
+                                        <button name="submit">Submit</button>
+                                        <p>Tolong password atau username diisi, meski tidak ingin diubah :)</p>
                                     </form>
                                   </div>
                                 </div>
@@ -288,7 +290,7 @@ $currentUser = $admin->getUser();
                                         </tbody>
                                     </table>
                                     <button onclick="showFunction()">User</button>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -302,11 +304,11 @@ $currentUser = $admin->getUser();
 
             // Display confirmation dialog
             echo "<script>
-                    var userConfirmed = confirm('Are you sure you want to delete this user?');
+                    var userConfirmed = confirm('Yakin Mau Dihapus?');
                     if (userConfirmed) {
                         window.location.href = 'admin2.php?delete_id={$usernameToDelete}&confirmed=true';
                     } else {
-                        // Do nothing or redirect to another page if the user cancels
+                        // kembali ke awal
                         window.location.href = 'admin2.php';
                     }
                   </script>";
@@ -324,7 +326,7 @@ $currentUser = $admin->getUser();
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($currentUser['username'] === 'admine1') {
+            if ($currentUser['id'] === 1) {
                 $yahJadiUser = $con->prepare("UPDATE users SET permissions = 0 WHERE username = :username");
                 $yahJadiUser->bindParam(":username", $adminJadiUser);
 
@@ -332,7 +334,32 @@ $currentUser = $admin->getUser();
                     //echo "<script>alert('Yakin mau dihapus?')</script>";
                     echo "<meta http-equiv=Refresh content=0;url=../admin/admin2.php>";
                 } else {
-                    echo "Error Jadikan User Sebagai Admin.";
+                    echo "<script>alert('Error Jadikan User Sebagai Admin.')</script>";
+                }
+            } else {
+                echo "<script>alert('Maaf Anda tidak bisa!')</script>";
+            }
+        }
+
+        if(isset($_GET['jadiadmin_id'])){
+            $adminJadiUser = $_GET['jadiadmin_id'];
+
+            // Assuming $con is your database connection
+            $query = "SELECT * FROM users WHERE username = :username";
+            $stmt = $con->prepare($query);
+            $stmt->bindParam(":username", $adminJadiUser);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($currentUser['id'] == 1) {
+                $yahJadiUser = $con->prepare("UPDATE users SET permissions = 1 WHERE username = :username");
+                $yahJadiUser->bindParam(":username", $adminJadiUser);
+
+                if ($yahJadiUser->execute()) {
+                    //echo "<script>alert('Yakin mau dihapus?')</script>";
+                    echo "<meta http-equiv=Refresh content=0;url=../admin/admin2.php>";
+                } else {
+                    echo "<script>alert('Error Jadikan User Sebagai Admin.')</script>";
                 }
             } else {
                 echo "<script>alert('Maaf Anda tidak bisa!')</script>";

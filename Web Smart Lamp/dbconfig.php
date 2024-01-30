@@ -6,24 +6,14 @@ try {
     echo $e->getMessage();
 }
 
-// include 'Auth.php';
-// include 'ClassLogin.php';
-// include 'ClassRegister.php';
-include 'ClassPerson.php';
-include 'ClassUser.php';
-include 'ClassAdmin.php';
-include 'ClassLamp.php';
-include 'library.php';
-//include 'update_status.php';
 
-//include '/admin/delete_schedule.php';
-// include '/admin/lamp_schedule.php';
+require_once 'ClassPerson.php';
+require_once 'ClassUser.php';
+require_once 'ClassAdmin.php';
+require_once 'ClassLamp.php';
+require_once 'library.php';
 
-// $user = new Auth($con);
-// $login = new Login($con);
-// $reg = new Register($con);
 $person = new Person($con);
 $admin = new Admin($con);
 $user = new User($con);
 $lamp = new Lamp($con);
-// $dev = new Dev($con);
